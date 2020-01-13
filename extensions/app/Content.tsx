@@ -9,7 +9,7 @@ export default class Content extends React.Component<IcontentProps> {
   }
 
   OpenCloseSideNav(){
-    var element = document.getElementById("sideNav");
+    var element = document.getElementById("sideNav"); 
     element.classList.toggle("sideNav");
   }
 
@@ -29,7 +29,7 @@ export default class Content extends React.Component<IcontentProps> {
           </div>
         </div>
         <div id="myDIV" className="w3-container">
-          <p>This sidebar is hidden by default, (style="display:none")</p>
+          <p>This sidebar is hidden</p>
           <p>You must click on the "hamburger" icon (top left) to open it.</p>
           <p>The sidebar will hide a part of the page content.</p>
         </div>
