@@ -1,15 +1,14 @@
 import { override } from '@microsoft/decorators';  
 import { Log } from '@microsoft/sp-core-library';  
 import * as React from 'react';  
-import * as ReactDOM from "react-dom";  
-import { Component } from "react";
+import * as ReactDOM from "react-dom"; 
 import {  
   BaseApplicationCustomizer,  
   PlaceholderContent,  
   PlaceholderName
 } from '@microsoft/sp-application-base';
 
-import Main, { IMainProps } from './Main';
+import Main, { IMainProps } from './components/Main';
 
 import * as strings from 'AppApplicationCustomizerStrings';
 

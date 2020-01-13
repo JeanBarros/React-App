@@ -10,8 +10,8 @@ body, html {
     font-size: 16px;
 }
 
-.header{
-    font-size: initial;
+.mainHeader-163{
+    display: none;
 }
 
 .logo{
@@ -29,7 +29,7 @@ body, html {
     font-size: 1.5625em;
 }
 
-.headerRow-139{
+.root-139{
     display: none !important;
 }
 

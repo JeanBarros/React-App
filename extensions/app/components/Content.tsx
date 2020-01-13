@@ -1,5 +1,6 @@
 import * as React from 'react';
-import './sideNav.css';
+
+import "../sideNav.css";
 
 export interface IcontentProps {}   
 
@@ -23,7 +24,7 @@ export default class Content extends React.Component<IcontentProps> {
           <a href="#" className="w3-bar-item w3-button">Link 3</a>
         </div>
         <div className="w3-teal">
-          <button onClick={this.OpenCloseSideNav} className="w3-xlarge btnOpenNav">☰ &nbsp;Menu</button>
+          <button onClick={this.OpenCloseSideNav} className="w3-xlarge btnOpenNav">☰<span>Menu</span></button>
           <div className="w3-container">
             <h1>My Page</h1>
           </div>
