@@ -1,0 +1,11 @@
+﻿.headerRow-48{
+    display: none;
+}
+
+.commandBarWrapper{
+    border: solid 1px green;
+}
+
+.react-clock__second-hand__body{
+      background-color: rgb(255, 200, 47) !important;
+    }

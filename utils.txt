@@ -1,0 +1,8 @@
+url format to create SPGO workspace:
+https://keyruspbi.sharepoint.com/sites/Lab02
+
+folder path to scripts:
+/sites/Lab02/SiteAssets/scripts
+
+folder path to styles:
+sites/Lab02/Style%20Library
