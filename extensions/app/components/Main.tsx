@@ -4,6 +4,7 @@ import { SPComponentLoader } from '@microsoft/sp-loader'; //Não remover
 import "../app.css";
 
 import Content from './Content'
+import LandingPage from './LandingPage'
 
 export interface IMainProps {}   
 
@@ -26,7 +27,7 @@ export default class Main extends React.Component<IMainProps> {
           // Estes elementos são ocultados no arquivo app.css
           // Em conexões lentas, os elementos padrão do SharePoint às vezes demoram para serem carregados
           // Caso o CSS seja carregado antes do elemento ser rederizado, uma segunda ação é realizada
-          $('.mainHeader-163').hide()
+          $('.headerRow-139').hide()
           $('._2kc0c9nP-qti6fefMCFonk').css({'display':'none', 'font-size': 'initial', 'border': 'solid 1px red', 'float': 'left'})
           $('.header').css('margin-left','130px')
           
@@ -43,7 +44,8 @@ export default class Main extends React.Component<IMainProps> {
   public render(): JSX.Element {  
     return (
       <div>
-        <Content/> {/*Referenciando o componente*/}
+        {<Content/>} {/*Referenciando o componente*/}
+        {/*<LandingPage/>*/} {/*Referenciando o componente*/}
         <div id="root"></div>
       </div>
     );  
