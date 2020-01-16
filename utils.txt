@@ -1,3 +1,6 @@
+SPGo > sitego
+SharePoint web development tools for Visual Studio Code.
+
 url format to create SPGO workspace:
 https://keyruspbi.sharepoint.com/sites/Lab02
 

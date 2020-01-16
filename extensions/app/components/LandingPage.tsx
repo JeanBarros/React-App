@@ -1,29 +1,55 @@
 import * as React from 'react';
 import "../sideNav.css";
+import Main from './Main';
 
 export interface ILandingPageProps {}   
 
 function UserGreeting(props) {
-  return <h1>Welcome back!</h1>;
+  return (
+    <div>      
+      <Main/>
+    </div>
+  )
 }
 
 function GuestGreeting(props) {
-  return <h1>Please sign up.</h1>;
+  return (
+    <div>  
+      
+    </div>    
+  );
 }
 
 function Greeting(props) {
   const isLoggedIn = props.isLoggedIn;
   if (isLoggedIn) {
-    return <UserGreeting />;
+    return (
+      <div>
+        <UserGreeting />        
+      </div>
+    )
   }
   return <GuestGreeting />;
 }
 
 function LoginButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Login
-    </button>
+  return (    
+    <div id="overlay">
+        <div className="ms-Grid-row"> 
+        <div className="ms-Grid-col ms-sm6 ms-md2 block">2</div> 
+        <div className="ms-Grid-col ms-sm12 ms-md4 block">
+          <div className="content"> 
+            <div className="logoLandingPage"></div>
+            <h1>Bem vindo ao <br/>Enterprise BI Portal</h1>
+            <p>Clique abaixo para entrar na plataforma</p>
+            <button onClick={props.onClick} className="btnLogin">Login</button>          
+          </div> 
+        </div>
+        <div className="ms-Grid-col ms-sm6 ms-md2 block">2</div> 
+        <div className="ms-Grid-col ms-sm6 ms-md2 block">2</div> 
+        <div className="ms-Grid-col ms-sm6 ms-md2 block">2</div> 
+      </div>      
+    </div>
   );
 }
 
@@ -70,46 +96,25 @@ class LoginControl extends React.Component<any, any> {
   }
 }
 
-class Football extends React.Component {
-  shoot() {
-    alert("Boom Shot!");
-  }
-  render() {
-    return (
-      <button onClick={this.shoot}>Take the shot!</button>
-    );
-  }
-}
-
 export default class LandingPage extends React.Component<ILandingPageProps> {  
   constructor(props: ILandingPageProps) {  
     super(props)
-    this.state = { isEmptyState: true }
 
-    setTimeout(function(){
-      var header = document.createElement("DIV");
-      header.innerHTML = "<div class='header'><div class='logo'></div><div id='webTitle'></div></div>"; 
-      document.getElementsByClassName('_71hjFgizWk0Cd55RzerwA')[0].appendChild(header); 
+    var head = document.getElementsByTagName('HEAD')[0]
+      var link = document.createElement('link'); 
+      link.rel = 'stylesheet'; 
+      link.type = 'text/css'; 
+      link.href = '/sites/Lab02/Style%20Library/app.css';  
 
-      // Remove o cabeçalho nativo
-      var mainHeader = document.getElementsByClassName('mainHeader-163')[0]
-      mainHeader.parentNode.removeChild(mainHeader);
-
-      var commandBarWrapper = document.getElementsByClassName('commandBarWrapper')[0]
-      commandBarWrapper.parentNode.removeChild(commandBarWrapper);
-      
-      
-      alert('pow')
-    }, 1000);
+      // Append link element to HTML head 
+      head.appendChild(link);
   }
 
   public render() {
     return (
-      <div>
-        <h1>Bem vindo ao Enterprise BI Portal</h1>                
+      <div> 
+        <div id="root"></div>            
         <LoginControl />
-        {document.getElementById('root')}  
-        <Football></Football>   
       </div>
     );  
   }

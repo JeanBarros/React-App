@@ -21,7 +21,7 @@ export default class Main extends React.Component<IMainProps> {
         // after all JS files are successfully loaded
         setTimeout(function(){
           var header = document.createElement("DIV");
-          header.innerHTML = "<div class='header'><div class='logo'></div><div id='webTitle'></div></div>"; 
+          header.innerHTML = "<div class='header'><div class='logoHeader'></div><div id='webTitle'></div></div>"; 
           document.getElementsByClassName('_71hjFgizWk0Cd55RzerwA')[0].appendChild(header); 
 
           // Estes elementos são ocultados no arquivo app.css
