@@ -1,19 +1,15 @@
 import { override } from '@microsoft/decorators';  
-import { Log } from '@microsoft/sp-core-library';  
 import * as React from 'react';  
-import * as ReactDOM from "react-dom";  
-import { Component } from "react";
+import * as ReactDOM from "react-dom"; 
 import {  
   BaseApplicationCustomizer,  
   PlaceholderContent,  
   PlaceholderName
 } from '@microsoft/sp-application-base';
 
-import Main, { IMainProps } from './Main';
+import Main, { IMainProps } from './Components/Main';
+import LandingPage, { ILandingPageProps } from './Components/LandingPage';
 
-import * as strings from 'AppApplicationCustomizerStrings';
-
-const LOG_SOURCE: string = 'AppApplicationCustomizer';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -32,9 +28,8 @@ export default class AppApplicationCustomizer
 
     @override  
     public onInit(): Promise<void> {  
-      Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);  
-    
-         this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);  
+      
+      this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);  
       
       return Promise.resolve<void>();  
     }
@@ -59,8 +54,11 @@ export default class AppApplicationCustomizer
             topString = "(Top property was not defined.)";  
           }  
           if (this._topPlaceholder.domElement) {  
-            const elem: React.ReactElement<IMainProps> = React.createElement(Main,{});  
-            ReactDOM.render(elem, this._topPlaceholder.domElement);            
+            /*const elem: React.ReactElement<IMainProps> = React.createElement(Main,{});  
+            ReactDOM.render(elem, this._topPlaceholder.domElement);*/ 
+            
+            const elem: React.ReactElement<ILandingPageProps> = React.createElement(LandingPage,{});  
+            ReactDOM.render(elem, this._topPlaceholder.domElement);
             
             // Obtém o título do site
             var webTitle = this.context.pageContext.web.title

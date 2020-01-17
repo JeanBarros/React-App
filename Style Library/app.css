@@ -10,12 +10,73 @@ body, html {
     font-size: 16px;
 }
 
-.header{
-    font-size: initial;
+.headerRow-139{
+    display: none;
 }
 
-.logo{
-    background: url("./images/Logo_CBMM-03.png") no-repeat;
+.searchCell-176{
+    display: none;
+}
+
+#overlay {
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+    position: fixed;
+    display: block;    
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("/sites/Lab02/SiteAssets/images/capa.png") no-repeat;
+    background-size: cover;
+    z-index: 5;
+}
+
+#overlay h1{
+    font-size: 3.75rem;
+}
+
+#overlay p{
+    font-size: 1.8rem;
+}
+
+#overlay .content{
+    padding: 33.3% 5%;
+}
+
+.btnLogin{
+    width: 181px;
+    height: 38px;
+    font-size: 1rem;
+    margin-top: 30px;
+    border-radius: 6px;
+    background-color: #8AA4AD;    
+    cursor: pointer;
+    position: relative;
+    z-index: 5;
+}
+
+.btnLogin div{
+    display: inline-flex;
+    align-items: center;
+}
+
+.btnLogin i{
+    font-size: 22px;
+    margin-right: 10px;
+}
+
+.logoLandingPage{
+    width: 273px;
+    height: 51px;
+    background: url("/sites/Lab02/SiteAssets/images/LogoLandingPage.png") no-repeat;
+    margin-bottom: 30px;
+    display: inline-block;
+}
+
+.logoHeader{
+    background: url("/sites/Lab02/SiteAssets/images/Logo_CBMM-03.png") no-repeat;
     border-right: solid 2px white;
     padding-right: 20px;
     width: 136px;
@@ -29,7 +90,7 @@ body, html {
     font-size: 1.5625em;
 }
 
-.headerRow-139{
+.root-139{
     display: none !important;
 }
 
@@ -116,5 +177,17 @@ input:checked ~ label .hamburguer:after {
 @media screen and (max-width: 992px) {
     .w3-container, .w3-panel {
         padding: .01em 16px !important;
+    }
+
+    .logoLandingPage{
+        background-size: 60%;
+    }
+
+    #overlay h1{
+        font-size: 2rem;
+    }
+    
+    #overlay p{
+        font-size: 1rem;
     }
   }

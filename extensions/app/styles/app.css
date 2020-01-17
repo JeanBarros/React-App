@@ -1,0 +1,152 @@
+body, html {
+    font-family: sans-serif !important;
+    font-size: 16px !important;
+    line-height: 1.5;
+}
+
+._71hjFgizWk0Cd55RzerwA{
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+}
+
+.headerRow-139{
+    display: none;
+}
+
+#o365cs-flexpane-overlay{
+    /*background-color: green;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    z-index: 1;*/
+}
+
+.btnLogin{
+    position: relative;
+    z-index: 5;
+}
+
+.searchCell-176{
+    display: none;
+}
+
+#overlay {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: blue !important;
+    z-index: 5;
+    cursor: pointer;
+  }
+
+.logo{
+    background: url("./images/Logo_CBMM-03.png") no-repeat;
+    border-right: solid 2px white;
+    padding-right: 20px;
+    width: 136px;
+    height: 22px;
+    display: inline-block;
+}
+
+#webTitle{
+    display: inline-block;
+    padding-left: 15px;
+    font-size: 1.5625em;
+}
+
+.root-139{
+    display: none !important;
+}
+
+.commandBarWrapper .ms-CommandBar {
+    display: none !important;
+}
+
+[data-sp-feature-tag="Site header host"] {
+    border-bottom: none !important;
+}
+
+.w3-container, .w3-panel {
+    padding: 0.01em 120px !important;
+}
+
+.left-nav-toggle{
+    width: 30px;
+    height: 25px;
+    padding-left: 25px;
+    display: inline-flex;
+    float: left;
+}
+
+.toggle-label{
+    padding-left: 25px;
+    padding-top: 5px;
+    color: #707070;
+}
+
+.menu {
+    width: 25px;
+    height: 25px;
+}
+
+.hamburguer {
+    position: relative;
+    display: block;
+    background: #707070;
+    width: 30px;
+    height: 2px;
+    top: 15px;
+    left: 0;
+    transition: .5s ease-in-out;
+}
+
+.hamburguer:before,
+.hamburguer:after {
+    background: #707070;
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: .5s ease-in-out;
+}
+
+.hamburguer:before {
+    top: -10px;
+}
+
+.hamburguer:after {
+    bottom: -10px;
+}
+
+input {
+    display: none;
+}
+
+input:checked ~ label .hamburguer {
+    transform: rotate(45deg);
+}
+
+input:checked ~ label .hamburguer:before {
+    transform: rotate(90deg);
+    top: 0;
+}
+
+input:checked ~ label .hamburguer:after {
+    transform: rotate(90deg);
+    bottom: 0;
+}
+
+/* On screens that are 992px or less */
+@media screen and (max-width: 992px) {
+    .w3-container, .w3-panel {
+        padding: .01em 16px !important;
+    }
+  }
