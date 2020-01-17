@@ -9,7 +9,7 @@ function UserGreeting(props) {
     <div>      
       <Main/>
     </div>
-  )
+  );
 }
 
 function GuestGreeting(props) {
@@ -27,7 +27,7 @@ function Greeting(props) {
       <div>
         <UserGreeting />        
       </div>
-    )
+    );
   }
   return <GuestGreeting />;
 }
@@ -74,15 +74,15 @@ class LoginControl extends React.Component<any, any> {
     this.state = {isLoggedIn: false};
   }
 
-  handleLoginClick() {
+  public handleLoginClick() {
     this.setState({isLoggedIn: true});
   }
 
-  handleLogoutClick() {
+  public handleLogoutClick() {
     this.setState({isLoggedIn: false});
   }
 
-  render() {
+  public render() {
     const isLoggedIn = this.state.isLoggedIn;
     let button;
 
@@ -103,9 +103,9 @@ class LoginControl extends React.Component<any, any> {
 
 export default class LandingPage extends React.Component<ILandingPageProps> {  
   constructor(props: ILandingPageProps) {  
-    super(props)
+    super(props);
 
-    var head = document.getElementsByTagName('HEAD')[0]
+    var head = document.getElementsByTagName('HEAD')[0];
       var link = document.createElement('link'); 
       link.rel = 'stylesheet'; 
       link.type = 'text/css'; 

@@ -3,15 +3,15 @@ import { SPComponentLoader } from '@microsoft/sp-loader'; //Não remover
 
 import "../app.css";
 
-import Content from './Content'
-import LandingPage from './LandingPage'
+import Content from './Content';
+import LandingPage from './LandingPage';
 
 export interface IMainProps {}   
 
 export default class Main extends React.Component<IMainProps> {
-  domElement: any;  
+  public domElement: any;  
   constructor(props: IMainProps) {  
-    super(props)
+    super(props);
 
     SPComponentLoader.loadScript('https://code.jquery.com/jquery-3.4.1.js', {
         globalExportsName: 'jQuery'
@@ -27,13 +27,13 @@ export default class Main extends React.Component<IMainProps> {
           // Estes elementos são ocultados no arquivo app.css
           // Em conexões lentas, os elementos padrão do SharePoint às vezes demoram para serem carregados
           // Caso o CSS seja carregado antes do elemento ser rederizado, uma segunda ação é realizada
-          $('.headerRow-139').hide()
-          $('._2kc0c9nP-qti6fefMCFonk').css({'display':'none', 'font-size': 'initial', 'border': 'solid 1px red', 'float': 'left'})
-          $('.header').css('margin-left','130px')
+          $('.headerRow-139').hide();
+          $('._2kc0c9nP-qti6fefMCFonk').css({'display':'none', 'font-size': 'initial', 'border': 'solid 1px red', 'float': 'left'});
+          $('.header').css('margin-left','130px');
           
           // Obtém o valor do <input hidden field> e o define no elemento webTitle
-          var siteName = $('#siteName').val()
-          $('#webTitle').text(siteName)
+          var siteName = $('#siteName').val();
+          $('#webTitle').text(siteName);
         }, 2000);
         
       });

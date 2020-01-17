@@ -61,7 +61,7 @@ export default class AppApplicationCustomizer
             ReactDOM.render(elem, this._topPlaceholder.domElement);
             
             // Obtém o título do site
-            var webTitle = this.context.pageContext.web.title
+            var webTitle = this.context.pageContext.web.title;
 
             // Cria um elemento com seu valor definido para o título do site
             const webTitleElement = <input type="hidden" id="siteName" name="custId" value={webTitle}></input>;            

@@ -6,15 +6,15 @@ export interface IcontentProps {}
 
 export default class Content extends React.Component<IcontentProps> {  
   constructor(props: IcontentProps) {  
-    super(props)
+    super(props);
   }
 
-  OpenCloseSideNav(){
+  public OpenCloseSideNav(){
     var element = document.getElementById("sideNav"); 
     element.classList.toggle("sideNav");
   }
 
-  render() {
+  public render() {
     
     return (
       <div>
