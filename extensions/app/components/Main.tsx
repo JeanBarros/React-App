@@ -1,8 +1,6 @@
 import * as React from 'react';  
 import { SPComponentLoader } from '@microsoft/sp-loader'; //Não remover
 
-import "../app.css";
-
 import Content from './Content';
 import LandingPage from './LandingPage';
 
@@ -19,22 +17,23 @@ export default class Main extends React.Component<IMainProps> {
         this.jQuery = $;
 
         // after all JS files are successfully loaded
-        setTimeout(function(){
-          var header = document.createElement("DIV");
+        // setTimeout(function(){
+          
+        // }, 2000);
+
+        var header = document.createElement("DIV");
           header.innerHTML = "<div class='header'><div class='logoHeader'></div><div id='webTitle'></div></div>"; 
           document.getElementsByClassName('_71hjFgizWk0Cd55RzerwA')[0].appendChild(header); 
 
-          // Estes elementos são ocultados no arquivo app.css
-          // Em conexões lentas, os elementos padrão do SharePoint às vezes demoram para serem carregados
-          // Caso o CSS seja carregado antes do elemento ser rederizado, uma segunda ação é realizada
-          $('.headerRow-139').hide();
           $('._2kc0c9nP-qti6fefMCFonk').css({'display':'none', 'font-size': 'initial', 'border': 'solid 1px red', 'float': 'left'});
-          $('.header').css('margin-left','130px');
           
           // Obtém o valor do <input hidden field> e o define no elemento webTitle
           var siteName = $('#siteName').val();
           $('#webTitle').text(siteName);
-        }, 2000);
+
+          // Cabeçalho padrão das páginas modernas
+          var mainHeader = document.getElementsByClassName("ms-CompositeHeader-collapsible")[0].parentNode.parentNode;
+          mainHeader.parentNode.removeChild(mainHeader);
         
       });
   }  

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import "../sideNav.css";
 import Main from './Main';
 
 export interface ILandingPageProps {}   
@@ -14,9 +13,7 @@ function UserGreeting(props) {
 
 function GuestGreeting(props) {
   return (
-    <div>  
-      
-    </div>    
+    <div></div>    
   );
 }
 
@@ -58,14 +55,6 @@ function LoginButton(props) {
   );
 }
 
-function LogoutButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Logout
-    </button>
-  );
-}
-
 class LoginControl extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -86,11 +75,8 @@ class LoginControl extends React.Component<any, any> {
     const isLoggedIn = this.state.isLoggedIn;
     let button;
 
-    if (isLoggedIn) {
-      button = <LogoutButton onClick={this.handleLogoutClick} />;
-    } else {
+    if(!isLoggedIn)
       button = <LoginButton onClick={this.handleLoginClick} />;
-    }
 
     return (
       <div>
@@ -103,16 +89,7 @@ class LoginControl extends React.Component<any, any> {
 
 export default class LandingPage extends React.Component<ILandingPageProps> {  
   constructor(props: ILandingPageProps) {  
-    super(props);
-
-    var head = document.getElementsByTagName('HEAD')[0];
-      var link = document.createElement('link'); 
-      link.rel = 'stylesheet'; 
-      link.type = 'text/css'; 
-      link.href = '/sites/Lab02/Style%20Library/app.css';  
-
-      // Append link element to HTML head 
-      head.appendChild(link);
+    super(props);    
   }
 
   public render() {

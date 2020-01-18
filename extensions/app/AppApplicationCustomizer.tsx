@@ -26,6 +26,26 @@ export default class AppApplicationCustomizer
   extends BaseApplicationCustomizer<IAppApplicationCustomizerProps> {
     private _topPlaceholder: PlaceholderContent | undefined;
 
+    constructor(){
+      super();
+
+      var head = document.getElementsByTagName('HEAD')[0];
+
+      var appStyle = document.createElement('link'); 
+      appStyle.rel = 'stylesheet'; 
+      appStyle.type = 'text/css'; 
+      appStyle.href = '/sites/Lab02/Style%20Library/app.css';  
+
+      var sideNavStyle = document.createElement('link'); 
+      sideNavStyle.rel = 'stylesheet'; 
+      sideNavStyle.type = 'text/css'; 
+      sideNavStyle.href = '/sites/Lab02/Style%20Library/sideNav.css';  
+
+      // Append link element to HTML head 
+      head.appendChild(appStyle);
+      head.appendChild(sideNavStyle);
+    }  
+
     @override  
     public onInit(): Promise<void> {  
       

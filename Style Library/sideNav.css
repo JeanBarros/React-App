@@ -49,8 +49,8 @@
 }
 
 .btnOpenNav{
-    position: relative;
-    top: -52px;
+    position: fixed;
+    top: 0;
     left: 0;
     z-index: 5;    
     border:none;
@@ -68,6 +68,11 @@
 
 .btnOpenNav:hover{
     background-color: transparent;
+}
+
+.btnOpenNav, .o365sx-navbar {
+    position: fixed;
+    top: 0px;
 }
 
 .btnOpenNav span{
