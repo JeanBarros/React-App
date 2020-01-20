@@ -1,8 +1,11 @@
 import * as React from 'react';  
 import { SPComponentLoader } from '@microsoft/sp-loader'; //Não remover
 
-import Content from './Content';
 import LandingPage from './LandingPage';
+import Content from './Content';
+import Favoritos from './Favoritos';
+import Downloads from './Downloads';
+
 
 export interface IMainProps {}   
 
@@ -43,7 +46,7 @@ export default class Main extends React.Component<IMainProps> {
   public render(): JSX.Element {  
     return (
       <div>
-        {<Content/>} {/*Referenciando o componente*/}
+        {<Downloads/>} {/*Referenciando o componente*/}
         {/*<LandingPage/>*/} {/*Referenciando o componente*/}
         <div id="root"></div>
       </div>

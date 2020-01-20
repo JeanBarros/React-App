@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-export interface IcontentProps {}   
+export interface IDownloadsProps {}   
 
-export default class Content extends React.Component<IcontentProps> {  
-  constructor(props: IcontentProps) {  
+export default class Downloads extends React.Component<IDownloadsProps> {  
+  constructor(props: IDownloadsProps) {  
     super(props);
   }
 
@@ -21,8 +21,8 @@ export default class Content extends React.Component<IcontentProps> {
           <ul>
             <li>
               <a href="#" className="w3-bar-item w3-button sideNavHeadLink">
-                <i className="ms-Icon ms-Icon--FavoriteStar"></i>
-                Favoritos
+                <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
+                Downloads
               </a>
             </li>
             <li>
@@ -67,7 +67,7 @@ export default class Content extends React.Component<IcontentProps> {
           <div className="ms-Grid-row w3-container">
             <div className="ms-Grid-col ms-md1 block"></div> 
             <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
-              <h1>Controladoria</h1>
+              <h1>Downloads</h1>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices dapibus egestas. 
                 Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
                 Vivamus efficitur urna vel velit porttitor tempus. Aliquam arcu orci, laoreet a tortor in, 
@@ -77,8 +77,30 @@ export default class Content extends React.Component<IcontentProps> {
             <div className="ms-Grid-col ms-md1 block"></div>
           </div>
           <div className="ms-Grid-row w3-container">
-            <div className="ms-Grid-col ms-sm12 ms-md12 block">
-              <p>Filters goes here</p>
+            <div className="ms-Grid-col ms-sm6 ms-md6 block favoriteFilters">
+              Filtrar por:
+              <select name="Categoria">
+                <option value="Categoria">Categoria</option>
+                <option value="todasCategorias">Todas as categorias</option>
+                <option value="comercial">Comercial</option>
+                <option value="controladoria">Controladoria</option>
+                <option value="manutencao">Manutenção</option>
+                <option value="mina">Mina</option>
+                <option value="pcp">PCP</option>
+                <option value="rh">RH</option>
+                <option value="subsidiarias">Subsidiárias</option>
+              </select>
+            </div>            
+            <div className="ms-Grid-col ms-sm6 ms-md6 block favoriteFilters">
+              <div className="filterOrder">
+                Ordenar por:
+                <select name="Order">
+                  <option value="maisRecente">Mais recente</option>
+                  <option value="maisAntigo">Mais antigo</option>
+                  <option value="az">Ordem A > Z</option>
+                  <option value="za">Ordem Z > A</option>
+                </select>
+              </div>
             </div>
           </div>
           <div className="ms-Grid-row w3-container">
@@ -100,19 +122,19 @@ export default class Content extends React.Component<IcontentProps> {
                   </div>           
                   <div className="ms-Grid-col ms-sm6 ms-md6">
                     <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStar"></i>
+                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
                       <br></br>
                       <strong>Tipo:</strong>
                       <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-                        <span>Dashboard</span>
+                        <i className="ms-Icon ms-Icon--TextDocument"></i>
+                        <span>Arquivo</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="tileToolBar">
                   <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Dashboard</button>
+                  <button className="btnDashboard">Download</button>
                 </div>
               </div>
             </div> 
@@ -134,19 +156,19 @@ export default class Content extends React.Component<IcontentProps> {
                   </div>           
                   <div className="ms-Grid-col ms-sm6 ms-md6">
                     <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStar"></i>
+                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
                       <br></br>
                       <strong>Tipo:</strong>
                       <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-                        <span>Dashboard</span>
+                        <i className="ms-Icon ms-Icon--TextDocument"></i>
+                        <span>Arquivo</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="tileToolBar">
                   <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Dashboard</button>
+                  <button className="btnDashboard">Download</button>
                 </div>
               </div>
             </div> 
@@ -168,19 +190,19 @@ export default class Content extends React.Component<IcontentProps> {
                   </div>           
                   <div className="ms-Grid-col ms-sm6 ms-md6">
                     <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStar"></i>
+                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
                       <br></br>
                       <strong>Tipo:</strong>
                       <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-                        <span>Dashboard</span>
+                        <i className="ms-Icon ms-Icon--TextDocument"></i>
+                        <span>Arquivo</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="tileToolBar">
                   <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Dashboard</button>
+                  <button className="btnDashboard">Download</button>
                 </div>
               </div>
             </div>
@@ -210,19 +232,19 @@ export default class Content extends React.Component<IcontentProps> {
                   </div>           
                   <div className="ms-Grid-col ms-sm6 ms-md6">
                     <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStar"></i>
+                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
                       <br></br>
                       <strong>Tipo:</strong>
                       <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-                        <span>Dashboard</span>
+                        <i className="ms-Icon ms-Icon--TextDocument"></i>
+                        <span>Arquivo</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="tileToolBar">
                   <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Dashboard</button>
+                  <button className="btnDashboard">Download</button>
                 </div>
               </div>
             </div> 
@@ -244,19 +266,19 @@ export default class Content extends React.Component<IcontentProps> {
                   </div>           
                   <div className="ms-Grid-col ms-sm6 ms-md6">
                     <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStar"></i>
+                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
                       <br></br>
                       <strong>Tipo:</strong>
                       <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-                        <span>Dashboard</span>
+                        <i className="ms-Icon ms-Icon--TextDocument"></i>
+                        <span>Arquivo</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="tileToolBar">
                   <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Dashboard</button>
+                  <button className="btnDashboard">Download</button>
                 </div>
               </div>
             </div> 
@@ -278,19 +300,19 @@ export default class Content extends React.Component<IcontentProps> {
                   </div>           
                   <div className="ms-Grid-col ms-sm6 ms-md6">
                     <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStar"></i>
+                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
                       <br></br>
                       <strong>Tipo:</strong>
                       <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-                        <span>Dashboard</span>
+                        <i className="ms-Icon ms-Icon--TextDocument"></i>
+                        <span>Arquivo</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="tileToolBar">
                   <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Dashboard</button>
+                  <button className="btnDashboard">Download</button>
                 </div>
               </div>
             </div>

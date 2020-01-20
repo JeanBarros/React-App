@@ -86,9 +86,9 @@ body, html {
 }
 
 .logoHeader{
-    background: url("/sites/Lab02/SiteAssets/images/Logo_CBMM-03.png") no-repeat;
     width: 136px;
     height: 22px;
+    background: url("/sites/Lab02/SiteAssets/images/Logo_CBMM-03.png") no-repeat;    
     display: inline-block;
 }
 
@@ -186,12 +186,102 @@ input:checked ~ label .hamburguer:after {
 
 .pageDescription{
     text-align: center;
+    padding-top: 80px;
+    padding-bottom: 30px;
+    color: #868686;
 }
 
-.w3-container div{
-    width: 100%;
-    border: solid 1px blue;
+.pageDescription h1{
+    color: #d8d8d8;
+    font-weight: 400;
 }
+
+.tile{
+    width: 100%;
+    height: 182px;
+    font-size: 1.2rem;
+    background: #2E2E2E url("/sites/Lab02/SiteAssets/images/bgTitle.png") no-repeat;
+    background-size: cover;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.tileToolBar{
+    height: 62px;
+    width: 100%;
+    text-align: right;
+    margin-top: 20px;    
+    padding-top: 15px;
+    background-color: #2E2E2E;
+    opacity: 0.7;
+}
+
+.tile .ms-Icon {
+    color: #A9B7C6;
+}
+
+.categoryDescription{
+    font-size: 1.43rem;
+    padding-top: 15px;
+}
+
+.categoryIcon{
+    margin-top: 10px;
+}
+
+.categoryIcon .ms-Icon{
+    font-size: 3.5rem;    
+}
+
+.categoryInfo{
+    text-align: right;
+    float: right;
+}
+
+.categoryInfo .ms-Icon{
+    font-size: 1.5rem;    
+}
+
+.categoryType span{
+    margin-left: 10px;
+}
+
+.btnDetalhes, .btnDashboard{
+    width: 120px;
+    height: 32px;
+    margin-right: 15px;
+    background-color: transparent;
+    border: solid 1px #fff;
+    border-radius: 3px;  
+    cursor: pointer;  
+    outline: 0;
+}
+
+.btnDashboard{
+    background-color: #A9B7C6;
+    border: none;
+}
+
+.favoriteFilters{
+    margin-bottom: 30px;
+}
+
+.favoriteFilters select{
+    width: 144px;
+    height: 30px;
+    border-radius: 3px;
+    margin-left: 15px;
+    outline: 0;
+}
+
+.filterOrder{
+    float: right;
+}
+
+.spaceBotton{
+    padding-bottom: 50px !important;
+}
+
 
 /* On screens that are 992px or less */
 @media screen and (max-width: 992px) {
