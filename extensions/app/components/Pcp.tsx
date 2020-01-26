@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-export interface IDownloadsProps {}   
+export interface IPcpProps {}   
 
-export default class Downloads extends React.Component<IDownloadsProps> {  
-  constructor(props: IDownloadsProps) {  
+export default class Pcp extends React.Component<IPcpProps> {  
+  constructor(props: IPcpProps) {  
     super(props);
   }
 
@@ -14,7 +14,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
           <div className="ms-Grid-row w3-container">
             <div className="ms-Grid-col ms-md1 block"></div> 
             <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
-              <h1>Downloads</h1>
+              <h1>Pcp</h1>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices dapibus egestas. 
                 Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
                 Vivamus efficitur urna vel velit porttitor tempus. Aliquam arcu orci, laoreet a tortor in, 
@@ -29,10 +29,10 @@ export default class Downloads extends React.Component<IDownloadsProps> {
               <select name="Categoria">
                 <option value="Categoria">Categoria</option>
                 <option value="todasCategorias">Todas as categorias</option>
-                <option value="comercial">Comercial</option>
-                <option value="controladoria">Controladoria</option>
-                <option value="manutencao">Manutenção</option>
-                <option value="mina">Mina</option>
+                <option value="Pcp">Pcp</option>
+                <option value="Pcp">Pcp</option>
+                <option value="Pcp">Manutenção</option>
+                <option value="Pcp">Pcp</option>
                 <option value="pcp">PCP</option>
                 <option value="rh">RH</option>
                 <option value="subsidiarias">Subsidiárias</option>

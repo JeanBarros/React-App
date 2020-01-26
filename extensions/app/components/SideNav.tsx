@@ -1,8 +1,6 @@
 import * as React from 'react';
-import * as ReactDOM from "react-dom";  
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
-import { SPComponentLoader } from '@microsoft/sp-loader'; //Não remover
 
 import Favoritos from './Favoritos';
 import Downloads from './Downloads';
@@ -13,59 +11,23 @@ import Mina from './Mina';
 import Pcp from './Pcp';
 import Rh from './Rh';
 import Subsidiarias from './Subsidiarias';
-import {SharePointData, SharePointWebTitle} from '../AppApplicationCustomizer'
 
-export interface IMainProps {}   
+export interface ISideNavProps {} 
 
-export default class Main extends React.Component<IMainProps> {
-  public domElement: any;  
-  constructor(props: IMainProps) {  
+export default class SideNav extends React.Component<ISideNavProps> {
+  constructor(props: ISideNavProps) {  
     super(props);
-
-    SPComponentLoader.loadScript('https://code.jquery.com/jquery-3.4.1.js', {
-        globalExportsName: 'jQuery'
-        }).then(($: any) => {
-        this.jQuery = $;
-
-        // after all JS files are successfully loaded
-        // setTimeout(function(){
-          
-        // }, 2000);
-
-        var header = document.createElement("DIV");
-          header.innerHTML = "<div class='header'><div class='logoHeader'></div><div id='webTitle'></div></div>"; 
-          document.getElementsByClassName('_71hjFgizWk0Cd55RzerwA')[0].appendChild(header); 
-
-          $('._2kc0c9nP-qti6fefMCFonk').css({'display':'none', 'font-size': 'initial', 'border': 'solid 1px red', 'float': 'left'});
-          
-          // Obtém o valor do <input hidden field> e o define no elemento webTitle
-        //   var siteName = $('#siteName').val();
-        //   $('#webTitle').text(siteName);
-
-          // Cabeçalho padrão das páginas modernas
-          var mainHeader = document.getElementsByClassName("ms-CompositeHeader-collapsible")[0].parentNode.parentNode;
-          mainHeader.parentNode.removeChild(mainHeader);
-
-          ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));
-        
-      });
-  }  
-
-  private jQuery: any;
+  }
 
   public OpenCloseSideNav(){
     var element = document.getElementById("sideNav"); 
     element.classList.toggle("sideNav");
   }
 
-  public render(): JSX.Element {
-
+  public render() {
     
-    return (
-      <div>  
-          <div id="myData">            
-            <SharePointData />
-          </div>        
+    return (      
+        <div>
           <HashRouter>   
                 <nav className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="sideNav">    
                     <div className="sideNavLogo"></div>
@@ -160,5 +122,5 @@ export default class Main extends React.Component<IMainProps> {
         </div>
       </div>
     );
-  }
+  } 
 }

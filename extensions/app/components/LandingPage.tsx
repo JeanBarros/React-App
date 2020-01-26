@@ -87,15 +87,15 @@ class LoginControl extends React.Component<any, any> {
   }
 }
 
-export default class LandingPage extends React.Component<ILandingPageProps> {  
+export default class LandingPage extends React.Component<ILandingPageProps> {
   constructor(props: ILandingPageProps) {  
     super(props);    
   }
 
   public render() {
     return (
-      <div> 
-        <div id="root"></div>            
+      <div>
+        <div id="root"></div>        
         <LoginControl />
       </div>
     );  

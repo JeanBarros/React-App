@@ -1,69 +1,16 @@
 import * as React from 'react';
 
-export interface IFavoritosProps {}   
+export interface IFavoritosProps {}  
 
-export default class Favoritos extends React.Component<IFavoritosProps> {  
+export default class Favoritos extends React.Component<IFavoritosProps> {
   constructor(props: IFavoritosProps) {  
     super(props);
   }
 
-  public OpenCloseSideNav(){
-    var element = document.getElementById("sideNav"); 
-    element.classList.toggle("sideNav");
-  }
-
   public render() {
-    
-    return (
-      <div>
-        <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="sideNav">
-          <div className="sideNavLogo"></div>
-          <ul>
-            <li>
-              <a href="#" className="w3-bar-item w3-button sideNavHeadLink">
-                <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                Favoritos
-              </a>
-            </li>
-            <li>
-              <a href="#" className="w3-bar-item w3-button sideNavHeadLink">
-                <i className="ms-Icon ms-Icon--Download"></i>
-                Downloads
-              </a>
-            </li>
-            <li className="spacer"></li>
-            <li className="sideNavHeadLink">
-              <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-              Dashboards
-            </li>
-            <li>
-              <ul className="sideNavSubLink">
-                <li><a href="#" className="w3-bar-item w3-button">Comercial</a></li>
-                <li><a href="#" className="w3-bar-item w3-button">Controladoria</a></li>
-                <li><a href="#" className="w3-bar-item w3-button">Manutenção</a></li>
-                <li><a href="#" className="w3-bar-item w3-button">Mina</a></li>
-                <li><a href="#" className="w3-bar-item w3-button">PCP</a></li>
-                <li><a href="#" className="w3-bar-item w3-button">RH</a></li>
-                <li><a href="#" className="w3-bar-item w3-button">Subsidiárias</a></li>
-                <li className="spacer"></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#" className="w3-bar-item w3-button sideNavLink">
-                <i className="ms-Icon ms-Icon--Add"></i>
-                Adicionar Novo...
-              </a>
-            </li>
-            <li>
-              <a href="#" className="w3-bar-item w3-button sideNavLink">
-                <i className="ms-Icon ms-Icon--SignOut"></i>
-                Sair
-              </a>
-            </li>
-          </ul>
-        </div>
+    return (      
+      <div>        
         <div>
-          <button onClick={this.OpenCloseSideNav} className="w3-xlarge btnOpenNav">☰<span>Menu</span></button>
           <div className="ms-Grid-row w3-container">
             <div className="ms-Grid-col ms-md1 block"></div> 
             <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">

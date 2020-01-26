@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-export interface IDownloadsProps {}   
+export interface IComercialProps {}   
 
-export default class Downloads extends React.Component<IDownloadsProps> {  
-  constructor(props: IDownloadsProps) {  
+export default class Comercial extends React.Component<IComercialProps> {  
+  constructor(props: IComercialProps) {  
     super(props);
   }
 
@@ -14,7 +14,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
           <div className="ms-Grid-row w3-container">
             <div className="ms-Grid-col ms-md1 block"></div> 
             <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
-              <h1>Downloads</h1>
+              <h1>Comercial</h1>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices dapibus egestas. 
                 Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
                 Vivamus efficitur urna vel velit porttitor tempus. Aliquam arcu orci, laoreet a tortor in, 
