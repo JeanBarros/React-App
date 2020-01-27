@@ -26,16 +26,11 @@ export interface IAppApplicationCustomizerProps {
 export interface ISPLists {  
   value: ISPList[];  
 }  
-export interface ISPList { 
-  Title: string; 
-  EmployeeId: string;  
-  EmployeeName: string;  
-  Experience: string;  
-  Location: string;  
-}
+
+export interface ISPList {}
 
 let webTitle;
-let myItens = [];
+let reportListItens;
 
 /** A Custom Action which can be run during execution of a Client Side Application */
 export default class AppApplicationCustomizer
@@ -82,25 +77,10 @@ export default class AppApplicationCustomizer
 
     private _renderListAsync(): void {        
       this._getListData()  
-        .then((response) => {  
-          this._renderList(response.value);            
+        .then((response) => {
+          reportListItens = response.value;
       });        
     } 
-    
-    
-    private _renderList(items: ISPList[]): void { 
-      
-      let itemTitleElement = <table></table>;
-      
-      
-      items.forEach((item: ISPList) => { 
-          console.log(item.Title, item.EmployeeId, item.EmployeeName, item.Experience, item.Location);
-          itemTitleElement = <tr>{item.Title}></tr> ;
-
-          myItens.push(item.Title);            
-        }      
-      );      
-    }
 
     public _renderPlaceHolders(): void {  
       // Handling the top placeholder  
@@ -151,14 +131,14 @@ export default class AppApplicationCustomizer
 }
 
 class Car extends React.Component<any> {
-  render() {
+  public render() {
     return <h2>I am a {this.props.brand.color}&nbsp;{this.props.brand.model}!
     </h2>;
   }
 }
 
 export class Garage extends React.Component {
-  render() {    
+  public render() {    
     const carinfo = {name: "Ford", model: "Mustang", color: "red"};
     return (
       <div>
@@ -169,25 +149,48 @@ export class Garage extends React.Component {
   }
 }
 
-export class SharePointData extends React.Component{
-  render(){
-    const listItems = myItens.map((number) =>      
-      <li>
-        <HashRouter>
-          <Link to={`/${number}`} className="w3-bar-item w3-button">
-            {number}
-          </Link>
-        </HashRouter>        
+export class SideNav extends React.Component{  
+  public render(){
+    console.log(reportListItens)
+    const listItems = reportListItens.map((item) =>
+      <li key={item.Id}>        
+        <HashRouter>  
+          {/* A coluna linkPath armazena os parâmetros a serem utilzados para referenciar o componente de cada categoria */}
+          {/* a função normalize() combinada com a regex converte acentos e cedilha para caracteres não acentuados e "c". */}
+          {item.linkType == "Toplink" ? 
+            <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
+              className="w3-bar-item w3-button sideNavHeadLink">
+              {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+              <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
+              <span>{item.linkTitle0}</span>
+            </Link>
+          : null}
+          {item.linkType == "Heading" ? 
+            <div className="sideNavHeadLink">
+              {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+              <i className="ms-Icon ms-Icon--PowerBILogo"></i>
+              {item.linkTitle0}
+            </div>
+          : null} 
+          {item.linkType == "Sublink" ? 
+            <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
+              className="w3-bar-item w3-button">
+              {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+              <span>{item.linkTitle0}</span>
+            </Link>
+          : null}         
+        </HashRouter> 
+        {console.log(item.Title)}          
       </li>      
     );
     return(      
-      <ul>{listItems}</ul>
+      <ul id="sideNavSubLinks" className="sideNavSubLink">{listItems}</ul>
     );
   }
 }
 
 export class SharePointWebTitle extends React.Component{
-  render(){
+  public render(){
     return(webTitle);
   }
 }
