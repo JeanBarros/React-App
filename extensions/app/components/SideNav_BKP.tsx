@@ -33,19 +33,19 @@ export default class SideNav extends React.Component<ISideNavProps> {
                     <div className="sideNavLogo"></div>
                     <ul>    
                         <li>
-                            <Link to={'/favoritos'} className="w3-bar-item w3-button sideNavHeadLink">
+                            <Link to={'/favoritos'} className="w3-bar-item w3-button sideNavHeading">
                                 <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
                                 <span>Favoritos</span>
                             </Link>
                         </li>
                         <li>
-                            <Link to={'/downloads'} className="w3-bar-item w3-button sideNavHeadLink">
+                            <Link to={'/downloads'} className="w3-bar-item w3-button sideNavHeading">
                                 <i className="ms-Icon ms-Icon--Download"></i>
                                 <span>Downloads</span>
                             </Link>
                         </li>
                         <li className="spacer"></li>
-                        <li className="sideNavHeadLink">
+                        <li className="sideNavHeading">
                         <i className="ms-Icon ms-Icon--PowerBILogo"></i>
                         Dashboards
                         </li>

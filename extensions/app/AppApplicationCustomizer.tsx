@@ -152,39 +152,72 @@ export class Garage extends React.Component {
 export class SideNav extends React.Component{  
   public render(){
     console.log(reportListItens)
-    const listItems = reportListItens.map((item) =>
+    const headings = reportListItens.map((item) =>
       <li key={item.Id}>        
         <HashRouter>  
           {/* A coluna linkPath armazena os parâmetros a serem utilzados para referenciar o componente de cada categoria */}
           {/* a função normalize() combinada com a regex converte acentos e cedilha para caracteres não acentuados e "c". */}
-          {item.linkType == "Toplink" ? 
+          {item.linkType == "Top link" ? 
             <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-              className="w3-bar-item w3-button sideNavHeadLink">
+              className="w3-bar-item w3-button sideNavHeading">
               {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-              <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
+              <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
               <span>{item.linkTitle0}</span>
             </Link>
           : null}
           {item.linkType == "Heading" ? 
-            <div className="sideNavHeadLink">
+            <div className="sideNavHeading">
+              <li className="spacerTop"></li>
               {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-              <i className="ms-Icon ms-Icon--PowerBILogo"></i>
+              <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
               {item.linkTitle0}
             </div>
-          : null} 
-          {item.linkType == "Sublink" ? 
-            <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-              className="w3-bar-item w3-button">
-              {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-              <span>{item.linkTitle0}</span>
-            </Link>
-          : null}         
-        </HashRouter> 
-        {console.log(item.Title)}          
+          : null}                    
+        </HashRouter>          
       </li>      
     );
+    const subLinks = reportListItens.map((item) =>
+      <li key={item.Id}>        
+        <HashRouter>
+          {item.linkType == "Sublink" ?             
+              <li>
+                <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
+                  className="w3-bar-item w3-button">
+                  {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                  <span>{item.linkTitle0}</span>
+                </Link>
+              </li>
+          : null}        
+        </HashRouter>          
+      </li>      
+    );
+    const bottomLinks = reportListItens.map((item) =>
+      <li key={item.Id}>        
+        <HashRouter>          
+          {item.linkType == "Bottom link" ?             
+              <li>
+                <Link to={'#'} 
+                  className="w3-bar-item w3-button sideNavLinkBottom">
+                  <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                  <span>{item.linkTitle0}</span>
+                </Link>
+              </li>
+          : null}         
+        </HashRouter>          
+      </li>      
+    );
+    
     return(      
-      <ul id="sideNavSubLinks" className="sideNavSubLink">{listItems}</ul>
+      <ul className="sideNavBottom">
+        <li>
+          {headings}
+          <ul className="sideNavSubLinks">
+            {subLinks}
+          </ul>
+        </li>
+        <li className="spacerBottom"></li>
+        {bottomLinks}        
+      </ul>
     );
   }
 }

@@ -278,6 +278,19 @@ input:checked ~ label .hamburguer:after {
     float: right;
 }
 
+.detalhes h1{
+    font-size: 32px;
+}
+
+.detalhes p{
+    font-size: 20px;
+    font-weight: lighter !important;
+}
+
+.detalhes span{
+    font-weight: 400;
+}
+
 .spaceBotton{
     padding-bottom: 50px !important;
 }

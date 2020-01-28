@@ -13,6 +13,8 @@ import Mina from './Mina';
 import Pcp from './Pcp';
 import Rh from './Rh';
 import Subsidiarias from './Subsidiarias';
+import Detalhes from './Detalhes';
+import Report from './Report';
 import {SideNav, SharePointWebTitle} from '../AppApplicationCustomizer';
 
 export interface IMainProps {}   
@@ -78,6 +80,8 @@ export default class Main extends React.Component<IMainProps> {
                         <Route path='/pcp' component={Pcp} />
                         <Route path='/rh' component={Rh} />
                         <Route path='/subsidiarias' component={Subsidiarias} /> 
+                        <Route path='/detalhes' component={Detalhes} />
+                        <Route path='/report' component={Report} /> 
                     </Switch> 
                 </div> 
         </HashRouter>
