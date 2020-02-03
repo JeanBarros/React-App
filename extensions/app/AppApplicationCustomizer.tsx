@@ -227,3 +227,57 @@ export class SharePointWebTitle extends React.Component{
     return(webTitle);
   }
 }
+
+export class ReportListItens extends React.Component{ 
+
+  showReportDetails = (linkPath: string) => {
+    alert(linkPath)
+  }
+
+  public render(){
+    const reports = reportListItens.map((item) =>
+      <div key={item.Id} className="ms-Grid-col ms-sm12 ms-md4 block">
+        {item.visibleOnTile == true ? 
+          <div className="tileBox">
+            <div className="tileBoxOverlay">
+              <div className="ms-Grid-row">
+                <div className="ms-Grid-col ms-sm8 ms-md8">
+                  <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-sm4 ms-md4">
+                      <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon})`}}>                                            
+                      </div>
+                    </div>  
+                    <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
+                      {item.Title}
+                    </div>
+                  </div>                    
+                </div>           
+                <div className="ms-Grid-col ms-sm4 ms-md4">
+                  <div className="reportCategoryInfo">
+                    <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
+                    <br></br>
+                    <strong>Tipo:</strong>
+                    <div className="reportCategoryType">                      
+                      <i className="ms-Icon ms-Icon--PowerBILogo"></i>
+                      <span>Dashboard</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <div className="tileBoxToolBar">
+                <button onClick={() => this.showReportDetails(`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`)} className="btnDetalhes">Detalhes</button>
+                <button className="btnDashboard">Dashboard</button>
+              </div>
+            </div>
+          </div>  
+        : null}        
+      </div>                 
+     );
+    
+    return(
+      <div>
+        {reports}
+      </div>
+    );
+  }
+}
