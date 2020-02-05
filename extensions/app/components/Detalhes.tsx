@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-export interface IComercialProps {}   
+export interface IDetalhesProps {} 
 
-export default class Comercial extends React.Component<IComercialProps> {  
-  constructor(props: IComercialProps) {  
+export default class Detalhes extends React.Component<any> {  
+  constructor(props: IDetalhesProps) {  
     super(props);
   }
 
-  public render() {    
+  public render() {
     return (      
       <div className="spaceBotton">
         <div className="ms-Grid-row w3-container">
@@ -31,8 +31,8 @@ export default class Comercial extends React.Component<IComercialProps> {
                 Mauris vel interdum felis. Duis iaculis blandit lacus eget pellentesque.
               </p>              
               <p style={{marginTop:'80px'}}>
-                <i className="ms-Icon ms-Icon--ChevronLeftSmall"></i>
-                <span style={{fontWeight:'bold', marginLeft:'5px'}}>Voltar</span> 
+                <i className="ms-Icon ms-Icon--ChevronLeftSmall"></i>                
+                  <a className="btnVoltar" href="#" onClick={() => this.props.history.goBack()}>Voltar</a>
               </p>
           </div>            
           <div className="ms-Grid-col ms-sm12 ms-md3 block">
@@ -44,7 +44,7 @@ export default class Comercial extends React.Component<IComercialProps> {
                       <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
                     </div>
                   </div>  
-                  <div className="ms-Grid-col ms-sm8 ms-md8 categoryDescription">
+                  <div className="ms-Grid-col ms-sm8 ms-md8">
                     Vendas<br></br>
                     FeNB
                   </div>

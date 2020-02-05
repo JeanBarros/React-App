@@ -61,7 +61,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
                           <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
                         </div>
                       </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8 categoryDescription">
+                      <div className="ms-Grid-col ms-sm8 ms-md8">
                         Vendas<br></br>
                         FeNB (T)
                       </div>
@@ -95,7 +95,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
                           <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
                         </div>
                       </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8 categoryDescription">
+                      <div className="ms-Grid-col ms-sm8 ms-md8">
                         Vendas<br></br>
                         FeNB (T)
                       </div>
@@ -129,7 +129,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
                           <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
                         </div>
                       </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8 categoryDescription">
+                      <div className="ms-Grid-col ms-sm8 ms-md8">
                         Vendas<br></br>
                         FeNB (T)
                       </div>
@@ -171,7 +171,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
                           <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
                         </div>
                       </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8 categoryDescription">
+                      <div className="ms-Grid-col ms-sm8 ms-md8">
                         Vendas<br></br>
                         FeNB (T)
                       </div>
@@ -205,7 +205,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
                           <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
                         </div>
                       </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8 categoryDescription">
+                      <div className="ms-Grid-col ms-sm8 ms-md8">
                         Vendas<br></br>
                         FeNB (T)
                       </div>
@@ -239,7 +239,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
                           <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
                         </div>
                       </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8 categoryDescription">
+                      <div className="ms-Grid-col ms-sm8 ms-md8">
                         Vendas<br></br>
                         FeNB (T)
                       </div>

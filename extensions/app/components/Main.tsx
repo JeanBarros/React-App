@@ -63,7 +63,7 @@ export default class Main extends React.Component<IMainProps> {
   public render(): JSX.Element {
     
     return (
-      <div>         
+      <div>      
           <HashRouter>   
                 <nav className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="sideNav">    
                     <div className="sideNavLogo"></div>

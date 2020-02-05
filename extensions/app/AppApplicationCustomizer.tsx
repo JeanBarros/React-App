@@ -13,6 +13,9 @@ import { SPHttpClient, ISPHttpClientOptions, SPHttpClientResponse } from '@micro
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
 
+import Detalhes from './Components/Detalhes';
+import Report from './Components/Report';
+
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
  * it will be deserialized into the BaseExtension.properties object.
@@ -181,8 +184,8 @@ export class SideNav extends React.Component{
         <HashRouter>
           {item.linkType == "Sublink" ?             
               <li>
-                <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-                  className="w3-bar-item w3-button">
+                <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
+                  className="w3-bar-item w3-button" onClick={() => showCategory(item.category)}>
                   {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
                   <span>{item.linkTitle0}</span>
                 </Link>
@@ -228,54 +231,69 @@ export class SharePointWebTitle extends React.Component{
   }
 }
 
-export class ReportListItens extends React.Component{ 
+let categoryName = 'Comercial';
 
-  showReportDetails = (linkPath: string) => {
-    alert(linkPath)
-  }
+export function showCategory(category:string) {
+  //alert(category);
+  //document.getElementById('categoryDescription').innerHTML = category;
+  categoryName = category;
+}
 
-  public render(){
-    const reports = reportListItens.map((item) =>
-      <div key={item.Id} className="ms-Grid-col ms-sm12 ms-md4 block">
-        {item.visibleOnTile == true ? 
-          <div className="tileBox">
-            <div className="tileBoxOverlay">
-              <div className="ms-Grid-row">
-                <div className="ms-Grid-col ms-sm8 ms-md8">
-                  <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm4 ms-md4">
-                      <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon})`}}>                                            
+export function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+export class ReportListItens extends React.Component{
+
+public render(){
+
+  const reports = reportListItens.map((item) =>
+    <section key={item.Id}>
+      {item.visibleOnTile == true ? 
+        item.category == categoryName ?
+          <div className="ms-Grid-col ms-sm12 ms-md4 block">
+            <div className="tileBox">
+              <div className="tileBoxOverlay">
+                <div className="ms-Grid-row">
+                  <div className="ms-Grid-col ms-sm8 ms-md8">
+                    <div className="ms-Grid-row">
+                      <div className="ms-Grid-col ms-sm4 ms-md4">
+                        <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon})`}}>                                            
+                        </div>
+                      </div>  
+                      <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
+                        {item.Title}
                       </div>
-                    </div>  
-                    <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
-                      {item.Title}
-                    </div>
-                  </div>                    
-                </div>           
-                <div className="ms-Grid-col ms-sm4 ms-md4">
-                  <div className="reportCategoryInfo">
-                    <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                    <br></br>
-                    <strong>Tipo:</strong>
-                    <div className="reportCategoryType">                      
-                      <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-                      <span>Dashboard</span>
+                    </div>                    
+                  </div>           
+                  <div className="ms-Grid-col ms-sm4 ms-md4">
+                    <div className="reportCategoryInfo">
+                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
+                      <br></br>
+                      <strong>Tipo:</strong>
+                      <div className="reportCategoryType">                      
+                        <i className="ms-Icon ms-Icon--PowerBILogo"></i>
+                        <span>Dashboard</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-                <div className="tileBoxToolBar">
-                <button onClick={() => this.showReportDetails(`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`)} className="btnDetalhes">Detalhes</button>
-                <button className="btnDashboard">Dashboard</button>
+                  <div className="tileBoxToolBar">
+                    <HashRouter>
+                      <Link className="btnDetalhes" to={`/detalhes`}>Detalhes</Link>
+                      <Link className="btnDashboard" to={`/report`}>Dashboard</Link>
+                    </HashRouter>
+                </div>
               </div>
             </div>
-          </div>  
-        : null}        
-      </div>                 
-     );
-    
+          </div>
+          : null
+      : null}        
+    </section>                 
+    );
+
     return(
-      <div>
+      <div>        
         {reports}
       </div>
     );
