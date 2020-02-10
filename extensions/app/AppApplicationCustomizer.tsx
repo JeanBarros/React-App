@@ -34,6 +34,7 @@ export interface ISPList {}
 
 let webTitle;
 let reportListItens;
+let categoryListItens;
 
 /** A Custom Action which can be run during execution of a Client Side Application */
 export default class AppApplicationCustomizer
@@ -69,8 +70,8 @@ export default class AppApplicationCustomizer
       return Promise.resolve<void>();  
     }
 
-    private _getListData(): Promise<ISPLists> {  
-      return this.context.spHttpClient.get(`${this.context.pageContext.web.absoluteUrl}/_api/lists/GetByTitle('reports')/items`,  
+    private _getListData(listName: string): Promise<ISPLists> {  
+      return this.context.spHttpClient.get(`${this.context.pageContext.web.absoluteUrl}/_api/lists/GetByTitle('${listName}')/items`,  
       SPHttpClient.configurations.v1)
       .then((response: SPHttpClientResponse) => {   
         debugger; 
@@ -78,12 +79,19 @@ export default class AppApplicationCustomizer
       });  
     }
 
-    private _renderListAsync(): void {        
-      this._getListData()  
+    private _renderReportList(listName:string): void {        
+      this._getListData(listName)  
         .then((response) => {
           reportListItens = response.value;
       });        
-    } 
+    }
+    
+    private _renderCategoryList(listName:string): void {        
+      this._getListData(listName)  
+        .then((response) => {
+          categoryListItens = response.value;
+      });        
+    }
 
     public _renderPlaceHolders(): void {  
       // Handling the top placeholder  
@@ -120,7 +128,8 @@ export default class AppApplicationCustomizer
             // Renderiza o elemento (neste caso não será visível porque o elemento é um input hidden)
             ReactDOM.render(webTitleElement, document.getElementById('root'));
             
-            this._renderListAsync();            
+            this._renderReportList('Reports'); // List display name
+            this._renderCategoryList('Report Categories'); // List display name        
 
           }       
        }  
@@ -152,21 +161,30 @@ export class Garage extends React.Component {
   }
 }
 
+let language = 'en'
 export class SideNav extends React.Component{  
   public render(){
-    console.log(reportListItens)
+    
     const headings = reportListItens.map((item) =>
       <li key={item.Id}>        
         <HashRouter>  
           {/* A coluna linkPath armazena os parâmetros a serem utilzados para referenciar o componente de cada categoria */}
           {/* a função normalize() combinada com a regex converte acentos e cedilha para caracteres não acentuados e "c". */}
           {item.linkType == "Top link" ? 
-            <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-              className="w3-bar-item w3-button sideNavHeading">
-              {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-              <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-              <span>{item.linkTitle0}</span>
-            </Link>
+            language == "pt" ?
+              <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
+                className="w3-bar-item w3-button sideNavHeading">
+                {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                <span>{item.linkTitle0}</span>
+              </Link>
+            :
+              <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
+                className="w3-bar-item w3-button sideNavHeading">
+                {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                <span>{item.linkTitleEn}</span>
+              </Link>            
           : null}
           {item.linkType == "Heading" ? 
             <div className="sideNavHeading">
@@ -181,15 +199,23 @@ export class SideNav extends React.Component{
     );
     const subLinks = reportListItens.map((item) =>
       <li key={item.Id}>        
-        <HashRouter>
+        <HashRouter>          
           {item.linkType == "Sublink" ?             
               <li>
-                <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
-                  className="w3-bar-item w3-button" onClick={() => showCategory(item.category)}>
-                  {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                  <span>{item.linkTitle0}</span>
-                </Link>
-              </li>
+                {language == 'pt' ?
+                  <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
+                    className="w3-bar-item w3-button" onClick={() => showCategory(item.category)}>
+                    {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                    <span>{item.linkTitle0}</span>
+                  </Link>
+                : 
+                  <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
+                    className="w3-bar-item w3-button" onClick={() => showCategory(item.category)}>
+                    {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                    <span>{item.linkTitleEn}</span>
+                  </Link>
+                }
+              </li>              
           : null}        
         </HashRouter>          
       </li>      
@@ -232,11 +258,13 @@ export class SharePointWebTitle extends React.Component{
 }
 
 let categoryName = 'Comercial';
-
 export function showCategory(category:string) {
   //alert(category);
   //document.getElementById('categoryDescription').innerHTML = category;
   categoryName = category;
+
+  var element = document.getElementById("sideNav"); 
+    element.classList.toggle("sideNav");
 }
 
 export function Welcome(props) {
@@ -246,6 +274,8 @@ export function Welcome(props) {
 export class ReportListItens extends React.Component{
 
 public render(){
+
+  console.log(reportListItens);
 
   const reports = reportListItens.map((item) =>
     <section key={item.Id}>
@@ -280,9 +310,9 @@ public render(){
                 </div>
                   <div className="tileBoxToolBar">
                     <HashRouter>
-                      <Link className="btnDetalhes" to={`/detalhes`}>Detalhes</Link>
-                      <Link className="btnDashboard" to={`/report`}>Dashboard</Link>
+                      <Link className="btnDetalhes" to={`/detalhes`}>Detalhes</Link>                      
                     </HashRouter>
+                      <a href="/sites/Lab02/SitePages/Report.aspx" className="btnDashboard">Dashboard</a>
                 </div>
               </div>
             </div>
@@ -299,3 +329,111 @@ public render(){
     );
   }
 }
+
+export class CategoryListItens extends React.Component{
+
+  public render(){
+  
+    console.log(categoryListItens);
+
+    const categories = categoryListItens.map((item) =>
+      <section key={item.Id}>
+        {item.Title == categoryName ?          
+          <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
+            {language == 'pt' ?
+              <div id="categoryName">
+                <h1>{item.Title}</h1>
+                <p>{item.description}</p>
+              </div>
+              : 
+              <div id="categoryName">
+                <h1>{item.titleEN}</h1>
+                <p>{item.descriptionEN}</p>
+              </div>
+            }            
+          </div>
+        : null}        
+      </section>                 
+      );
+  
+      return(
+        <div>        
+          {categories}
+        </div>
+      );
+    }
+  }
+
+  export class ReportDetails extends React.Component{
+
+    public render(){
+    
+      const reportDetails = reportListItens.map((item) =>
+        <section key={item.Id}>
+          {item.category == categoryName ?
+            <div className="spaceBotton">
+              <div className="ms-Grid-row w3-container">
+                <div className="ms-Grid-col ms-md1 block"></div> 
+                <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
+                </div> 
+                <div className="ms-Grid-col ms-md1 block"></div>
+              </div>
+              <div className="ms-Grid-row w3-container">
+                <div className="ms-Grid-col ms-sm12 ms-md9 block detalhes">
+                    {language == 'pt' ?
+                      <div>
+                        <h1>{item.Title}</h1>
+                        <p><span>Categoria: </span>{item.category}</p>
+                        <p><span>Tipo: </span>Dashboard</p>
+                        <p><span>Autor: </span>xxx</p>
+                        <p><span>Data de criação: </span>{item.Created}</p>
+                        <p>{item.reportDetails}</p>
+                      </div>
+                    :
+                      <div>
+                        <h1>{item.reportTitleEN}</h1>
+                        <p><span>Category: </span>{item.categoryEN}</p>
+                        <p><span>Type: </span>Dashboard</p>
+                        <p><span>Author: </span>xxx</p>
+                        <p><span>Creation date: </span>{item.Created}</p>
+                        <p>{item.reportDetailsEN}</p>
+                      </div>
+                    }
+                </div>            
+                <div className="ms-Grid-col ms-sm12 ms-md3 block">
+                  <div className="reportDetailRightBox">
+                    <div className="reportDetailImage">
+                      <div className="tileBoxOverlay">
+                      <div className="ms-Grid-row">
+                        <div className="ms-Grid-col ms-sm4 ms-md4">
+                            <div className="categoryIcon">
+                              <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon})`}}></div>                      
+                            </div>
+                          </div>  
+                          <div className="ms-Grid-col ms-sm8 ms-md8">
+                            {item.Title}
+                          </div>
+                        </div> 
+                      </div>
+                    </div>
+                    <div className="reportDetailsToolBar">              
+                      <a href="/sites/Lab02/SitePages/Report.aspx" className="btnDashboard-Large">Dashboard</a>
+                      <p>
+                        <a href="#" className="btnAddFavorites">Adicionar aos Favoritos</a>
+                      </p>
+                    </div>                    
+                  </div>
+                </div>
+              </div>
+            </div>  
+          :null} 
+        </section>                 
+        );
+    
+        return(
+          <div>        
+            {reportDetails}
+          </div>
+        );
+      }
+    }
