@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Main from './Main';
+import { setLanguage } from '../AppApplicationCustomizer';
 
 export interface ILandingPageProps {}   
 
@@ -36,6 +37,8 @@ function LoginButton(props) {
         <div className="ms-Grid-col ms-sm6 ms-md2 block"></div> 
         <div className="ms-Grid-col ms-sm12 ms-md4 block">
           <div className="content"> 
+            <button onClick={() => setLanguage('language', 'pt', 365, '/')} style={{color:"red"}}>Português</button> 
+            <button onClick={() => setLanguage('language', 'en', 365, '/')} style={{color:"red"}}>Inglês</button>
             <div className="logoLandingPage"></div>
             <h1>Bem vindo ao <br/>Enterprise BI Portal</h1>
             <p>Clique abaixo para entrar na plataforma</p>

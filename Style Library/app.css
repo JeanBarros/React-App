@@ -332,17 +332,13 @@ input:checked ~ label .hamburguer:after {
     text-align: center;
 }
 
-.CanvasZoneContainer{
-    background-color: yellow !important;
+.CanvasZoneContainer, .mainContent{
+    background-color: #EAEAEA !important;
 }
 
-.CanvasZone.CanvasZone--read {
-    padding: 0 !important;
-}
-
-.CanvasZone{
+/* .CanvasZone{
     background-color: blueviolet !important;
-}
+} */
 
 .reportContainer{
     width: 1260px;
