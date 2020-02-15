@@ -15,7 +15,8 @@ import Rh from './Rh';
 import Subsidiarias from './Subsidiarias';
 import Detalhes from './Detalhes';
 import Report from './Report';
-import {SideNav, SharePointWebTitle} from '../AppApplicationCustomizer';
+import {SideNav, SharePointWebTitle, language} from '../AppApplicationCustomizer';
+import LandingPage from './LandingPage';
 
 export interface IMainProps {}   
 
@@ -58,6 +59,11 @@ export default class Main extends React.Component<IMainProps> {
   public OpenCloseSideNav(){
     var element = document.getElementById("sideNav"); 
     element.classList.toggle("sideNav");
+
+    language == "pt"?
+      document.getElementById("btnTranslateEN-small").style.opacity = "0.3"
+    :
+      document.getElementById("btnTranslatePT-small").style.opacity = "0.3"        
   }
 
   public render(): JSX.Element {
@@ -81,7 +87,8 @@ export default class Main extends React.Component<IMainProps> {
                         <Route path='/rh' component={Rh} />
                         <Route path='/subsidiarias' component={Subsidiarias} /> 
                         <Route path='/detalhes' component={Detalhes} />
-                        <Route path='/report' component={Report} /> 
+                        <Route path='/report' component={Report} />
+                        <Route path='/landingPage' component={LandingPage} /> 
                     </Switch> 
                 </div> 
         </HashRouter>

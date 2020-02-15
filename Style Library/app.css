@@ -401,6 +401,35 @@ input:checked ~ label .hamburguer:after {
     border: none;
 }
 
+.btnTranslatePT, .btnTranslateEN, .btnTranslatePT-small, .btnTranslateEN-small{
+    width: 42px;
+    height: 42px;
+    margin-top: 36px;
+    background: url(/sites/Lab02/SiteAssets/images/BR-flag-round.png) center center no-repeat;
+    background-size: 100% !important;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.btnTranslateEN, .btnTranslateEN-small{    
+    background: url(/sites/Lab02/SiteAssets/images/USA-flag-round.png) center center no-repeat;
+    margin-left: 16px;
+}
+
+.btnTranslatePT-small, .btnTranslateEN-small{
+    width: 36px;
+    height: 36px;
+    margin-top: 0;
+}
+
+.btnTranslateContainer-small{
+    float: right;
+    position: relative;
+    top: -42px;
+    margin-right: 15px;
+}
+
 /* On screens that are 992px or less */
 @media screen and (max-width: 992px) {
     .w3-container, .w3-panel {

@@ -1,6 +1,7 @@
 import { override } from '@microsoft/decorators';  
 import * as React from 'react';  
 import * as ReactDOM from "react-dom"; 
+import * as moment from 'moment';
 import {  
   BaseApplicationCustomizer,  
   PlaceholderContent,  
@@ -30,17 +31,20 @@ export interface ISPLists {
 export interface ISPList {}
 
 let webTitle;
+var relativeSiteUrl;
 let reportListItens;
 let categoryListItens;
-let language;
+export let language;
 let selectedCategory = 'Comercial';
 
 export const setLanguage = (name, value, days = 7, path = '/') => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString()
-  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path
+  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path;
+
+  location.reload();  
 }
 
-const getCookie = (name) => {
+export const getCookie = (name) => {
   return document.cookie.split('; ').reduce((r, v) => {
     const parts = v.split('=')
     return parts[0] === name ? decodeURIComponent(parts[1]) : r
@@ -68,12 +72,12 @@ export default class AppApplicationCustomizer
       var appStyle = document.createElement('link'); 
       appStyle.rel = 'stylesheet'; 
       appStyle.type = 'text/css'; 
-      appStyle.href = '/sites/Lab02/Style%20Library/app.css';  
+      appStyle.href = '/sites/lab02/Style%20Library/app.css';  
 
       var sideNavStyle = document.createElement('link'); 
       sideNavStyle.rel = 'stylesheet'; 
       sideNavStyle.type = 'text/css'; 
-      sideNavStyle.href = '/sites/Lab02/Style%20Library/sideNav.css';  
+      sideNavStyle.href = '/sites/lab02/Style%20Library/sideNav.css';  
 
       // Append link element to HTML head 
       head.appendChild(appStyle);
@@ -140,6 +144,9 @@ export default class AppApplicationCustomizer
             // Obtém o título do site
             webTitle = this.context.pageContext.web.title;
 
+            relativeSiteUrl = this.context.pageContext.web.serverRelativeUrl;
+            console.log(relativeSiteUrl);
+
             // Cria um elemento com seu valor definido para o título do site
             const webTitleElement = <input type="hidden" id="siteName" name="custId" value={webTitle}></input>;            
 
@@ -147,7 +154,7 @@ export default class AppApplicationCustomizer
             ReactDOM.render(webTitleElement, document.getElementById('root'));
             
             this._renderReportList('Reports'); // List display name
-            this._renderCategoryList('Report Categories'); // List display name 
+            this._renderCategoryList('Categorias e Menu'); // List display name 
           }       
        }  
       }      
@@ -159,61 +166,42 @@ export default class AppApplicationCustomizer
     }
 }
 
-class Car extends React.Component<any> {
-  public render() {
-    return <h2>I am a {this.props.brand.color}&nbsp;{this.props.brand.model}!
-    </h2>;
-  }
-}
-
-export class Garage extends React.Component {
-  public render() {    
-    const carinfo = {name: "Ford", model: "Mustang", color: "red"};
-    return (
-      <div>
-      <h1>Who lives in my garage?</h1>
-      <Car brand={carinfo} />
-      </div>
-    );
-  }
-}
-
 export class SideNav extends React.Component{  
   
   public render(){
     console.log(categoryListItens);
-    // const headings = reportListItens.map((item) =>
-    //   <li key={item.Id}>        
-    //     <HashRouter>  
-    //       {/* A coluna linkPath armazena os parâmetros a serem utilzados para referenciar o componente de cada categoria */}
-    //       {/* a função normalize() combinada com a regex converte acentos e cedilha para caracteres não acentuados e "c". */}
-    //       {item.linkType == "Top link" ? 
-    //         language == "pt" ?
-    //           <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-    //             className="w3-bar-item w3-button sideNavHeading">
-    //             {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-    //             <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-    //             <span>{item.linkTitle0}</span>
-    //           </Link>
-    //         :
-    //           <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-    //             className="w3-bar-item w3-button sideNavHeading">
-    //             {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-    //             <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-    //             <span>{item.linkTitleEn}</span>
-    //           </Link>            
-    //       : null}
-    //       {item.linkType == "Heading" ? 
-    //         <div className="sideNavHeading">
-    //           <li className="spacerTop"></li>
-    //           {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-    //           <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-    //           {item.linkTitle0}
-    //         </div>
-    //       : null}                    
-    //     </HashRouter>          
-    //   </li>      
-    // );
+    const headings = categoryListItens.map((item) =>
+      <li key={item.Id}>        
+        <HashRouter>  
+          {/* A coluna linkPath armazena os parâmetros a serem utilzados para referenciar o componente de cada categoria */}
+          {/* a função normalize() combinada com a regex converte acentos e cedilha para caracteres não acentuados e "c". */}
+          {item.linkType == "Top link" ? 
+            language == "pt" ?
+              <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
+                className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>
+                {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                <span>{item.Title}</span>
+              </Link>
+            :
+              <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
+                className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>
+                {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                <span>{item.titleEN}</span>
+              </Link>            
+          : null}
+          {item.linkType == "Heading" ? 
+            <div className="sideNavHeading">
+              <li className="spacerTop"></li>
+              {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+              <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+              {item.Title}
+            </div>
+          : null}                    
+        </HashRouter>          
+      </li>      
+    );
     const subLinks = categoryListItens.map((item) =>
       <li key={item.Id}>        
         <HashRouter>          
@@ -237,16 +225,24 @@ export class SideNav extends React.Component{
         </HashRouter>          
       </li> 
     );
-    const bottomLinks = reportListItens.map((item) =>
+    const bottomLinks = categoryListItens.map((item) =>
       <li key={item.Id}>        
         <HashRouter>          
           {item.linkType == "Bottom link" ?             
               <li>
-                <Link to={'#'} 
-                  className="w3-bar-item w3-button sideNavLinkBottom">
-                  <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-                  <span>{item.linkTitle0}</span>
-                </Link>
+                {language == 'pt' ?
+                  <Link to={'/'} 
+                    className="w3-bar-item w3-button sideNavLinkBottom">
+                    <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                    <span>{item.Title}</span>
+                  </Link>
+                :
+                  <Link to={'/'} 
+                    className="w3-bar-item w3-button sideNavLinkBottom">
+                    <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                    <span>{item.titleEN}</span>
+                  </Link>
+                }
               </li>
           : null}         
         </HashRouter>          
@@ -256,15 +252,17 @@ export class SideNav extends React.Component{
     return(      
       <ul className="sideNavBottom">
         <li>
-          {/* {headings} */}
+          {headings}
           <ul className="sideNavSubLinks">
             {subLinks}
           </ul>
         </li>
         <li className="spacerBottom"></li>
         {bottomLinks}
-        <button onClick={() => setLanguage('language', 'pt', 365, '/')}>Português</button> 
-        <button onClick={() => setLanguage('language', 'en', 365, '/')}>Inglês</button>       
+        <div className="btnTranslateContainer-small">
+          <button id="btnTranslatePT-small" onClick={() => setLanguage('language', 'pt', 365, '/')} className="btnTranslatePT-small"></button> 
+          <button id="btnTranslateEN-small" onClick={() => setLanguage('language', 'en', 365, '/')} className="btnTranslateEN-small"></button>       
+        </div>               
       </ul>
     );
   }
@@ -299,7 +297,7 @@ public render(){
     <section key={item.Id}>
       {item.visibleOnTile == true ? 
         language == "pt" ?
-          selectedCategory == item.category ?
+          selectedCategory == item.categoryLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
               <div className="tileBox">
                 <div className="tileBoxOverlay">
@@ -331,14 +329,14 @@ public render(){
                       <HashRouter>
                         <Link className="btnDetalhes" to={`/detalhes`}>Detalhes</Link>                      
                       </HashRouter>
-                        <a href="/sites/Lab02/SitePages/Report.aspx" className="btnDashboard">Dashboard</a>
+                        <a href={`${relativeSiteUrl}/SitePages/${item.reportPage}.aspx`} className="btnDashboard">Dashboard</a>
                   </div>
                 </div>
               </div>
             </div>
           : null
         :
-          selectedCategory == item.categoryEN ?
+          selectedCategory == item.categoryENLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
               <div className="tileBox">
                 <div className="tileBoxOverlay">
@@ -370,13 +368,13 @@ public render(){
                       <HashRouter>
                         <Link className="btnDetalhes" to={`/detalhes`}>Details</Link>                      
                       </HashRouter>
-                        <a href="/sites/Lab02/SitePages/Report.aspx" className="btnDashboard">Dashboard</a>
+                        <a href={`${relativeSiteUrl}/SitePages/${item.reportPage}.aspx`} className="btnDashboard">Dashboard</a>
                   </div>
                 </div>
               </div>
             </div>
           : null
-      : null}        
+      : null}     
     </section>                 
     );
 
@@ -426,11 +424,11 @@ export class CategoryListItens extends React.Component{
   export class ReportDetails extends React.Component{
 
     public render(){
-    
+      
       const reportDetails = reportListItens.map((item) =>
         <section key={item.Id}>          
           {language == 'pt' ?
-            selectedCategory == item.category ?
+            selectedCategory == item.categoryLookupValue ?
               <div className="spaceBotton">
                 <div className="ms-Grid-row w3-container">
                   <div className="ms-Grid-col ms-md1 block"></div> 
@@ -442,10 +440,10 @@ export class CategoryListItens extends React.Component{
                   <div className="ms-Grid-col ms-sm12 ms-md9 block detalhes">                    
                     <div>
                       <h1>{item.Title}</h1>
-                      <p><span>Categoria: </span>{item.category}</p>
+                      <p><span>Categoria: </span>{item.categoryLookupValue}</p>
                       <p><span>Tipo: </span>Dashboard</p>
-                      <p><span>Autor: </span>xxx</p>
-                      <p><span>Data de criação: </span>{item.Created}</p>
+                      <p><span>Autor: </span>{item.author0}</p>
+                      <p><span>Data de criação: </span>{moment(item.Created).format('DD/MM/YYYY')}</p>
                       <p>{item.reportDetails}</p>
                     </div>
                   </div>                
@@ -466,7 +464,7 @@ export class CategoryListItens extends React.Component{
                         </div>
                       </div>
                       <div className="reportDetailsToolBar">              
-                        <a href="/sites/Lab02/SitePages/Report.aspx" className="btnDashboard-Large">Dashboard</a>
+                        <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a>
                         <p>
                           <a href="#" className="btnAddFavorites">Adicionar aos Favoritos</a>
                         </p>
@@ -478,7 +476,7 @@ export class CategoryListItens extends React.Component{
             :
               null
           :
-            selectedCategory == item.categoryEN ?
+            selectedCategory == item.categoryENLookupValue ?
               <div className="spaceBotton">
                 <div className="ms-Grid-row w3-container">
                   <div className="ms-Grid-col ms-md1 block"></div> 
@@ -490,10 +488,10 @@ export class CategoryListItens extends React.Component{
                   <div className="ms-Grid-col ms-sm12 ms-md9 block detalhes">                    
                     <div>
                       <h1>{item.reportTitleEN}</h1>
-                      <p><span>Category: </span>{item.categoryEN}</p>
+                      <p><span>Category: </span>{item.categoryENLookupValue}</p>
                       <p><span>Type: </span>Dashboard</p>
-                      <p><span>Author: </span>xxx</p>
-                      <p><span>Creation date: </span>{item.Created}</p>
+                      <p><span>Author: </span>{item.author0}</p>
+                      <p><span>Creation date: </span>{moment(item.Created).format('DD/MM/YYYY')}</p>
                       <p>{item.reportDetailsEN}</p>
                     </div>
                   </div>                
@@ -514,7 +512,7 @@ export class CategoryListItens extends React.Component{
                         </div>
                       </div>
                       <div className="reportDetailsToolBar">              
-                        <a href="/sites/Lab02/SitePages/Report.aspx" className="btnDashboard-Large">Dashboard</a>
+                        <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a>
                         <p>
                           <a href="#" className="btnAddFavorites">Add to Favorites</a>
                         </p>

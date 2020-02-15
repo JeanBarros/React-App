@@ -1,33 +1,21 @@
 import * as React from 'react';
 import Main from './Main';
-import { setLanguage } from '../AppApplicationCustomizer';
+import { setLanguage, language} from '../AppApplicationCustomizer';
 
 export interface ILandingPageProps {}   
-
-function UserGreeting(props) {
-  return (
-    <div>      
-      <Main/>
-    </div>
-  );
-}
-
-function GuestGreeting(props) {
-  return (
-    <div></div>    
-  );
-}
 
 function Greeting(props) {
   const isLoggedIn = props.isLoggedIn;
   if (isLoggedIn) {
     return (
       <div>
-        <UserGreeting />        
+        <Main/>        
       </div>
     );
   }
-  return <GuestGreeting />;
+  return (
+    <div></div>
+  );
 }
 
 function LoginButton(props) {
@@ -36,24 +24,40 @@ function LoginButton(props) {
         <div className="ms-Grid-row"> 
         <div className="ms-Grid-col ms-sm6 ms-md2 block"></div> 
         <div className="ms-Grid-col ms-sm12 ms-md4 block">
-          <div className="content"> 
-            <button onClick={() => setLanguage('language', 'pt', 365, '/')} style={{color:"red"}}>Português</button> 
-            <button onClick={() => setLanguage('language', 'en', 365, '/')} style={{color:"red"}}>Inglês</button>
+          <div className="content">
             <div className="logoLandingPage"></div>
-            <h1>Bem vindo ao <br/>Enterprise BI Portal</h1>
-            <p>Clique abaixo para entrar na plataforma</p>
-            <button onClick={props.onClick} className="btnLogin">
-              <div>
-                <i className="ms-Icon ms-Icon--ClosePane" aria-hidden="true"></i>
-                <span>ACESSAR</span>
-              </div>
-            </button>          
+              {language == "pt" ?
+                <div>
+                  <h1>Bem vindo ao <br/>Enterprise BI Portal</h1>
+                  <p>Clique abaixo para entrar na plataforma</p>
+                  <button onClick={props.onClick} className="btnLogin">
+                    <div>
+                      <i className="ms-Icon ms-Icon--ClosePane" aria-hidden="true"></i>
+                      <span>ACESSAR</span>
+                    </div>
+                  </button>                  
+                </div>
+              :
+                <div>
+                  <h1>Welcome to <br/>Enterprise BI Portal</h1>
+                  <p>Click below to enter the platform</p>
+                  <button onClick={props.onClick} className="btnLogin">
+                    <div>
+                      <i className="ms-Icon ms-Icon--ClosePane" aria-hidden="true"></i>
+                      <span>ACCESS</span>
+                    </div>
+                  </button>                  
+                </div>
+              }  
           </div> 
         </div>
         <div className="ms-Grid-col ms-sm6 ms-md2 block"></div> 
         <div className="ms-Grid-col ms-sm6 ms-md2 block"></div> 
-        <div className="ms-Grid-col ms-sm6 ms-md2 block"></div> 
-      </div>      
+        <div className="ms-Grid-col ms-sm6 ms-md2 block">
+          <button id="btnTranslatePT" onClick={() => setLanguage('language', 'pt', 365, '/')} className="btnTranslatePT"></button> 
+          <button id="btnTranslateEN" onClick={() => setLanguage('language', 'en', 365, '/')} className="btnTranslateEN"></button>  
+        </div> 
+      </div>
     </div>
   );
 }
@@ -88,6 +92,13 @@ class LoginControl extends React.Component<any, any> {
       </div>
     );
   }
+
+  componentDidMount() {
+    language == "pt" ?
+      document.getElementById("btnTranslateEN").style.opacity = "0.3"
+    :
+    document.getElementById("btnTranslatePT").style.opacity = "0.3"
+  }
 }
 
 export default class LandingPage extends React.Component<ILandingPageProps> {
@@ -99,7 +110,7 @@ export default class LandingPage extends React.Component<ILandingPageProps> {
     return (
       <div>
         <div id="root"></div>        
-        <LoginControl />
+        <LoginControl />        
       </div>
     );  
   }
