@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { BrowserRouter as Redirect } from 'react-router-dom';
 import Main from './Main';
-import { setLanguage, language} from '../AppApplicationCustomizer';
+import { setLanguage, language, isLogged} from '../AppApplicationCustomizer';
 
 export interface ILandingPageProps {}   
 
@@ -9,7 +10,7 @@ function Greeting(props) {
   if (isLoggedIn) {
     return (
       <div>
-        <Main/>        
+        <Main/>       
       </div>
     );
   }
@@ -71,7 +72,7 @@ class LoginControl extends React.Component<any, any> {
   }
 
   public handleLoginClick() {
-    this.setState({isLoggedIn: true});
+    this.setState({isLoggedIn: true});    
   }
 
   public handleLogoutClick() {
@@ -83,21 +84,21 @@ class LoginControl extends React.Component<any, any> {
     let button;
 
     if(!isLoggedIn)
-      button = <LoginButton onClick={this.handleLoginClick} />;
+      button = <LoginButton onClick={this.handleLoginClick} />;      
 
     return (
       <div>
         <Greeting isLoggedIn={isLoggedIn} />
         {button}
-      </div>
+      </div>          
     );
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     language == "pt" ?
       document.getElementById("btnTranslateEN").style.opacity = "0.3"
     :
-    document.getElementById("btnTranslatePT").style.opacity = "0.3"
+      document.getElementById("btnTranslatePT").style.opacity = "0.3";
   }
 }
 
@@ -109,8 +110,8 @@ export default class LandingPage extends React.Component<ILandingPageProps> {
   public render() {
     return (
       <div>
-        <div id="root"></div>        
-        <LoginControl />        
+        <div id="root"></div>
+        <LoginControl />                
       </div>
     );  
   }

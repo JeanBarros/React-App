@@ -9,10 +9,10 @@ import {
 } from '@microsoft/sp-application-base';
 
 import Main, { IMainProps } from './Components/Main';
-import LandingPage, { ILandingPageProps } from './Components/LandingPage';
 import { SPHttpClient, ISPHttpClientOptions, SPHttpClientResponse } from '@microsoft/sp-http';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
+import LandingPage, { ILandingPageProps } from './Components/LandingPage';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -32,27 +32,33 @@ export interface ISPList {}
 
 let webTitle;
 var relativeSiteUrl;
-let reportListItens;
-let categoryListItens;
-export let language;
+export let reportListItens;
+export let categoryListItens;
 let selectedCategory = 'Comercial';
+export let language;
+export let isLogged;
 
 export const setLanguage = (name, value, days = 7, path = '/') => {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString()
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
   document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path;
 
   location.reload();  
-}
+};
 
 export const getCookie = (name) => {
   return document.cookie.split('; ').reduce((r, v) => {
-    const parts = v.split('=')
-    return parts[0] === name ? decodeURIComponent(parts[1]) : r
-  }, '')
-}
+    const parts = v.split('=');
+    return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+  }, '');
+};
 
-const deleteCookie = (name, path) => {
-  setLanguage(name, '', -1, path)
+export const setLoggedIn = (value) => {
+  document.cookie = 'loggedIn=' + encodeURIComponent(value) + '; path=/';
+};
+
+export function logOut(){
+  setLoggedIn(false);
+  location.reload();
 }
 
 /** A Custom Action which can be run during execution of a Client Side Application */
@@ -64,8 +70,11 @@ export default class AppApplicationCustomizer
     constructor(){
       super();
 
-      language = getCookie('language')
+      language = getCookie('language');
       console.log(language);
+
+      isLogged = getCookie('loggedIn')
+      console.log(isLogged)
 
       var head = document.getElementsByTagName('HEAD')[0];
 
@@ -115,7 +124,7 @@ export default class AppApplicationCustomizer
       });        
     }
 
-    public _renderPlaceHolders(): void {  
+    private _renderPlaceHolders(): void {  
       // Handling the top placeholder  
       if (!this._topPlaceholder)   
       {  
@@ -134,12 +143,19 @@ export default class AppApplicationCustomizer
           if (!topString) {  
             topString = "(Top property was not defined.)";  
           }  
-          if (this._topPlaceholder.domElement) {  
-            /*const elem: React.ReactElement<IMainProps> = React.createElement(Main,{});  
-            ReactDOM.render(elem, this._topPlaceholder.domElement);*/ 
-            
-            const elem: React.ReactElement<ILandingPageProps> = React.createElement(LandingPage,{});  
-            ReactDOM.render(elem, this._topPlaceholder.domElement);
+          if (this._topPlaceholder.domElement) { 
+
+            this._renderReportList('Reports'); // List display name
+            this._renderCategoryList('Categorias e Menu'); // List display name
+
+            if(isLogged == "false"){
+              const elem: React.ReactElement<ILandingPageProps> = React.createElement(LandingPage,{});  
+              ReactDOM.render(elem, this._topPlaceholder.domElement);
+            }
+            else{
+              const elem: React.ReactElement<IMainProps> = React.createElement(Main,{});  
+              ReactDOM.render(elem, this._topPlaceholder.domElement);
+            }
 
             // Obtém o título do site
             webTitle = this.context.pageContext.web.title;
@@ -152,9 +168,6 @@ export default class AppApplicationCustomizer
 
             // Renderiza o elemento (neste caso não será visível porque o elemento é um input hidden)
             ReactDOM.render(webTitleElement, document.getElementById('root'));
-            
-            this._renderReportList('Reports'); // List display name
-            this._renderCategoryList('Categorias e Menu'); // List display name 
           }       
        }  
       }      
@@ -164,108 +177,6 @@ export default class AppApplicationCustomizer
     {  
       console.log('[AppApplicationCustomizer._onDispose] Disposed custom top placeholders.');        
     }
-}
-
-export class SideNav extends React.Component{  
-  
-  public render(){
-    console.log(categoryListItens);
-    const headings = categoryListItens.map((item) =>
-      <li key={item.Id}>        
-        <HashRouter>  
-          {/* A coluna linkPath armazena os parâmetros a serem utilzados para referenciar o componente de cada categoria */}
-          {/* a função normalize() combinada com a regex converte acentos e cedilha para caracteres não acentuados e "c". */}
-          {item.linkType == "Top link" ? 
-            language == "pt" ?
-              <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-                className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>
-                {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-                <span>{item.Title}</span>
-              </Link>
-            :
-              <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-                className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>
-                {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-                <span>{item.titleEN}</span>
-              </Link>            
-          : null}
-          {item.linkType == "Heading" ? 
-            <div className="sideNavHeading">
-              <li className="spacerTop"></li>
-              {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-              <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-              {item.Title}
-            </div>
-          : null}                    
-        </HashRouter>          
-      </li>      
-    );
-    const subLinks = categoryListItens.map((item) =>
-      <li key={item.Id}>        
-        <HashRouter>          
-          {item.linkType == "Sublink" ?             
-              <li>
-                {language == 'pt' ?
-                  <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
-                    className="w3-bar-item w3-button" onClick={() => showCategory(item.Title)}>
-                    {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                    <span>{item.Title}</span>
-                  </Link>
-                : 
-                  <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
-                    className="w3-bar-item w3-button" onClick={() => showCategory(item.titleEN)}>
-                    {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                    <span>{item.titleEN}</span>
-                  </Link>
-                }
-              </li>              
-          : null}        
-        </HashRouter>          
-      </li> 
-    );
-    const bottomLinks = categoryListItens.map((item) =>
-      <li key={item.Id}>        
-        <HashRouter>          
-          {item.linkType == "Bottom link" ?             
-              <li>
-                {language == 'pt' ?
-                  <Link to={'/'} 
-                    className="w3-bar-item w3-button sideNavLinkBottom">
-                    <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-                    <span>{item.Title}</span>
-                  </Link>
-                :
-                  <Link to={'/'} 
-                    className="w3-bar-item w3-button sideNavLinkBottom">
-                    <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
-                    <span>{item.titleEN}</span>
-                  </Link>
-                }
-              </li>
-          : null}         
-        </HashRouter>          
-      </li>      
-    );
-    
-    return(      
-      <ul className="sideNavBottom">
-        <li>
-          {headings}
-          <ul className="sideNavSubLinks">
-            {subLinks}
-          </ul>
-        </li>
-        <li className="spacerBottom"></li>
-        {bottomLinks}
-        <div className="btnTranslateContainer-small">
-          <button id="btnTranslatePT-small" onClick={() => setLanguage('language', 'pt', 365, '/')} className="btnTranslatePT-small"></button> 
-          <button id="btnTranslateEN-small" onClick={() => setLanguage('language', 'en', 365, '/')} className="btnTranslateEN-small"></button>       
-        </div>               
-      </ul>
-    );
-  }
 }
 
 export class SharePointWebTitle extends React.Component{
