@@ -34,7 +34,7 @@ let webTitle;
 var relativeSiteUrl;
 export let reportListItens;
 export let categoryListItens;
-let selectedCategory = 'Comercial';
+let selectedCategory = 'Favoritos';
 export let language;
 export let isLogged;
 
@@ -58,7 +58,18 @@ export const setLoggedIn = (value) => {
 
 export function logOut(){
   setLoggedIn(false);
-  location.reload();
+  window.location.replace("https://keyruspbi.sharepoint.com/sites/Lab02");
+  //location.reload();
+}
+
+function hideCustomContent(){
+  var content = document.getElementById('customContent');
+  content.style.display='none';
+}
+
+// Aguarda para garantir que os dados da lista sejam retornados antes de utilizá-los nos componentes
+function sleep (time) {      
+  return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 /** A Custom Action which can be run during execution of a Client Side Application */
@@ -71,10 +82,10 @@ export default class AppApplicationCustomizer
       super();
 
       language = getCookie('language');
-      console.log(language);
+      console.log('Language: ' + language);
 
-      isLogged = getCookie('loggedIn')
-      console.log(isLogged)
+      isLogged = getCookie('loggedIn');
+      console.log('Is logged: ' + isLogged);
 
       var head = document.getElementsByTagName('HEAD')[0];
 
@@ -86,12 +97,17 @@ export default class AppApplicationCustomizer
       var sideNavStyle = document.createElement('link'); 
       sideNavStyle.rel = 'stylesheet'; 
       sideNavStyle.type = 'text/css'; 
-      sideNavStyle.href = '/sites/lab02/Style%20Library/sideNav.css';  
-
+      sideNavStyle.href = '/sites/lab02/Style%20Library/sideNav.css';
+      
+      var jQuery=document.createElement('script');
+      jQuery.setAttribute("type","text/javascript");
+      jQuery.setAttribute("src", "https://code.jquery.com/jquery-3.4.1.js");
+      
       // Append link element to HTML head 
       head.appendChild(appStyle);
       head.appendChild(sideNavStyle);
-    }
+      head.appendChild(jQuery);
+    }    
     
     @override  
     public onInit(): Promise<void> {  
@@ -114,6 +130,7 @@ export default class AppApplicationCustomizer
       this._getListData(listName)  
         .then((response) => {
           reportListItens = response.value;
+          console.log(reportListItens);
       });        
     }
     
@@ -121,6 +138,7 @@ export default class AppApplicationCustomizer
       this._getListData(listName)  
         .then((response) => {
           categoryListItens = response.value;
+          console.log(categoryListItens);
       });        
     }
 
@@ -148,20 +166,24 @@ export default class AppApplicationCustomizer
             this._renderReportList('Reports'); // List display name
             this._renderCategoryList('Categorias e Menu'); // List display name
 
-            if(isLogged == "false"){
-              const elem: React.ReactElement<ILandingPageProps> = React.createElement(LandingPage,{});  
-              ReactDOM.render(elem, this._topPlaceholder.domElement);
-            }
-            else{
-              const elem: React.ReactElement<IMainProps> = React.createElement(Main,{});  
-              ReactDOM.render(elem, this._topPlaceholder.domElement);
-            }
+            console.log('Inicializou o componente principal');
+
+            sleep(500).then(() => {      
+              if(isLogged == "false"){
+                const elem: React.ReactElement<ILandingPageProps> = React.createElement(LandingPage,{});  
+                ReactDOM.render(elem, this._topPlaceholder.domElement);
+              }
+              else{
+                const elem: React.ReactElement<IMainProps> = React.createElement(Main,{});  
+                ReactDOM.render(elem, this._topPlaceholder.domElement);
+              }
+            });            
 
             // Obtém o título do site
             webTitle = this.context.pageContext.web.title;
 
             relativeSiteUrl = this.context.pageContext.web.serverRelativeUrl;
-            console.log(relativeSiteUrl);
+            console.log('Relative path: ' + relativeSiteUrl);
 
             // Cria um elemento com seu valor definido para o título do site
             const webTitleElement = <input type="hidden" id="siteName" name="custId" value={webTitle}></input>;            
@@ -186,23 +208,15 @@ export class SharePointWebTitle extends React.Component{
 }
 
 export function showCategory(category:string) {
-  //alert(category);
-  //document.getElementById('categoryDescription').innerHTML = category;
   selectedCategory = category;
 
   var element = document.getElementById("sideNav"); 
     element.classList.toggle("sideNav");
 }
 
-export function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-
 export class ReportListItens extends React.Component{
 
 public render(){
-
-  console.log(reportListItens);
 
   const reports = reportListItens.map((item) =>
     <section key={item.Id}>
@@ -240,7 +254,7 @@ public render(){
                       <HashRouter>
                         <Link className="btnDetalhes" to={`/detalhes`}>Detalhes</Link>                      
                       </HashRouter>
-                        <a href={`${relativeSiteUrl}/SitePages/${item.reportPage}.aspx`} className="btnDashboard">Dashboard</a>
+                        <a href={`${relativeSiteUrl}/SitePages/${item.reportPage}.aspx`} className="btnDashboard" onClick={() => hideCustomContent()}>Dashboard</a>
                   </div>
                 </div>
               </div>
@@ -279,7 +293,7 @@ public render(){
                       <HashRouter>
                         <Link className="btnDetalhes" to={`/detalhes`}>Details</Link>                      
                       </HashRouter>
-                        <a href={`${relativeSiteUrl}/SitePages/${item.reportPage}.aspx`} className="btnDashboard">Dashboard</a>
+                        <a href={`${relativeSiteUrl}/SitePages/${item.reportPage}.aspx`} className="btnDashboard" onClick={() => hideCustomContent()}>Dashboard</a>
                   </div>
                 </div>
               </div>
@@ -299,10 +313,7 @@ public render(){
 
 export class CategoryListItens extends React.Component{
 
-  public render(){
-  
-    console.log(categoryListItens);
-
+  public render(){  
     const categories = categoryListItens.map((item) =>
       <section key={item.Id}>
         {selectedCategory == item.Title ?          
@@ -340,7 +351,7 @@ export class CategoryListItens extends React.Component{
         <section key={item.Id}>          
           {language == 'pt' ?
             selectedCategory == item.categoryLookupValue ?
-              <div className="spaceBotton">
+              <div className="content">
                 <div className="ms-Grid-row w3-container">
                   <div className="ms-Grid-col ms-md1 block"></div> 
                   <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
@@ -388,7 +399,7 @@ export class CategoryListItens extends React.Component{
               null
           :
             selectedCategory == item.categoryENLookupValue ?
-              <div className="spaceBotton">
+              <div className="content">
                 <div className="ms-Grid-row w3-container">
                   <div className="ms-Grid-col ms-md1 block"></div> 
                   <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              

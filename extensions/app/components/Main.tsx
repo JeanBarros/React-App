@@ -3,7 +3,6 @@ import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
-import { SPComponentLoader } from '@microsoft/sp-loader'; //Não remover
 
 import Favoritos from './Favoritos';
 import Downloads from './Downloads';
@@ -15,74 +14,58 @@ import Pcp from './Pcp';
 import Rh from './Rh';
 import Subsidiarias from './Subsidiarias';
 import Detalhes from './Detalhes';
-import Report from './Report';
-import {SharePointWebTitle, language, setLoggedIn, categoryListItens, showCategory, logOut, setLanguage} from '../AppApplicationCustomizer';
+import {SharePointWebTitle, language, setLoggedIn, logOut, setLanguage, showCategory} from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
 
 export interface IMainProps {}
 
-let subLinks;
 let categoryCollection;
 
+// Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
+function sleep (time) {      
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 export default class Main extends React.Component<IMainProps> {
-  public domElement: any;  
   constructor(props: IMainProps) {  
     super(props);
 
-    setLoggedIn(true) 
-    this.RetrieveSPData();
-    // sleep time expects milliseconds
-    function sleep (time) {      
-      return new Promise((resolve) => setTimeout(resolve, time));
-    }
+    setLoggedIn(true);
 
-    // Usage!
+    // Remove o menu padrão do Office 365 no canto superior esquerdo
+    var O365NavMenu = document.getElementById('O365_NavHeader');
+    O365NavMenu.children[0].remove();
+    
+    // Obtém os dados da lista de Categorias pelo display name
+    this.getCategoryListItems('Categorias e Menu');
+
     sleep(500).then(() => {
-        // Do something after the sleep!
-        
-        // Cria um elemento
-        const sideNavElements = <div><div className="sideNavLogo"></div><SideNav /></div>;            
 
-        // Renderiza o dentro da tag SideNav
-        ReactDOM.render(sideNavElements, document.getElementById('sideNav'));
-        //ReactDOM.render(<SideNav />, document.getElementById('sideNav'));         
+      var header = document.createElement("DIV");
+      header.innerHTML = "<div class='header'><div class='logoHeader'></div><div id='webTitle'></div></div>"; 
+      document.getElementsByClassName('_71hjFgizWk0Cd55RzerwA')[0].appendChild(header);
+      
+      // Cria um elemento
+      const sideNavElements = <div><div className="sideNavLogo"></div><SideNav /></div>;
+      // Renderiza o dentro da tag SideNav
+      ReactDOM.render(sideNavElements, document.getElementById('sideNav')); 
+      
+      // Cabeçalho padrão das páginas modernas
+      var mainHeader = document.getElementsByClassName("ms-CompositeHeader-collapsible")[0].parentNode.parentNode;
+      mainHeader.parentNode.removeChild(mainHeader);
+
+      ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));
     });
-
-    SPComponentLoader.loadScript('https://code.jquery.com/jquery-3.4.1.js', {
-        globalExportsName: 'jQuery'
-        }).then(($: any) => {
-        this.jQuery = $;
-
-        // after all JS files are successfully loaded
-        setTimeout(() => {
-          var header = document.createElement("DIV");
-          header.innerHTML = "<div class='header'><div class='logoHeader'></div><div id='webTitle'></div></div>"; 
-          document.getElementsByClassName('_71hjFgizWk0Cd55RzerwA')[0].appendChild(header);
-          $('._2kc0c9nP-qti6fefMCFonk').css({'display':'none', 'font-size': 'initial', 'border': 'solid 1px red', 'float': 'left'});
-        }, 500);
-          
-          // Obtém o valor do <input hidden field> e o define no elemento webTitle
-        //   var siteName = $('#siteName').val();
-        //   $('#webTitle').text(siteName);
-
-          // Cabeçalho padrão das páginas modernas
-          var mainHeader = document.getElementsByClassName("ms-CompositeHeader-collapsible")[0].parentNode.parentNode;
-          mainHeader.parentNode.removeChild(mainHeader);
-
-          ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));        
-      });
   }
-  private jQuery: any;
 
-  RetrieveSPData(){    
+  private getCategoryListItems(listName){    
     var reactHandler = this;    
 
     var spRequest = new XMLHttpRequest();    
-    spRequest.open('GET', "/sites/lab02/_api/web/lists/getbytitle('Categorias%20e%20Menu')/items",true);    
+    spRequest.open('GET', `/sites/lab02/_api/web/lists/getbytitle('${listName}')/items`,true);    
     spRequest.setRequestHeader("Accept","application/json");  
                         
-    spRequest.onreadystatechange = function(){    
-          
+    spRequest.onreadystatechange = () =>{
         if (spRequest.readyState === 4 && spRequest.status === 200){    
             var result = JSON.parse(spRequest.responseText);    
                 
@@ -91,7 +74,6 @@ export default class Main extends React.Component<IMainProps> {
             }); 
             
             categoryCollection = result.value;
-            console.log(categoryCollection)
         }    
         else if (spRequest.readyState === 4 && spRequest.status !== 200){    
             console.log('Error Occured !');    
@@ -129,8 +111,7 @@ export default class Main extends React.Component<IMainProps> {
                   <Route path='/pcp' component={Pcp} />
                   <Route path='/rh' component={Rh} />
                   <Route path='/subsidiarias' component={Subsidiarias} /> 
-                  <Route path='/detalhes' component={Detalhes} />
-                  <Route path='/report' component={Report} />                         
+                  <Route path='/detalhes' component={Detalhes} />                     
               </Switch> 
             </div> 
           </HashRouter>
@@ -177,7 +158,7 @@ class SideNav extends React.Component{
           : null}                    
         </HashRouter>          
       </li>);
-    subLinks = categoryCollection.map((item) =>
+      const subLinks = categoryCollection.map((item) =>
       <li key={item.Id}>        
       <HashRouter>          
         {item.linkType == "Sublink" ?             
@@ -202,7 +183,7 @@ class SideNav extends React.Component{
         : null}        
       </HashRouter>          
     </li>); 
-    console.log(subLinks)
+    
     return( 
       <ul className="sideNavBottom">
         <li>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ReportListItens } from '../AppApplicationCustomizer';
+import { ReportListItens, CategoryListItens } from '../AppApplicationCustomizer';
 
 export interface IMinaProps {}   
 
@@ -10,18 +10,11 @@ export default class Mina extends React.Component<IMinaProps> {
 
   public render() {    
     return (
-      <div className="ms-Grid-row w3-container spaceBotton">
+      <div id="customContent" className="ms-Grid-row w3-container content">
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
-            <div id="categoryName">Mina</div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices dapibus egestas. 
-              Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
-              Vivamus efficitur urna vel velit porttitor tempus. Aliquam arcu orci, laoreet a tortor in, 
-              sollicitudin blandit ex. Ut dapibus dui vel nulla efficitur, posuere venenatis leo volutpat. 
-              Mauris vel interdum felis. Duis iaculis blandit lacus eget pellentesque.</p>
-          </div> 
+          <div id="CategoryListItens"><CategoryListItens/></div> 
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <ReportListItens></ReportListItens>
+          <div id="ReportListItens"><ReportListItens/></div>          
       </div>
     );
   } 

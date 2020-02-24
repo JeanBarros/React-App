@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { ReportListItens, CategoryListItens } from '../AppApplicationCustomizer';
+import { CategoryListItens } from '../AppApplicationCustomizer';
 
-export interface IFavoritosProps {}  
+export interface IFavoritosProps {}
 
 export default class Favoritos extends React.Component<IFavoritosProps> {
   constructor(props: IFavoritosProps) {  
@@ -9,12 +9,12 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
   }
 
   public render() {
-    return (      
+    return (
       <div className="ms-Grid-row w3-container spaceBotton">
         <div className="ms-Grid-col ms-md1 block"></div> 
-        <CategoryListItens></CategoryListItens> 
+          <div id="CategoryListItens"><CategoryListItens/></div> 
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <ReportListItens></ReportListItens>
+          <div id="ReportListItens"></div>          
       </div>
     );
   } 

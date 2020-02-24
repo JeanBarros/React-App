@@ -4,13 +4,17 @@ body, html {
     line-height: 1.5;
 }
 
+[data-sp-placeholder='Top']{
+    height: 100%;
+}
+
 ._71hjFgizWk0Cd55RzerwA{
     text-align: center;
     color: #fff;
     font-size: 16px;
 }
 
-.searchCell-176{
+.ms-searchux-searchbox{
     display: none;
 }
 
@@ -43,7 +47,7 @@ body, html {
     font-size: 1.65rem;
 }
 
-#overlay .content{
+#overlay .landingPage-content{
     padding: 33.3% 5%;
 }
 
@@ -192,6 +196,7 @@ input:checked ~ label .hamburguer:after {
 }
 
 .pageDescription h1{
+    font-size: 2em;
     color: #d8d8d8;
     font-weight: 400;
 }
@@ -224,14 +229,6 @@ input:checked ~ label .hamburguer:after {
 
 .tileBox .ms-Icon {
     color: #6F848B;
-}
-
-.categoryDescription{
-    border: solid 1px red;
-    width: 100% !important;
-    display: block;
-    position: absolute;
-    text-align: center;
 }
 
 .reportCategoryDescription{
@@ -323,7 +320,7 @@ input:checked ~ label .hamburguer:after {
     font-weight: 600;
 }
 
-.spaceBotton, .reportPage{
+.content, .reportPage{
     padding-bottom: 50px !important;
 }
 
@@ -332,13 +329,9 @@ input:checked ~ label .hamburguer:after {
     text-align: center;
 }
 
-.CanvasZoneContainer, .mainContent{
+.CanvasZoneContainer.CanvasZoneContainer--read, .mainContent{
     background-color: #EAEAEA !important;
 }
-
-/* .CanvasZone{
-    background-color: blueviolet !important;
-} */
 
 .reportContainer{
     width: 1260px;

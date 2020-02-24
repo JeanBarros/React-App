@@ -25,7 +25,7 @@ function LoginButton(props) {
         <div className="ms-Grid-row"> 
         <div className="ms-Grid-col ms-sm6 ms-md2 block"></div> 
         <div className="ms-Grid-col ms-sm12 ms-md4 block">
-          <div className="content">
+          <div className="landingPage-content">
             <div className="logoLandingPage"></div>
               {language == "pt" ?
                 <div>
