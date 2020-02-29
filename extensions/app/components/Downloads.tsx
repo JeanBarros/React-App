@@ -1,269 +1,131 @@
 import * as React from 'react';
+import * as ReactDOM from "react-dom";
+import { Link } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
-export interface IDownloadsProps {}   
+export interface IDownloadsProps {}
+
+let documentCollection;
+
+// Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
+function sleep (time) {      
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 export default class Downloads extends React.Component<IDownloadsProps> {  
   constructor(props: IDownloadsProps) {  
     super(props);
+
+    // Obtém os dados da lista de Categorias pelo display name
+    this.getDocuments('Documentos Compartilhados');
+
+    sleep(500).then(() => {
+
+      // Cria um elemento
+      const documentElements = <Documentlist />;
+      
+      //Renderiza o dentro da tag SideNav
+      ReactDOM.render(documentElements, document.getElementById('documentList'));
+    });
   }
 
-  public render() {    
+  private getDocuments(listName){    
+    var reactHandler = this;    
+
+    var spRequest = new XMLHttpRequest();    
+    spRequest.open('GET', `/sites/lab02/_api/web/GetFolderByServerRelativeUrl('${listName}')/Files?$expand=ListItemAllFields`,true);    
+    spRequest.setRequestHeader("Accept","application/json");  
+
+    spRequest.onreadystatechange = () =>{
+        if (spRequest.readyState === 4 && spRequest.status === 200){    
+            var result = JSON.parse(spRequest.responseText);    
+                
+            reactHandler.setState({    
+                items: result.value  
+            }); 
+            
+            documentCollection = result.value;
+            
+            console.log('Documents here:');
+        }    
+        else if (spRequest.readyState === 4 && spRequest.status !== 200){    
+            console.log('Error Occured !');    
+        }    
+    };    
+    spRequest.send();    
+  }
+
+  public render() {
     return (
-      <div>
-        <div>
-          <div className="ms-Grid-row w3-container">
-            <div className="ms-Grid-col ms-md1 block"></div> 
+      <div id="customContent" className="ms-Grid-row w3-container content">
+        <div className="ms-Grid-col ms-md1 block"></div> 
+          {/* <div id="CategoryListItens"><CategoryListItens/></div>  */}
+          <div id="CategoryListItens"><div>
             <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
-              <h1>Downloads</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices dapibus egestas. 
-                Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
-                Vivamus efficitur urna vel velit porttitor tempus. Aliquam arcu orci, laoreet a tortor in, 
-                sollicitudin blandit ex. Ut dapibus dui vel nulla efficitur, posuere venenatis leo volutpat. 
-                Mauris vel interdum felis. Duis iaculis blandit lacus eget pellentesque.</p>
-            </div> 
-            <div className="ms-Grid-col ms-md1 block"></div>
-          </div>
-          <div className="ms-Grid-row w3-container">
-            <div className="ms-Grid-col ms-sm6 ms-md6 block favoriteFilters">
-              Filtrar por:
-              <select name="Categoria">
-                <option value="Categoria">Categoria</option>
-                <option value="todasCategorias">Todas as categorias</option>
-                <option value="comercial">Comercial</option>
-                <option value="controladoria">Controladoria</option>
-                <option value="manutencao">Manutenção</option>
-                <option value="mina">Mina</option>
-                <option value="pcp">PCP</option>
-                <option value="rh">RH</option>
-                <option value="subsidiarias">Subsidiárias</option>
-              </select>
-            </div>            
-            <div className="ms-Grid-col ms-sm6 ms-md6 block favoriteFilters">
-              <div className="filterOrder">
-                Ordenar por:
-                <select name="Order">
-                  <option value="maisRecente">Mais recente</option>
-                  <option value="maisAntigo">Mais antigo</option>
-                  <option value="az">Ordem A > Z</option>
-                  <option value="za">Ordem Z > A</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="ms-Grid-row w3-container">
-            <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div className="tile">
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="ms-Grid-row">
-                      <div className="ms-Grid-col ms-sm4 ms-md4">
-                        <div className="categoryIcon">
-                          <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
-                        </div>
-                      </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8">
-                        Vendas<br></br>
-                        FeNB (T)
-                      </div>
-                    </div>                    
-                  </div>           
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                      <br></br>
-                      <strong>Tipo:</strong>
-                      <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--TextDocument"></i>
-                        <span>Arquivo</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="tileToolBar">
-                  <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Download</button>
-                </div>
-              </div>
-            </div> 
-            <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div className="tile">
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="ms-Grid-row">
-                      <div className="ms-Grid-col ms-sm4 ms-md4">
-                        <div className="categoryIcon">
-                          <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
-                        </div>
-                      </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8">
-                        Vendas<br></br>
-                        FeNB (T)
-                      </div>
-                    </div>                    
-                  </div>           
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                      <br></br>
-                      <strong>Tipo:</strong>
-                      <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--TextDocument"></i>
-                        <span>Arquivo</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="tileToolBar">
-                  <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Download</button>
-                </div>
-              </div>
-            </div> 
-            <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div className="tile">
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="ms-Grid-row">
-                      <div className="ms-Grid-col ms-sm4 ms-md4">
-                        <div className="categoryIcon">
-                          <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
-                        </div>
-                      </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8">
-                        Vendas<br></br>
-                        FeNB (T)
-                      </div>
-                    </div>                    
-                  </div>           
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                      <br></br>
-                      <strong>Tipo:</strong>
-                      <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--TextDocument"></i>
-                        <span>Arquivo</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="tileToolBar">
-                  <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Download</button>
-                </div>
+              <div id="categoryName"><h1>Downloads</h1>
+                <p>CBMM's history is closely linked to the development of niobium processing and applications. 
+                  When the Company was founded in the 1950s, there was neither the market nor the know-how to produce 
+                  niobium. CBMM developed the uses of niobium and created a market for it, through a program for the 
+                  development of niobium technology and the promotion of its effectiveness, 
+                  demonstrating the advantages that make niobium an insurmountable element in its main applications.
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div className="ms-Grid-row w3-container">
-            <div className="ms-Grid-col ms-sm12 ms-md12 block">
-              <p>&nbsp;</p>
-            </div>
-          </div>
-        <div className="ms-Grid-row w3-container spaceBotton">
-            <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div className="tile">
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="ms-Grid-row">
-                      <div className="ms-Grid-col ms-sm4 ms-md4">
-                        <div className="categoryIcon">
-                          <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
+        <div className="ms-Grid-col ms-md1 block"></div> 
+          <div id="documentList"></div>          
+      </div>
+    );
+  } 
+}
+
+class Documentlist extends React.Component{
+  public render(){
+    console.log(documentCollection);
+    const documents = documentCollection.map((item) =>
+      <section key={item.Id}>
+        <div className="ms-Grid-col ms-sm12 ms-md4 block">
+              <div className="tileBox">
+                <div className="tileBoxOverlay">
+                  <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-sm8 ms-md8">
+                      <div className="ms-Grid-row">
+                        <div className="ms-Grid-col ms-sm4 ms-md4">
+                          <div className="reportCategoryIcon" style = {{background: `url(${item.ListItemAllFields.icone})`}}>                                            
+                          </div>
+                        </div>  
+                        <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
+                          {item.Title}
                         </div>
-                      </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8">
-                        Vendas<br></br>
-                        FeNB (T)
-                      </div>
-                    </div>                    
-                  </div>           
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                      <br></br>
-                      <strong>Tipo:</strong>
-                      <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--TextDocument"></i>
-                        <span>Arquivo</span>
+                      </div>                    
+                    </div>           
+                    <div className="ms-Grid-col ms-sm4 ms-md4">
+                      <div className="reportCategoryInfo">
+                        <br></br>
+                        <strong>Tipo:</strong>
+                        <div className="reportCategoryType">                      
+                          <i className="ms-Icon ms-Icon--TextDocument"></i>
+                          <span>Arquivo</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="tileToolBar">
-                  <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Download</button>
-                </div>
-              </div>
-            </div> 
-            <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div className="tile">
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="ms-Grid-row">
-                      <div className="ms-Grid-col ms-sm4 ms-md4">
-                        <div className="categoryIcon">
-                          <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
-                        </div>
-                      </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8">
-                        Vendas<br></br>
-                        FeNB (T)
-                      </div>
-                    </div>                    
-                  </div>           
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                      <br></br>
-                      <strong>Tipo:</strong>
-                      <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--TextDocument"></i>
-                        <span>Arquivo</span>
-                      </div>
-                    </div>
+                    <div className="tileBoxToolBar">
+                      <HashRouter>
+                        <Link className="btnDetalhes" to={`/detalhes`}>Detalhes</Link>                      
+                      </HashRouter>
+                      <a href={item.LinkingUrl.split('?')[0]} className="btnDashboard">Download</a>
+                      {console.log(item.ListItemAllFields.detalhes)}
                   </div>
-                </div>
-                <div className="tileToolBar">
-                  <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Download</button>
-                </div>
-              </div>
-            </div> 
-            <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div className="tile">
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="ms-Grid-row">
-                      <div className="ms-Grid-col ms-sm4 ms-md4">
-                        <div className="categoryIcon">
-                          <i className="ms-Icon ms-Icon--ClassroomLogo"></i>                      
-                        </div>
-                      </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8">
-                        Vendas<br></br>
-                        FeNB (T)
-                      </div>
-                    </div>                    
-                  </div>           
-                  <div className="ms-Grid-col ms-sm6 ms-md6">
-                    <div className="categoryInfo">
-                      <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                      <br></br>
-                      <strong>Tipo:</strong>
-                      <div className="categoryType">                      
-                        <i className="ms-Icon ms-Icon--TextDocument"></i>
-                        <span>Arquivo</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="tileToolBar">
-                  <button className="btnDetalhes">Detalhes</button>
-                  <button className="btnDashboard">Download</button>
                 </div>
               </div>
             </div>
-          </div>
+      </section>);
+
+    return(
+      <div>
+          {documents}
       </div>
     );
   } 

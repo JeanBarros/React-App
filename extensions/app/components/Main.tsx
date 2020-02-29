@@ -47,12 +47,28 @@ export default class Main extends React.Component<IMainProps> {
       
       // Cria um elemento
       const sideNavElements = <div><div className="sideNavLogo"></div><SideNav /></div>;
-      // Renderiza o dentro da tag SideNav
+      
+      //Renderiza o dentro da tag SideNav
       ReactDOM.render(sideNavElements, document.getElementById('sideNav')); 
       
       // Cabeçalho padrão das páginas modernas
-      var mainHeader = document.getElementsByClassName("ms-CompositeHeader-collapsible")[0].parentNode.parentNode;
-      mainHeader.parentNode.removeChild(mainHeader);
+      // var mainHeader = document.getElementsByClassName("ms-CompositeHeader-collapsible")[0].parentNode.parentNode;
+      // mainHeader.parentNode.removeChild(mainHeader);
+      
+      
+      // Barra de ferramenta padrão de edição das páginas
+      let pageCommandBar = document.getElementsByClassName("commandBarWrapper")[0];
+      let topPlaceHolder = document.querySelector("[data-sp-placeholder='Top']");
+      
+      if(!location.href.match('.aspx')){
+        pageCommandBar.classList.add("hiddenCommandBar");
+        topPlaceHolder.className = "topPlaceHolder-h100";
+      }
+      else{
+        pageCommandBar.classList.remove("hiddenCommandBar");
+          // if(!location.href.match('edit'))
+          //   topPlaceHolder.className = "hiddenTopPlaceHolder";
+      }
 
       ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));
     });

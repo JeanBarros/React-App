@@ -34,7 +34,7 @@ let webTitle;
 var relativeSiteUrl;
 export let reportListItens;
 export let categoryListItens;
-let selectedCategory = 'Favoritos';
+let selectedCategory = 'comercial';
 export let language;
 export let isLogged;
 

@@ -4,9 +4,25 @@ body, html {
     line-height: 1.5;
 }
 
-[data-sp-placeholder='Top']{
+.hiddenTopPlaceHolder{
+    display: none !important;
+}
+
+.topPlaceHolder-h100{
     height: 100%;
 }
+
+[role='banner']{
+    display: none !important;
+}
+
+.hiddenCommandBar{
+    display: none !important;
+}
+
+/* .commandBarWrapper .ms-CommandBar {
+    display: none !important;
+} */
 
 ._71hjFgizWk0Cd55RzerwA{
     text-align: center;
@@ -34,7 +50,7 @@ body, html {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url("/sites/Lab02/SiteAssets/images/capa.png") no-repeat;
+    background: url("/sites/Lab02/SiteAssets/images/capa.jpg") no-repeat;
     background-size: cover;
     z-index: 5;
 }
@@ -104,10 +120,6 @@ body, html {
 }
 
 .root-139{
-    display: none !important;
-}
-
-.commandBarWrapper .ms-CommandBar {
     display: none !important;
 }
 
@@ -289,22 +301,6 @@ input:checked ~ label .hamburguer:after {
     line-height: 32px;
     font-size: .875rem;
     text-decoration: none;
-}
-
-.favoriteFilters{
-    margin-bottom: 30px;
-}
-
-.favoriteFilters select{
-    width: 144px;
-    height: 30px;
-    border-radius: 3px;
-    margin-left: 15px;
-    outline: 0;
-}
-
-.filterOrder{
-    float: right;
 }
 
 .detalhes h1{
