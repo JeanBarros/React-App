@@ -14,6 +14,7 @@ import Pcp from './Pcp';
 import Rh from './Rh';
 import Subsidiarias from './Subsidiarias';
 import Detalhes from './Detalhes';
+import DetalhesDocumento from './DetalhesDocumento';
 import {SharePointWebTitle, language, setLoggedIn, logOut, setLanguage, showCategory} from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
 
@@ -60,16 +61,21 @@ export default class Main extends React.Component<IMainProps> {
       let pageCommandBar = document.getElementsByClassName("commandBarWrapper")[0];
       let topPlaceHolder = document.querySelector("[data-sp-placeholder='Top']");
       
+      // Menu superior nativo do SharePoint
+      let sharepointTopMenu = document.querySelector("[role='banner']");
+      
       if(!location.href.match('.aspx')){
         pageCommandBar.classList.add("hiddenCommandBar");
+        sharepointTopMenu.classList.add("hiddenCommandBar");
         topPlaceHolder.className = "topPlaceHolder-h100";
       }
       else{
         pageCommandBar.classList.remove("hiddenCommandBar");
+        sharepointTopMenu.classList.remove("hiddenCommandBar");
           // if(!location.href.match('edit'))
           //   topPlaceHolder.className = "hiddenTopPlaceHolder";
       }
-
+      
       ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));
     });
   }
@@ -127,7 +133,8 @@ export default class Main extends React.Component<IMainProps> {
                   <Route path='/pcp' component={Pcp} />
                   <Route path='/rh' component={Rh} />
                   <Route path='/subsidiarias' component={Subsidiarias} /> 
-                  <Route path='/detalhes' component={Detalhes} />                     
+                  <Route path='/detalhes' component={Detalhes} />
+                  <Route path='/detalhesDocumento' component={DetalhesDocumento} />                     
               </Switch> 
             </div> 
           </HashRouter>

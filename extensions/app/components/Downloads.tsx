@@ -2,10 +2,12 @@ import * as React from 'react';
 import * as ReactDOM from "react-dom";
 import { Link } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
+import * as moment from 'moment';
 
 export interface IDownloadsProps {}
 
 let documentCollection;
+let documentTitle;
 
 // Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
 function sleep (time) {      
@@ -113,7 +115,7 @@ class Documentlist extends React.Component{
                   </div>
                     <div className="tileBoxToolBar">
                       <HashRouter>
-                        <Link className="btnDetalhes" to={`/detalhes`}>Detalhes</Link>                      
+                        <Link onClick={() => getDocumentTitle(item.Title)} className="btnDetalhes" to={`/detalhesDocumento`}>Detalhes</Link>                      
                       </HashRouter>
                       <a href={item.LinkingUrl.split('?')[0]} className="btnDashboard">Download</a>
                       {console.log(item.ListItemAllFields.detalhes)}
@@ -126,6 +128,48 @@ class Documentlist extends React.Component{
     return(
       <div>
           {documents}
+      </div>
+    );
+  } 
+}
+
+function getDocumentTitle(title){
+  documentTitle = title;
+}
+
+export class DocumentDetails extends React.Component{
+  public render(){
+    console.log(documentCollection);
+    const documentDetails = documentCollection.map((item) =>
+    <section key={item.Id}>          
+      {item.Title == documentTitle ?
+        <div className="content">
+          <div className="ms-Grid-row w3-container">
+            <div className="ms-Grid-col ms-md1 block"></div> 
+            <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
+            </div> 
+            <div className="ms-Grid-col ms-md1 block"></div>
+          </div>
+          <div className="ms-Grid-row w3-container">
+            <div className="ms-Grid-col ms-sm12 ms-md9 block detalhes">                    
+              <div>
+                <h1>{item.Title}</h1>
+                <p><span>Tipo: </span>Documento</p>
+                <p><span>Autor: </span>{item.ListItemAllFields.author0}</p>
+                <p><span>Data de criação: </span>{moment(item.TimeCreated).format('DD/MM/YYYY')}</p>
+                <p>{item.ListItemAllFields.detalhes}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      :
+      null}
+    </section>                 
+  );
+
+    return(
+      <div>
+          {documentDetails}
       </div>
     );
   } 

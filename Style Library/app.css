@@ -12,17 +12,9 @@ body, html {
     height: 100%;
 }
 
-[role='banner']{
-    display: none !important;
-}
-
 .hiddenCommandBar{
     display: none !important;
 }
-
-/* .commandBarWrapper .ms-CommandBar {
-    display: none !important;
-} */
 
 ._71hjFgizWk0Cd55RzerwA{
     text-align: center;
@@ -119,10 +111,6 @@ body, html {
     border-left: solid 2px white;
 }
 
-.root-139{
-    display: none !important;
-}
-
 [data-sp-feature-tag="Site header host"] {
     border-bottom: none !important;
 }
@@ -180,24 +168,6 @@ body, html {
 
 .hamburguer:after {
     bottom: -10px;
-}
-
-input {
-    display: none;
-}
-
-input:checked ~ label .hamburguer {
-    transform: rotate(45deg);
-}
-
-input:checked ~ label .hamburguer:before {
-    transform: rotate(90deg);
-    top: 0;
-}
-
-input:checked ~ label .hamburguer:after {
-    transform: rotate(90deg);
-    bottom: 0;
 }
 
 .pageDescription{
