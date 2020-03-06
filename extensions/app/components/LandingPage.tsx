@@ -32,22 +32,18 @@ function LoginButton(props) {
                   <h1>Bem vindo ao <br/>Enterprise BI Portal</h1>
                   <p>Clique abaixo para entrar na plataforma</p>
                   <button onClick={props.onClick} className="btnLogin">
-                    <div>
-                      <i className="ms-Icon ms-Icon--ClosePane" aria-hidden="true"></i>
-                      <span>ACESSAR</span>
-                    </div>
-                  </button>                  
+                    <div className="btnLogin-Icon">&nbsp;</div>
+                    <span>ACESSAR</span>
+                  </button>         
                 </div>
               :
                 <div>
                   <h1>Welcome to <br/>Enterprise BI Portal</h1>
                   <p>Click below to enter the platform</p>
                   <button onClick={props.onClick} className="btnLogin">
-                    <div>
-                      <i className="ms-Icon ms-Icon--ClosePane" aria-hidden="true"></i>
-                      <span>ACCESS</span>
-                    </div>
-                  </button>                  
+                    <div className="btnLogin-Icon">&nbsp;</div>
+                    <span>ACCESS</span>
+                  </button>                                    
                 </div>
               }  
           </div> 

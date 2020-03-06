@@ -58,13 +58,16 @@ export const setLoggedIn = (value) => {
 
 export function logOut(){
   setLoggedIn(false);
-  window.location.replace("https://keyruspbi.sharepoint.com/sites/Lab02");
+  window.location.replace("https://cbmmbr.sharepoint.com/sites/bienterprise");
   //location.reload();
 }
 
-function hideCustomContent(){
+function getDashboard(pageTitle){
   var content = document.getElementById('customContent');
-  content.style.display='none';
+  if (content != null)
+    content.style.display='none';
+
+  window.location.replace(`${relativeSiteUrl}/SitePages/${pageTitle}.aspx`);
 }
 
 // Aguarda para garantir que os dados da lista sejam retornados antes de utilizá-los nos componentes
@@ -92,12 +95,12 @@ export default class AppApplicationCustomizer
       var appStyle = document.createElement('link'); 
       appStyle.rel = 'stylesheet'; 
       appStyle.type = 'text/css'; 
-      appStyle.href = '/sites/lab02/Style%20Library/app.css';  
+      appStyle.href = '/sites/bienterprise/Style%20Library/app.css';  
 
       var sideNavStyle = document.createElement('link'); 
       sideNavStyle.rel = 'stylesheet'; 
       sideNavStyle.type = 'text/css'; 
-      sideNavStyle.href = '/sites/lab02/Style%20Library/sideNav.css';
+      sideNavStyle.href = '/sites/bienterprise/Style%20Library/sideNav.css';
       
       var jQuery=document.createElement('script');
       jQuery.setAttribute("type","text/javascript");
@@ -163,8 +166,8 @@ export default class AppApplicationCustomizer
           }  
           if (this._topPlaceholder.domElement) { 
 
-            this._renderReportList('Reports'); // List display name
-            this._renderCategoryList('Categorias e Menu'); // List display name
+            this._renderReportList('reports'); // List interal name
+            this._renderCategoryList('reportCategories'); // List interal name
 
             console.log('Inicializou o componente principal');
 
@@ -220,56 +223,61 @@ public render(){
 
   const reports = reportListItens.map((item) =>
     <section key={item.Id}>
-      {item.visibleOnTile == true ? 
-        language == "pt" ?
-          selectedCategory == item.categoryLookupValue ?
-            <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div className="tileBox">
-                <div className="tileBoxOverlay">
-                  <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm8 ms-md8">
-                      <div className="ms-Grid-row">
-                        <div className="ms-Grid-col ms-sm4 ms-md4">
-                          <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon})`}}>                                            
-                          </div>
-                        </div>  
-                        <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
-                          {item.Title}
+      {language == "pt" ?
+        selectedCategory == item.categoryLookupValue ?
+          <div className="ms-Grid-col ms-sm12 ms-md4 block">
+            <div className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+              <div className="tileBoxOverlay">
+                <div className="ms-Grid-row">
+                  <div className="ms-Grid-col ms-sm8 ms-md8">
+                    <div className="ms-Grid-row">
+                      <div className="ms-Grid-col ms-sm4 ms-md4">
+                        <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}>                                            
                         </div>
-                      </div>                    
-                    </div>           
-                    <div className="ms-Grid-col ms-sm4 ms-md4">
-                      <div className="reportCategoryInfo">
-                        <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                        <br></br>
-                        <strong>Tipo:</strong>
-                        <div className="reportCategoryType">                      
-                          <i className="ms-Icon ms-Icon--PowerBILogo"></i>
+                      </div>  
+                      <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
+                        {item.Title}
+                      </div>
+                    </div>                    
+                  </div>           
+                  <div className="ms-Grid-col ms-sm4 ms-md4">
+                    <div className="reportCategoryInfo">
+                      <div className="favoriteIcon"></div>                      
+                      <div className="reportCategoryType">
+                        <span>Tipo:</span>                      
+                        <div className="iconType">
                           <span>Dashboard</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                    <div className="tileBoxToolBar">
-                      <HashRouter>
-                        <Link className="btnDetalhes" to={`/detalhes`}>Detalhes</Link>                      
-                      </HashRouter>
-                        <a href={`${relativeSiteUrl}/SitePages/${item.reportPage}.aspx`} className="btnDashboard" onClick={() => hideCustomContent()}>Dashboard</a>
-                  </div>
+                </div>
+                  <div className="tileBoxToolBar">
+                    <HashRouter>
+                      <Link className="btnDetalhes" to={`/detalhes`}>
+                        <div className="btnDetalhes-Icon">&nbsp;</div>
+                        <span>Detalhes</span>
+                      </Link>                      
+                    </HashRouter>
+                    <button className="btnDashboard" onClick={() => getDashboard(item.reportPage)}>
+                      <div className="btnDashboard-Icon">&nbsp;</div>
+                      <span>Dashboard</span>
+                    </button>
                 </div>
               </div>
             </div>
+          </div>
           : null
         :
           selectedCategory == item.categoryENLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div className="tileBox">
+              <div className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">
                       <div className="ms-Grid-row">
                         <div className="ms-Grid-col ms-sm4 ms-md4">
-                          <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon})`}}>                                            
+                          <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}>                                            
                           </div>
                         </div>  
                         <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
@@ -279,27 +287,32 @@ public render(){
                     </div>           
                     <div className="ms-Grid-col ms-sm4 ms-md4">
                       <div className="reportCategoryInfo">
-                        <i className="ms-Icon ms-Icon--FavoriteStarFill"></i>
-                        <br></br>
-                        <strong>Type:</strong>
-                        <div className="reportCategoryType">                      
-                          <i className="ms-Icon ms-Icon--PowerBILogo"></i>
-                          <span>Dashboard</span>
+                        <div className="favoriteIcon"></div>                      
+                          <div className="reportCategoryType">
+                            <span>Tipo:</span>                      
+                            <div className="iconType">
+                              <span>Dashboard</span>
+                            </div>
                         </div>
                       </div>
                     </div>
                   </div>
                     <div className="tileBoxToolBar">
                       <HashRouter>
-                        <Link className="btnDetalhes" to={`/detalhes`}>Details</Link>                      
+                        <Link className="btnDetalhes" to={`/detalhes`}>
+                          <div className="btnDetalhes-Icon">&nbsp;</div>
+                          <span>Details</span>
+                        </Link>                      
                       </HashRouter>
-                        <a href={`${relativeSiteUrl}/SitePages/${item.reportPage}.aspx`} className="btnDashboard" onClick={() => hideCustomContent()}>Dashboard</a>
+                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage)}>
+                        <div className="btnDashboard-Icon">&nbsp;</div>
+                        <span>Dashboard</span>
+                      </button>
                   </div>
                 </div>
               </div>
             </div>
-          : null
-      : null}     
+          : null}     
     </section>                 
     );
 
@@ -376,7 +389,7 @@ export class CategoryListItens extends React.Component{
                           <div className="ms-Grid-row">
                             <div className="ms-Grid-col ms-sm4 ms-md4">
                               <div className="categoryIcon">
-                                <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon})`}}></div>                      
+                                <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}></div>                      
                               </div>
                             </div>  
                             <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -386,7 +399,11 @@ export class CategoryListItens extends React.Component{
                         </div>
                       </div>
                       <div className="reportDetailsToolBar">              
-                        <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a>
+                        {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
+                        <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage)}>
+                          <div className="btnDashboard-Icon">&nbsp;</div>
+                          <span>Dashboard</span>
+                        </button>
                         <p>
                           <a href="#" className="btnAddFavorites">Adicionar aos Favoritos</a>
                         </p>
@@ -424,7 +441,7 @@ export class CategoryListItens extends React.Component{
                           <div className="ms-Grid-row">
                             <div className="ms-Grid-col ms-sm4 ms-md4">
                               <div className="categoryIcon">
-                                <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon})`}}></div>                      
+                                <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}></div>                      
                               </div>
                             </div>  
                             <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -434,7 +451,11 @@ export class CategoryListItens extends React.Component{
                         </div>
                       </div>
                       <div className="reportDetailsToolBar">              
-                        <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a>
+                        {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
+                        <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage)}>
+                          <div className="btnDashboard-Icon">&nbsp;</div>
+                          <span>Dashboard</span>
+                        </button>
                         <p>
                           <a href="#" className="btnAddFavorites">Add to Favorites</a>
                         </p>

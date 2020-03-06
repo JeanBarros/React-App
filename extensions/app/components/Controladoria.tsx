@@ -10,7 +10,7 @@ export default class Controladoria extends React.Component<IControladoriaProps> 
 
   public render() {    
     return (
-      <div className="ms-Grid-row w3-container content">
+      <div id="customContent" className="ms-Grid-row w3-container content">
         <div className="ms-Grid-col ms-md1 block"></div> 
           <div id="CategoryListItens"><CategoryListItens/></div> 
         <div className="ms-Grid-col ms-md1 block"></div> 

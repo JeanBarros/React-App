@@ -4,12 +4,31 @@ body, html {
     line-height: 1.5;
 }
 
+#O365_SearchBoxContainer{
+    display: none !important;
+}
+
+#O365_NavHeader, .o365sx-button{
+    background-color: #27292D !important;
+    color: #FFFFFF !important;
+}
+
+/* Barra de comentários em páginas modernas (Social Media Tools) */
+[data-sp-feature-tag='Comments']{
+    display: none;
+}
+
+.ms-searchux-searchbox{
+    display: none;
+}
+
 .hiddenTopPlaceHolder{
     display: none !important;
 }
 
 .topPlaceHolder-h100{
     height: 100%;
+    background-color: #383a40;
 }
 
 .hiddenCommandBar{
@@ -20,10 +39,6 @@ body, html {
     text-align: center;
     color: #fff;
     font-size: 16px;
-}
-
-.ms-searchux-searchbox{
-    display: none;
 }
 
 /* Classes React*/
@@ -42,7 +57,7 @@ body, html {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url("/sites/Lab02/SiteAssets/images/capa.jpg") no-repeat;
+    background: url("/sites/bienterprise/SiteAssets/images/capa.jpg") no-repeat;
     background-size: cover;
     z-index: 5;
 }
@@ -57,34 +72,13 @@ body, html {
 
 #overlay .landingPage-content{
     padding: 33.3% 5%;
-}
-
-.btnLogin{
-    width: 181px;
-    height: 38px;
-    font-size: 1rem;
-    margin-top: 30px;
-    border-radius: 6px;
-    background-color: #8AA4AD;    
-    cursor: pointer;
-    position: relative;
-    z-index: 5;
-}
-
-.btnLogin div{
-    display: inline-flex;
-    align-items: center;
-}
-
-.btnLogin i{
-    font-size: 22px;
-    margin-right: 10px;
+    color: #FFFFFF;
 }
 
 .logoLandingPage{
     width: 273px;
     height: 51px;
-    background: url("/sites/Lab02/SiteAssets/images/LogoLandingPage.png") no-repeat;
+    background: url("/sites/bienterprise/SiteAssets/images/LogoLandingPage.png") no-repeat;
     margin-bottom: 30px;
     display: inline-block;
 }
@@ -100,7 +94,7 @@ body, html {
 .logoHeader{
     width: 136px;
     height: 22px;
-    background: url("/sites/Lab02/SiteAssets/images/Logo_CBMM-03.png") no-repeat;    
+    background: url("/sites/bienterprise/SiteAssets/images/Logo_CBMM-03.png") no-repeat;    
     display: inline-block;
 }
 
@@ -172,8 +166,8 @@ body, html {
 
 .pageDescription{
     text-align: center;
-    padding-top: 80px;
-    padding-bottom: 30px;
+    padding-top: 100px;
+    padding-bottom: 70px;
     color: #868686;
 }
 
@@ -186,9 +180,9 @@ body, html {
 .tileBox{
     width: 100%;
     height: 182px;
+    color: #fff;
     margin-bottom: 20px;
-    font-size: 1.2rem;
-    background: #2E2E2E url("/sites/Lab02/SiteAssets/images/bgTitle.png") no-repeat;
+    font-size: 0.875rem;
     background-size: cover;
     border-radius: 6px;
     overflow: hidden;
@@ -197,7 +191,7 @@ body, html {
 .tileBoxOverlay{
     width: 100%;
     height: 100%;
-    background-color: #030303c2;
+    /* background-color: #030303c2; */
 }
 
 .tileBoxToolBar{
@@ -219,7 +213,7 @@ body, html {
 }
 
 .reportCategoryIcon{
-    width: 56px;
+    width: 62px;
     height: 56px;
     margin-top: 20px;
     margin-left: 5px;
@@ -227,20 +221,85 @@ body, html {
     background-position: center center !important;
 }
 
-.reportCategoryInfo{
+.downloadModal{
+    width: 100%;
+    height: 100%;
+    background-color: #ADADAD;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    z-index: 6;
+}
+
+.downloadCenterBox{
+    width: 519px;
+    height: 371px;
+    margin: 10px;
+    padding: 5px;
+    background: #FCFCFC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.downloadCenterBox-content{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background: url(/sites/bienterprise/SiteAssets/images/icons/downloadCheck.png) no-repeat center 50px;
+    margin: 10px;
+    padding: 5px;
+}
+
+.downloadCenterBox-content h1{
+    font-size: 1.5rem;
+    color: #707070;
+    margin-top: 170px;
+}
+
+.downloadCenterBox-content a{
+    color: #707070;
+}
+
+.reportCategoryInfo, .downloadInfo{
     text-align: right;
     float: right;
+    margin: 16px 10px 0 0;
 }
 
-.reportCategoryInfo .ms-Icon{
-    font-size: 1.5rem;    
+.downloadInfo{
+    margin: 22px 10px 33px 0;
 }
 
-.reportCategoryType span{
+.iconType{
+    background: url(/sites/bienterprise/SiteAssets/images/icons/dashboard.png) left center no-repeat;
+}
+
+.downloadIconType{
+    background: url(/sites/bienterprise/SiteAssets/images/icons/file.png) left center no-repeat;
+}
+
+.iconType span, .downloadIconType span{
+    margin-left: 34px !important;
+}
+
+.favoriteIcon{
+    width: 27px;
+    height: 26px;
+    margin-bottom: 8px;
+    background: url(/sites/bienterprise/SiteAssets/images/icons/favStarOutline.png) left center no-repeat;
+    display: inline-flex;
+}
+
+.reportCategoryType span, .downloadType{
     margin-left: 10px;
 }
 
-.btnDetalhes, .btnDashboard{
+.btnDetalhes, .btnDashboard, .btnLogin{
     margin-right: 15px;
     background-color: transparent;
     border: solid 1px #fff;
@@ -249,9 +308,50 @@ body, html {
     outline: 0;
 }
 
+.btnLogin{
+    width: 181px;
+    height: 38px;
+    font-size: 1rem;
+    color: #E4EAEF;
+    margin-top: 30px;
+    border-radius: 6px;
+    background-color: #8AA4AD;    
+    cursor: pointer;
+    outline: none;
+    border: solid 1px #8aa4ad;
+}
+
 .btnDashboard{
     background-color: #6F848B;
     border: none;
+}
+
+.btnLogin span{
+    margin-left: 15px;
+}
+
+.btnDetalhes span, .btnDashboard span, .btnAddFavorites span, .btnDashboard-Large span{
+    margin-left: 5px;
+}
+
+.btnLogin-Icon, .btnDetalhes-Icon, .btnDashboard-Icon, .btnDownload-Icon{
+    width: 21px;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/info.png') no-repeat center;
+    display: inherit;
+}
+
+.btnDashboard-Icon{
+    background: url('/sites/bienterprise/SiteAssets/images/icons/rightArrow.png') no-repeat center;
+}
+
+.btnDownload-Icon{
+    width: 24px;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/download.png') no-repeat center;
+}
+
+.btnLogin-Icon{
+    height: 24px;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/login.png') no-repeat center;
 }
 
 .btnVoltar{
@@ -262,7 +362,7 @@ body, html {
     text-decoration: none;
 }
 
-.tileBoxToolBar a{
+.tileBoxToolBar a, .btnDashboard{
     width: 120px;
     height: 32px;
     color: #fff;
@@ -271,6 +371,10 @@ body, html {
     line-height: 32px;
     font-size: .875rem;
     text-decoration: none;
+}
+
+.detalhes{
+    color: #fff;
 }
 
 .detalhes h1{
@@ -288,6 +392,7 @@ body, html {
 
 .content, .reportPage{
     padding-bottom: 50px !important;
+    color: #fff;
 }
 
 .reportPage{
@@ -316,7 +421,7 @@ body, html {
     height: 180px;
     font-size: 1.2rem;
     text-align: center;
-    background: #2E2E2E url(/sites/Lab02/SiteAssets/images/bgTitle.png) no-repeat;
+    background: #2E2E2E url(/sites/bienterprise/SiteAssets/images/bgTitle.png) no-repeat;
     background-size: cover;
     border-radius: 6px;
     overflow: hidden;
@@ -335,7 +440,7 @@ body, html {
     padding-top: 15px;
 }
 
-.reportDetailsToolBar a {
+.reportDetailsToolBar a, .btnAddFavorites, .btnDashboard-Large {
     width: 190px;
     height: 32px;
     display: inline-block;
@@ -364,7 +469,7 @@ body, html {
     width: 42px;
     height: 42px;
     margin-top: 36px;
-    background: url(/sites/Lab02/SiteAssets/images/BR-flag-round.png) center center no-repeat;
+    background: url(/sites/bienterprise/SiteAssets/images/BR-flag-round.png) center center no-repeat;
     background-size: 100% !important;
     border: none;
     outline: none;
@@ -372,7 +477,7 @@ body, html {
 }
 
 .btnTranslateEN, .btnTranslateEN-small{    
-    background: url(/sites/Lab02/SiteAssets/images/USA-flag-round.png) center center no-repeat;
+    background: url(/sites/bienterprise/SiteAssets/images/USA-flag-round.png) center center no-repeat;
     margin-left: 16px;
 }
 

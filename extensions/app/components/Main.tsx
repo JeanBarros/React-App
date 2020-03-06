@@ -37,8 +37,8 @@ export default class Main extends React.Component<IMainProps> {
     var O365NavMenu = document.getElementById('O365_NavHeader');
     O365NavMenu.children[0].remove();
     
-    // Obtém os dados da lista de Categorias pelo display name
-    this.getCategoryListItems('Categorias e Menu');
+    // Obtém os dados da lista de Categorias pelo interal name
+    this.getCategoryListItems('reportCategories');
 
     sleep(500).then(() => {
 
@@ -50,17 +50,12 @@ export default class Main extends React.Component<IMainProps> {
       const sideNavElements = <div><div className="sideNavLogo"></div><SideNav /></div>;
       
       //Renderiza o dentro da tag SideNav
-      ReactDOM.render(sideNavElements, document.getElementById('sideNav')); 
-      
-      // Cabeçalho padrão das páginas modernas
-      // var mainHeader = document.getElementsByClassName("ms-CompositeHeader-collapsible")[0].parentNode.parentNode;
-      // mainHeader.parentNode.removeChild(mainHeader);
-      
+      ReactDOM.render(sideNavElements, document.getElementById('sideNav'));      
       
       // Barra de ferramenta padrão de edição das páginas
       let pageCommandBar = document.getElementsByClassName("commandBarWrapper")[0];
       let topPlaceHolder = document.querySelector("[data-sp-placeholder='Top']");
-      
+            
       // Menu superior nativo do SharePoint
       let sharepointTopMenu = document.querySelector("[role='banner']");
       
@@ -75,7 +70,7 @@ export default class Main extends React.Component<IMainProps> {
           // if(!location.href.match('edit'))
           //   topPlaceHolder.className = "hiddenTopPlaceHolder";
       }
-      
+
       ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));
     });
   }
@@ -84,7 +79,7 @@ export default class Main extends React.Component<IMainProps> {
     var reactHandler = this;    
 
     var spRequest = new XMLHttpRequest();    
-    spRequest.open('GET', `/sites/lab02/_api/web/lists/getbytitle('${listName}')/items`,true);    
+    spRequest.open('GET', `/sites/bienterprise/_api/web/lists/getbytitle('${listName}')/items`,true);    
     spRequest.setRequestHeader("Accept","application/json");  
                         
     spRequest.onreadystatechange = () =>{
@@ -159,7 +154,7 @@ class SideNav extends React.Component{
               <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
                 className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>
                 {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                <div className="sideNavIcons" style = {{background: `url(${item.icon}) no-repeat center center`}}></div>
                 <span>{item.Title}</span>
               </Link>              
               </div>
@@ -167,7 +162,7 @@ class SideNav extends React.Component{
               <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
                 className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>
                 {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+                <div className="sideNavIcons" style = {{background: `url(${item.icon}) no-repeat center center`}}></div>
                 <span>{item.titleEN}</span>
               </Link>            
           : null}
@@ -175,7 +170,7 @@ class SideNav extends React.Component{
             <div className="sideNavHeading">
               <li className="spacerTop"></li>
               {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-              <div className="sideNavIcons" style = {{background: `url(${item.icon})`}}></div>
+              <div className="sideNavIcons" style = {{background: `url(${item.icon}) no-repeat center center`}}></div>
               {item.Title}
             </div>
           : null}                    
@@ -221,13 +216,13 @@ class SideNav extends React.Component{
               {language == 'pt' ?    
                 <Link to={'/landingPage'} onClick={() => logOut()}
                   className="w3-bar-item w3-button sideNavLinkBottom">
-                  <div className="sideNavIcons"></div>
+                  <div className="sideNavIcons logoutIcon"></div>
                   <span>Sair</span>
                 </Link> 
               :
                 <Link to={'/landingPage'} onClick={() => logOut()}
                   className="w3-bar-item w3-button sideNavLinkBottom">
-                  <div className="sideNavIcons"></div>
+                  <div className="sideNavIcons logoutIcon"></div>
                   <span>Logout</span>
                 </Link> 
               }  

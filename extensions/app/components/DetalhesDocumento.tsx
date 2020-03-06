@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from "react-dom";
-import { ReportDetails } from '../AppApplicationCustomizer';
+import { ReportDetails, language } from '../AppApplicationCustomizer';
 import { DocumentDetails } from './Downloads';
 
 export interface IDetalhesDocumentoProps {} 
@@ -63,7 +63,13 @@ export default class DetalhesDocumento extends React.Component<any> {
           <div className="ms-Grid-col ms-sm12 ms-md12 block detalhes">
               <p>
                 <i className="ms-Icon ms-Icon--ChevronLeftSmall"></i>                
-                <a className="btnVoltar" href="#" onClick={() => this.props.history.goBack()}>Voltar</a>
+                <a className="btnVoltar" href="#" onClick={() => this.props.history.goBack()}>
+                    {language == "pt" ?
+                        "Voltar"
+                    :
+                        "Back"
+                    }
+                </a>
               </p>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ReportDetails } from '../AppApplicationCustomizer';
+import { ReportDetails, language } from '../AppApplicationCustomizer';
 
 export interface IDetalhesProps {} 
 
@@ -16,7 +16,13 @@ export default class Detalhes extends React.Component<any> {
           <div className="ms-Grid-col ms-sm12 ms-md12 block detalhes">
               <p>
                 <i className="ms-Icon ms-Icon--ChevronLeftSmall"></i>                
-                <a className="btnVoltar" href="#" onClick={() => this.props.history.goBack()}>Voltar</a>
+                <a className="btnVoltar" href="#" onClick={() => this.props.history.goBack()}>
+                  {language == "pt" ?
+                    "Voltar"
+                  :
+                    "Back"
+                  }
+                </a>
               </p>
           </div>
         </div>
