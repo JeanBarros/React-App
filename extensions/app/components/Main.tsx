@@ -15,7 +15,7 @@ import Rh from './Rh';
 import Subsidiarias from './Subsidiarias';
 import Detalhes from './Detalhes';
 import DetalhesDocumento from './DetalhesDocumento';
-import {SharePointWebTitle, language, setLoggedIn, logOut, setLanguage, showCategory} from '../AppApplicationCustomizer';
+import {SharePointWebTitle, language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl} from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
 
 export interface IMainProps {}
@@ -33,18 +33,20 @@ export default class Main extends React.Component<IMainProps> {
 
     setLoggedIn(true);
 
-    // Remove o menu padrão do Office 365 no canto superior esquerdo
-    var O365NavMenu = document.getElementById('O365_NavHeader');
-    O365NavMenu.children[0].remove();
-    
     // Obtém os dados da lista de Categorias pelo interal name
-    this.getCategoryListItems('reportCategories');
+    this.getCategoryListItems('Categorias e Menu');
 
     sleep(500).then(() => {
 
       var header = document.createElement("DIV");
       header.innerHTML = "<div class='header'><div class='logoHeader'></div><div id='webTitle'></div></div>"; 
       document.getElementsByClassName('_71hjFgizWk0Cd55RzerwA')[0].appendChild(header);
+
+      // Remove o menu padrão do Office 365 no canto superior esquerdo
+      // A classe _2kc0c9nP-qti6fefMCFonk no arquivo app.css atualmente oculta este item;
+      // Utilizar descomentar o trech abaixo caso o nome da classe seja alterado
+      // var O365NavMenu = document.getElementById('O365_NavHeader');
+      // O365NavMenu.children[0].remove();
       
       // Cria um elemento
       const sideNavElements = <div><div className="sideNavLogo"></div><SideNav /></div>;
@@ -79,7 +81,7 @@ export default class Main extends React.Component<IMainProps> {
     var reactHandler = this;    
 
     var spRequest = new XMLHttpRequest();    
-    spRequest.open('GET', `/sites/bienterprise/_api/web/lists/getbytitle('${listName}')/items`,true);    
+    spRequest.open('GET', `${relativeSiteUrl}/_api/web/lists/getbytitle('${listName}')/items`,true);    
     spRequest.setRequestHeader("Accept","application/json");  
                         
     spRequest.onreadystatechange = () =>{

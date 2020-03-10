@@ -31,12 +31,13 @@ export interface ISPLists {
 export interface ISPList {}
 
 let webTitle;
-var relativeSiteUrl;
+export var relativeSiteUrl;
 export let reportListItens;
 export let categoryListItens;
 let selectedCategory = 'comercial';
 export let language;
 export let isLogged;
+export let myFavorites;
 
 export const setLanguage = (name, value, days = 7, path = '/') => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -95,12 +96,12 @@ export default class AppApplicationCustomizer
       var appStyle = document.createElement('link'); 
       appStyle.rel = 'stylesheet'; 
       appStyle.type = 'text/css'; 
-      appStyle.href = '/sites/bienterprise/Style%20Library/app.css';  
+      appStyle.href = '/sites/Lab02/Style%20Library/app.css';  
 
       var sideNavStyle = document.createElement('link'); 
       sideNavStyle.rel = 'stylesheet'; 
       sideNavStyle.type = 'text/css'; 
-      sideNavStyle.href = '/sites/bienterprise/Style%20Library/sideNav.css';
+      sideNavStyle.href = '/sites/Lab02/Style%20Library/sideNav.css';
       
       var jQuery=document.createElement('script');
       jQuery.setAttribute("type","text/javascript");
@@ -167,7 +168,7 @@ export default class AppApplicationCustomizer
           if (this._topPlaceholder.domElement) { 
 
             this._renderReportList('reports'); // List interal name
-            this._renderCategoryList('reportCategories'); // List interal name
+            this._renderCategoryList('Categorias e Menu'); // List interal name
 
             console.log('Inicializou o componente principal');
 
@@ -217,16 +218,84 @@ export function showCategory(category:string) {
     element.classList.toggle("sideNav");
 }
 
+function addFavorites(itemTitle, itemId){
+    
+  // Grava o relatório favoritado no local storage  
+  if(window.localStorage.favoriteItems === undefined){
+    localStorage.setItem('favoriteItems', itemTitle);
+  }
+  else{
+    // Obtém a lista de strings do itens salvos
+    myFavorites = localStorage.getItem('favoriteItems');
+
+    // Se existirem dados, converte os dados existentes para um array
+    // Caso contrário, cria um array    
+    myFavorites = myFavorites ? myFavorites.split(',') : [];
+    
+    console.log(myFavorites);
+
+    // Adiciona um novo item ao localStorage array
+    myFavorites.push(itemTitle);
+
+    // Salva no localStorage
+    localStorage.setItem('favoriteItems', myFavorites.toString());
+
+    let favoriteReportIcon = document.getElementsByClassName('btnFavorite');
+    
+    
+    favoriteReportIcon[itemId].classList.add('btnFavorite-icon-filled');
+  }
+}
+
+export function checkFavoriteItens(){
+
+  // Obtém a lista de strings do itens salvos
+  myFavorites = localStorage.getItem('favoriteItems');
+
+  // Obtém o array de favoritos salvos no localStorage
+  let favorites = myFavorites.split(',');
+
+  console.log("Favorite Array:");
+  console.log(favorites);
+  
+  let favoriteReportIcon = document.getElementsByClassName('btnFavorite');
+  let reportTitle = document.getElementsByClassName('reportTitle');
+
+  console.log('Títulos dos relatórios:')
+  favorites.forEach(logArrayElements);
+
+  function logArrayElements(element, index, favoriteItem) {
+
+    //console.log(index + " : " + element);
+    if(reportTitle[index] !== undefined)
+      console.log(reportTitle[index].innerHTML)
+    
+    if(favoriteItem != null && reportTitle[index] !== undefined){
+      if(element === reportTitle[index].innerHTML){
+        favoriteReportIcon[index].classList.remove('btnFavorite-icon-outline');        
+        favoriteReportIcon[index].classList.add('btnFavorite-icon-filled');
+      }
+      else{
+        favoriteReportIcon[index].classList.add('btnFavorite-icon-outline');        
+        favoriteReportIcon[index].classList.remove('btnFavorite-icon-filled');
+      }
+    }
+  }    
+}
+
 export class ReportListItens extends React.Component{
 
 public render(){
 
+  var count = 0;
+
   const reports = reportListItens.map((item) =>
-    <section key={item.Id}>
+    
+    <section key={item.Id}>        
       {language == "pt" ?
         selectedCategory == item.categoryLookupValue ?
           <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+            <div id={item.Id.toString()} data-report-itemid={count} className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
               <div className="tileBoxOverlay">
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -235,14 +304,15 @@ public render(){
                         <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}>                                            
                         </div>
                       </div>  
-                      <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
+                      <div className="ms-Grid-col ms-sm8 ms-md8 reportTitle">
                         {item.Title}
                       </div>
                     </div>                    
                   </div>           
                   <div className="ms-Grid-col ms-sm4 ms-md4">
                     <div className="reportCategoryInfo">
-                      <div className="favoriteIcon"></div>                      
+                        <button data-report-itemid={count} className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-report-itemid')))}>                                                    
+                        </button>                 
                       <div className="reportCategoryType">
                         <span>Tipo:</span>                      
                         <div className="iconType">
@@ -271,7 +341,7 @@ public render(){
         :
           selectedCategory == item.categoryENLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+              <div data-report-itemid={item.Id} className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -280,19 +350,20 @@ public render(){
                           <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}>                                            
                           </div>
                         </div>  
-                        <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
+                        <div className="ms-Grid-col ms-sm8 ms-md8 reportTitle">
                           {item.reportTitleEN}
                         </div>
                       </div>                    
                     </div>           
                     <div className="ms-Grid-col ms-sm4 ms-md4">
-                      <div className="reportCategoryInfo">
-                        <div className="favoriteIcon"></div>                      
-                          <div className="reportCategoryType">
-                            <span>Tipo:</span>                      
-                            <div className="iconType">
-                              <span>Dashboard</span>
-                            </div>
+                      <div className="reportCategoryInfo">                      
+                          <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-report-itemid')))}>                                                    
+                          </button>                 
+                        <div className="reportCategoryType">
+                          <span>Tipo:</span>                      
+                          <div className="iconType">
+                            <span>Dashboard</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -312,13 +383,14 @@ public render(){
                 </div>
               </div>
             </div>
-          : null}     
+          : null}
+          <span style={{display:'none'}}>{count += 1}</span>            
     </section>                 
     );
 
     return(
       <div>        
-        {reports}
+        {reports}        
       </div>
     );
   }
