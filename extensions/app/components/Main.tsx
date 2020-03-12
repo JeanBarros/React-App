@@ -162,7 +162,7 @@ class SideNav extends React.Component{
               </div>
             :
               <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-                className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>
+                className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.titleEN)}>
                 {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
                 <div className="sideNavIcons" style = {{background: `url(${item.icon}) no-repeat center center`}}></div>
                 <span>{item.titleEN}</span>

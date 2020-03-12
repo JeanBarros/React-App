@@ -34,13 +34,17 @@ let webTitle;
 export var relativeSiteUrl;
 export let reportListItens;
 export let categoryListItens;
-let selectedCategory = 'favoritos';
+export let selectedCategory;
 export let language;
 export let isLogged;
 export let myFavorites;
 let favoriteReportButton;
 let reportTitle;
 let reportTileBox;
+
+export function setCategory(category){
+  selectedCategory = category;
+}
 
 export const setLanguage = (name, value, days = 7, path = '/') => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -114,6 +118,12 @@ export default class AppApplicationCustomizer
       head.appendChild(appStyle);
       head.appendChild(sideNavStyle);
       head.appendChild(jQuery);
+
+      // Define qual será o primeiro componente a ser exibido, de acordo com o idioma
+      language == "pt" ?
+        selectedCategory = "Favoritos"
+      :
+        selectedCategory = "Favorites";
     }    
     
     @override  
@@ -223,7 +233,6 @@ export function showCategory(category:string) {
 
 function addFavorites(itemTitle, itemId){   
 
-  //reportTileBox = document.getElementsByClassName('tileBox')[itemId].getAttribute('data-favorite-checked');
   reportTileBox = document.getElementsByClassName('tileBox')[itemId];
 
   // Grava o relatório favoritado no localStorage  
@@ -324,11 +333,8 @@ export function checkFavoriteItens(){
 }
 
 export class ReportListItens extends React.Component{
-
 public render(){
-
   var count = 0;
-
   const reports = reportListItens.map((item) =>    
     <section key={item.Id}>        
       {language == "pt" ?
@@ -396,7 +402,7 @@ public render(){
                     </div>           
                     <div className="ms-Grid-col ms-sm4 ms-md4">
                       <div className="reportCategoryInfo">                      
-                        <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
+                        <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.reportTitleEN, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
                         </button>                 
                         <div className="reportCategoryType">
                           <span>Tipo:</span>                      
@@ -436,7 +442,6 @@ public render(){
 }
 
 export class CategoryListItens extends React.Component{
-
   public render(){  
     const categories = categoryListItens.map((item) =>
       <section key={item.Id}>
@@ -465,126 +470,266 @@ export class CategoryListItens extends React.Component{
         </div>
       );
     }
-  }
+}
 
-  export class ReportDetails extends React.Component{
-
-    public render(){
-      
-      const reportDetails = reportListItens.map((item) =>
-        <section key={item.Id}>          
-          {language == 'pt' ?
-            selectedCategory == item.categoryLookupValue ?
-              <div className="content">
-                <div className="ms-Grid-row w3-container">
-                  <div className="ms-Grid-col ms-md1 block"></div> 
-                  <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
-                  </div> 
-                  <div className="ms-Grid-col ms-md1 block"></div>
-                </div>
-                <div className="ms-Grid-row w3-container">
-                  <div className="ms-Grid-col ms-sm12 ms-md9 block detalhes">                    
-                    <div>
-                      <h1>{item.Title}</h1>
-                      <p><span>Categoria: </span>{item.categoryLookupValue}</p>
-                      <p><span>Tipo: </span>Dashboard</p>
-                      <p><span>Autor: </span>{item.author0}</p>
-                      <p><span>Data de criação: </span>{moment(item.Created).format('DD/MM/YYYY')}</p>
-                      <p>{item.reportDetails}</p>
-                    </div>
-                  </div>                
-                  <div className="ms-Grid-col ms-sm12 ms-md3 block">
-                    <div className="reportDetailRightBox">
-                      <div className="reportDetailImage">
-                        <div className="tileBoxOverlay">
-                          <div className="ms-Grid-row">
-                            <div className="ms-Grid-col ms-sm4 ms-md4">
-                              <div className="categoryIcon">
-                                <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}></div>                      
-                              </div>
-                            </div>  
-                            <div className="ms-Grid-col ms-sm8 ms-md8">
-                              {item.Title}
+export class ReportDetails extends React.Component{
+  public render(){    
+    const reportDetails = reportListItens.map((item) =>
+      <section key={item.Id}>          
+        {language == 'pt' ?
+          selectedCategory == item.categoryLookupValue ?
+            <div className="content">
+              <div className="ms-Grid-row w3-container">
+                <div className="ms-Grid-col ms-md1 block"></div> 
+                <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
+                </div> 
+                <div className="ms-Grid-col ms-md1 block"></div>
+              </div>
+              <div className="ms-Grid-row w3-container">
+                <div className="ms-Grid-col ms-sm12 ms-md9 block detalhes">                    
+                  <div>
+                    <h1>{item.Title}</h1>
+                    <p><span>Categoria: </span>{item.categoryLookupValue}</p>
+                    <p><span>Tipo: </span>Dashboard</p>
+                    <p><span>Autor: </span>{item.author0}</p>
+                    <p><span>Data de criação: </span>{moment(item.Created).format('DD/MM/YYYY')}</p>
+                    <p>{item.reportDetails}</p>
+                  </div>
+                </div>                
+                <div className="ms-Grid-col ms-sm12 ms-md3 block">
+                  <div className="reportDetailRightBox">
+                    <div className="reportDetailImage">
+                      <div className="tileBoxOverlay">
+                        <div className="ms-Grid-row">
+                          <div className="ms-Grid-col ms-sm4 ms-md4">
+                            <div className="categoryIcon">
+                              <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}></div>                      
                             </div>
-                          </div> 
-                        </div>
+                          </div>  
+                          <div className="ms-Grid-col ms-sm8 ms-md8">
+                            {item.Title}
+                          </div>
+                        </div> 
                       </div>
-                      <div className="reportDetailsToolBar">              
-                        {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
-                        <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage)}>
-                          <div className="btnDashboard-Icon">&nbsp;</div>
-                          <span>Dashboard</span>
-                        </button>
-                        <p>
-                          <a href="#" className="btnAddFavorites">Adicionar aos Favoritos</a>
-                        </p>
-                      </div>                    
                     </div>
+                    <div className="reportDetailsToolBar">              
+                      {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
+                      <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage)}>
+                        <div className="btnDashboard-Icon">&nbsp;</div>
+                        <span>Dashboard</span>
+                      </button>
+                      <p>
+                        <a href="#" className="btnAddFavorites">Adicionar aos Favoritos</a>
+                      </p>
+                    </div>                    
                   </div>
                 </div>
-              </div>      
-            :
-              null
+              </div>
+            </div>      
           :
-            selectedCategory == item.categoryENLookupValue ?
-              <div className="content">
-                <div className="ms-Grid-row w3-container">
-                  <div className="ms-Grid-col ms-md1 block"></div> 
-                  <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
-                  </div> 
-                  <div className="ms-Grid-col ms-md1 block"></div>
-                </div>
-                <div className="ms-Grid-row w3-container">
-                  <div className="ms-Grid-col ms-sm12 ms-md9 block detalhes">                    
-                    <div>
-                      <h1>{item.reportTitleEN}</h1>
-                      <p><span>Category: </span>{item.categoryENLookupValue}</p>
-                      <p><span>Type: </span>Dashboard</p>
-                      <p><span>Author: </span>{item.author0}</p>
-                      <p><span>Creation date: </span>{moment(item.Created).format('DD/MM/YYYY')}</p>
-                      <p>{item.reportDetailsEN}</p>
-                    </div>
-                  </div>                
-                  <div className="ms-Grid-col ms-sm12 ms-md3 block">
-                    <div className="reportDetailRightBox">
-                      <div className="reportDetailImage">
-                        <div className="tileBoxOverlay">
-                          <div className="ms-Grid-row">
-                            <div className="ms-Grid-col ms-sm4 ms-md4">
-                              <div className="categoryIcon">
-                                <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}></div>                      
-                              </div>
-                            </div>  
-                            <div className="ms-Grid-col ms-sm8 ms-md8">
-                              {item.reportTitleEN}
+            null
+        :
+          selectedCategory == item.categoryENLookupValue ?
+            <div className="content">
+              <div className="ms-Grid-row w3-container">
+                <div className="ms-Grid-col ms-md1 block"></div> 
+                <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
+                </div> 
+                <div className="ms-Grid-col ms-md1 block"></div>
+              </div>
+              <div className="ms-Grid-row w3-container">
+                <div className="ms-Grid-col ms-sm12 ms-md9 block detalhes">                    
+                  <div>
+                    <h1>{item.reportTitleEN}</h1>
+                    <p><span>Category: </span>{item.categoryENLookupValue}</p>
+                    <p><span>Type: </span>Dashboard</p>
+                    <p><span>Author: </span>{item.author0}</p>
+                    <p><span>Creation date: </span>{moment(item.Created).format('DD/MM/YYYY')}</p>
+                    <p>{item.reportDetailsEN}</p>
+                  </div>
+                </div>                
+                <div className="ms-Grid-col ms-sm12 ms-md3 block">
+                  <div className="reportDetailRightBox">
+                    <div className="reportDetailImage">
+                      <div className="tileBoxOverlay">
+                        <div className="ms-Grid-row">
+                          <div className="ms-Grid-col ms-sm4 ms-md4">
+                            <div className="categoryIcon">
+                              <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}></div>                      
                             </div>
-                          </div> 
+                          </div>  
+                          <div className="ms-Grid-col ms-sm8 ms-md8">
+                            {item.reportTitleEN}
+                          </div>
+                        </div> 
+                      </div>
+                    </div>
+                    <div className="reportDetailsToolBar">              
+                      {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
+                      <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage)}>
+                        <div className="btnDashboard-Icon">&nbsp;</div>
+                        <span>Dashboard</span>
+                      </button>
+                      <p>
+                        <a href="#" className="btnAddFavorites">Add to Favorites</a>
+                      </p>
+                    </div>                    
+                  </div>
+                </div>
+              </div>
+            </div>      
+          :
+            null
+        }        
+      </section>                 
+      );
+  
+      return(
+        <div>        
+          {reportDetails}
+        </div>
+      );
+    }
+}
+
+export class FavoriteListItens extends React.Component{
+  public render(){
+  var count = 0;
+  const reports = reportListItens.map((item) =>    
+    <section key={item.Id}>        
+      {language == "pt" ?        
+        <div className="ms-Grid-col ms-sm12 ms-md4 block">
+            <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+              <div className="tileBoxOverlay">
+                <div className="ms-Grid-row">
+                  <div className="ms-Grid-col ms-sm8 ms-md8">
+                    <div className="ms-Grid-row">
+                      <div className="ms-Grid-col ms-sm4 ms-md4">
+                        <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}>                                            
+                        </div>
+                      </div>  
+                      <div className="ms-Grid-col ms-sm8 ms-md8 reportTitle">
+                        {item.Title}
+                      </div>
+                    </div>                    
+                  </div>           
+                  <div className="ms-Grid-col ms-sm4 ms-md4">
+                    <div className="reportCategoryInfo">
+                      <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
+                      </button>
+                      <div className="reportCategoryType">
+                        <span>Tipo:</span>                      
+                        <div className="iconType">
+                          <span>Dashboard</span>
                         </div>
                       </div>
-                      <div className="reportDetailsToolBar">              
-                        {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
-                        <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage)}>
-                          <div className="btnDashboard-Icon">&nbsp;</div>
-                          <span>Dashboard</span>
-                        </button>
-                        <p>
-                          <a href="#" className="btnAddFavorites">Add to Favorites</a>
-                        </p>
-                      </div>                    
                     </div>
                   </div>
                 </div>
-              </div>      
-            :
-              null
-          }        
-        </section>                 
-        );
-    
-        return(
-          <div>        
-            {reportDetails}
+                  <div className="tileBoxToolBar">
+                    <HashRouter>
+                      <Link className="btnDetalhes" to={`/detalhes`}>
+                        <div className="btnDetalhes-Icon">&nbsp;</div>
+                        <span>Detalhes</span>
+                      </Link>                      
+                    </HashRouter>
+                    <button className="btnDashboard" onClick={() => getDashboard(item.reportPage)}>
+                      <div className="btnDashboard-Icon">&nbsp;</div>
+                      <span>Dashboard</span>
+                    </button>
+                </div>
+              </div>
+            </div>
           </div>
-        );
+      :
+        <div className="ms-Grid-col ms-sm12 ms-md4 block">
+              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+                <div className="tileBoxOverlay">
+                  <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-sm8 ms-md8">
+                      <div className="ms-Grid-row">
+                        <div className="ms-Grid-col ms-sm4 ms-md4">
+                          <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}>                                            
+                          </div>
+                        </div>  
+                        <div className="ms-Grid-col ms-sm8 ms-md8 reportTitle">
+                          {item.reportTitleEN}
+                        </div>
+                      </div>                    
+                    </div>           
+                    <div className="ms-Grid-col ms-sm4 ms-md4">
+                      <div className="reportCategoryInfo">                      
+                        <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
+                        </button>                 
+                        <div className="reportCategoryType">
+                          <span>Tipo:</span>                      
+                          <div className="iconType">
+                            <span>Dashboard</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    <div className="tileBoxToolBar">
+                      <HashRouter>
+                        <Link className="btnDetalhes" to={`/detalhes`}>
+                          <div className="btnDetalhes-Icon">&nbsp;</div>
+                          <span>Details</span>
+                        </Link>                      
+                      </HashRouter>
+                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage)}>
+                        <div className="btnDashboard-Icon">&nbsp;</div>
+                        <span>Dashboard</span>
+                      </button>
+                  </div>
+                </div>
+              </div>
+            </div>
       }
+      <span style={{display:'none'}}>{count += 1}</span>            
+    </section>                 
+    );
+
+    return(
+      <div>        
+        {reports}        
+      </div>
+    );
+  }
+}
+
+export class FavoriteCategoryListItens extends React.Component{
+  public render(){  
+    const categories = categoryListItens.map((item) =>
+      <section key={item.Id}>
+        {language == "pt" ?
+          selectedCategory == item.Title ?          
+            <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
+              <div id="categoryName">
+                  <h1>{item.Title}</h1>
+                  <p>{item.description}</p>
+                </div>            
+            </div>
+          : 
+          null
+        :
+          selectedCategory == item.titleEN ?          
+          <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
+            <div id="categoryName">
+              <h1>{item.titleEN}</h1>
+              <p>{item.descriptionEN}</p>
+            </div>            
+          </div>
+        : 
+          null
+        }                
+      </section>                 
+      );
+  
+      return(
+        <div>        
+          {categories}
+        </div>
+      );
     }
+}

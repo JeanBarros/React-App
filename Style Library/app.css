@@ -195,6 +195,10 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     overflow: hidden;
 }
 
+.hiddenReportTileBox{
+    display: none;
+}
+
 .tileBoxOverlay{
     width: 100%;
     height: 100%;
