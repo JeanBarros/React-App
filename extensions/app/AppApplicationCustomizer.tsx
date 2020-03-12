@@ -34,10 +34,13 @@ let webTitle;
 export var relativeSiteUrl;
 export let reportListItens;
 export let categoryListItens;
-let selectedCategory = 'comercial';
+let selectedCategory = 'favoritos';
 export let language;
 export let isLogged;
 export let myFavorites;
+let favoriteReportButton;
+let reportTitle;
+let reportTileBox;
 
 export const setLanguage = (name, value, days = 7, path = '/') => {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -218,66 +221,103 @@ export function showCategory(category:string) {
     element.classList.toggle("sideNav");
 }
 
-function addFavorites(itemTitle, itemId){
-    
-  // Grava o relatório favoritado no local storage  
-  if(window.localStorage.favoriteItems === undefined){
+function addFavorites(itemTitle, itemId){   
+
+  //reportTileBox = document.getElementsByClassName('tileBox')[itemId].getAttribute('data-favorite-checked');
+  reportTileBox = document.getElementsByClassName('tileBox')[itemId];
+
+  // Grava o relatório favoritado no localStorage  
+  if(window.localStorage.favoriteItems == undefined){
     localStorage.setItem('favoriteItems', itemTitle);
+
+    favoriteReportButton = document.getElementsByClassName('btnFavorite');
+    reportTitle = document.getElementsByClassName('reportTitle');
+
+    // Adiciona uma nova classe para alterar o ícone
+    favoriteReportButton[itemId].classList.remove('btnFavorite-icon-outline');        
+    favoriteReportButton[itemId].classList.add('btnFavorite-icon-filled');
+
+    reportTileBox.setAttribute('data-favorite-checked', 'true');
   }
   else{
     // Obtém a lista de strings do itens salvos
-    myFavorites = localStorage.getItem('favoriteItems');
+    myFavorites = localStorage.getItem('favoriteItems');    
+
+    // Obtém o array de favoritos salvos no localStorage
+    let favorites = myFavorites.split(',');
+
+    favorites.forEach(logArrayElements);
 
     // Se existirem dados, converte os dados existentes para um array
     // Caso contrário, cria um array    
     myFavorites = myFavorites ? myFavorites.split(',') : [];
-    
-    console.log(myFavorites);
 
-    // Adiciona um novo item ao localStorage array
-    myFavorites.push(itemTitle);
+    if(reportTileBox.getAttribute('data-favorite-checked') == "true"){
 
-    // Salva no localStorage
-    localStorage.setItem('favoriteItems', myFavorites.toString());
+      // Sempre limpa o LocalStorage antes de iniciar a gravação
+      var storage = window.localStorage;
+      storage.clear();      
 
-    let favoriteReportIcon = document.getElementsByClassName('btnFavorite');
-    
-    
-    favoriteReportIcon[itemId].classList.add('btnFavorite-icon-filled');
+      for(let i = 0; i < favorites.length; i++){
+        if(favorites[i] == itemTitle){
+          favorites.splice([i], 1);
+          if(favorites.length > 0)
+            storage.setItem("favoriteItems", favorites.toString());
+        }
+      }
+
+      // Alterna entre as classes para trocar o ícone
+      favoriteReportButton[itemId].classList.remove('btnFavorite-icon-filled');
+      favoriteReportButton[itemId].classList.add('btnFavorite-icon-outline');
+      reportTileBox.setAttribute('data-favorite-checked', 'false');
+    }
+    else{
+      // Adiciona um novo item ao localStorage array
+      myFavorites.push(itemTitle);
+
+      // Salva no localStorage
+      localStorage.setItem('favoriteItems', myFavorites.toString());        
+      
+      // Adiciona uma nova classe para alterar o ícone
+      favoriteReportButton[itemId].classList.add('btnFavorite-icon-filled');
+      reportTileBox.setAttribute('data-favorite-checked', 'true');
+    }
+  }
+}
+
+function logArrayElements(element, index, favoriteItem) {  
+  if(favoriteItem != null && reportTitle[index] !== undefined){
+    if(element === reportTitle[index].innerHTML){
+      favoriteReportButton[index].classList.remove('btnFavorite-icon-outline');        
+      favoriteReportButton[index].classList.add('btnFavorite-icon-filled');
+    }
   }
 }
 
 export function checkFavoriteItens(){
+  
+  // Obtém os relatórios visíveis na tela
+  reportTileBox = document.getElementsByClassName('tileBox');
 
   // Obtém a lista de strings do itens salvos
   myFavorites = localStorage.getItem('favoriteItems');
 
-  // Obtém o array de favoritos salvos no localStorage
-  let favorites = myFavorites.split(',');
+  if(myFavorites != null){
+    // Obtém o array de favoritos salvos no localStorage
+    let favorites = myFavorites.split(',');
+    
+    favoriteReportButton = document.getElementsByClassName('btnFavorite');
+    reportTitle = document.getElementsByClassName('reportTitle');
 
-  console.log("Favorite Array:");
-  console.log(favorites);
-  
-  let favoriteReportIcon = document.getElementsByClassName('btnFavorite');
-  let reportTitle = document.getElementsByClassName('reportTitle');
-
-  console.log('Títulos dos relatórios:')
-  favorites.forEach(logArrayElements);
+    favorites.forEach(logArrayElements);  
+  }
 
   function logArrayElements(element, index, favoriteItem) {
-
-    //console.log(index + " : " + element);
-    if(reportTitle[index] !== undefined)
-      console.log(reportTitle[index].innerHTML)
-    
-    if(favoriteItem != null && reportTitle[index] !== undefined){
-      if(element === reportTitle[index].innerHTML){
-        favoriteReportIcon[index].classList.remove('btnFavorite-icon-outline');        
-        favoriteReportIcon[index].classList.add('btnFavorite-icon-filled');
-      }
-      else{
-        favoriteReportIcon[index].classList.add('btnFavorite-icon-outline');        
-        favoriteReportIcon[index].classList.remove('btnFavorite-icon-filled');
+    for(let i = 0; i < reportTitle.length; i++){      
+      if(element == reportTitle[i].innerHTML){
+        favoriteReportButton[i].classList.remove('btnFavorite-icon-outline');        
+        favoriteReportButton[i].classList.add('btnFavorite-icon-filled');
+        reportTileBox[i].setAttribute('data-favorite-checked', 'true');
       }
     }
   }    
@@ -289,13 +329,12 @@ public render(){
 
   var count = 0;
 
-  const reports = reportListItens.map((item) =>
-    
+  const reports = reportListItens.map((item) =>    
     <section key={item.Id}>        
       {language == "pt" ?
         selectedCategory == item.categoryLookupValue ?
           <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div id={item.Id.toString()} data-report-itemid={count} className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+            <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
               <div className="tileBoxOverlay">
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -311,8 +350,8 @@ public render(){
                   </div>           
                   <div className="ms-Grid-col ms-sm4 ms-md4">
                     <div className="reportCategoryInfo">
-                        <button data-report-itemid={count} className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-report-itemid')))}>                                                    
-                        </button>                 
+                      <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
+                      </button>
                       <div className="reportCategoryType">
                         <span>Tipo:</span>                      
                         <div className="iconType">
@@ -341,7 +380,7 @@ public render(){
         :
           selectedCategory == item.categoryENLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div data-report-itemid={item.Id} className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -357,8 +396,8 @@ public render(){
                     </div>           
                     <div className="ms-Grid-col ms-sm4 ms-md4">
                       <div className="reportCategoryInfo">                      
-                          <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-report-itemid')))}>                                                    
-                          </button>                 
+                        <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
+                        </button>                 
                         <div className="reportCategoryType">
                           <span>Tipo:</span>                      
                           <div className="iconType">
