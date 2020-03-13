@@ -318,10 +318,10 @@ export function checkFavoriteItens(){
     favoriteReportButton = document.getElementsByClassName('btnFavorite');
     reportTitle = document.getElementsByClassName('reportTitle');
 
-    favorites.forEach(logArrayElements);  
+    favorites.forEach(addFavoriteIcon);  
   }
 
-  function logArrayElements(element, index, favoriteItem) {
+  function addFavoriteIcon(element) {
     for(let i = 0; i < reportTitle.length; i++){      
       if(element == reportTitle[i].innerHTML){
         favoriteReportButton[i].classList.remove('btnFavorite-icon-outline');        

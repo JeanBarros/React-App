@@ -48,6 +48,29 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     font-size: 16px;
 }
 
+.floatMenuContainer{
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+}
+
+.floatListMenu ul{
+    list-style-type: none;
+    font-size: 1.3rem;
+    padding: 0;
+    border: solid 1px red;   
+}
+
+.floatButton{
+    width: 85px;
+    height: 90px;
+    float: right;
+    background: url("/sites/Lab02/SiteAssets/images/icons/btnFlutuante.png") no-repeat center center;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
 /* Classes React*/
 .ms-SPLegacyFabricBlock .ms-Grid-row {
     margin: 0 !important;

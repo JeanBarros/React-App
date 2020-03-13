@@ -26,7 +26,7 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
 
     sleep(100).then(() => {
       checkFavoriteItens();
-      showOnlyFavorites()
+      showOnlyFavorites();
     });
   }
 

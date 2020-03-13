@@ -111,10 +111,29 @@ export default class Main extends React.Component<IMainProps> {
       document.getElementById("btnTranslatePT-small").style.opacity = "0.3";        
   }
 
+  public showFloatMenu() {
+    var x = document.getElementById("floatListMenu");
+    if (x.style.display === "block") {
+      x.style.display = "none";
+    } else {
+      x.style.display = "block";
+    }
+  }
+
   public render() { 
     return (
       <div>
-        <div id="root"></div>   
+        <div id="root"></div> 
+          <div className="floatMenuContainer">
+            <div id="floatListMenu" className="floatListMenu" style = {{"display" : "none"}}>
+              <ul>
+                <li>Report 1</li>
+                <li>Report 2</li>
+                <li>Report 3</li>
+              </ul>
+            </div>
+            <button onClick={this.showFloatMenu} className="floatButton"></button>            
+          </div>
           <HashRouter>   
             <nav className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="sideNav"> 
             </nav>  
