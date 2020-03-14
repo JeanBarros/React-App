@@ -1,11 +1,22 @@
 import * as React from 'react';
-import { ReportListItens, CategoryListItens } from '../AppApplicationCustomizer';
+import { ReportListItens, CategoryListItens, setCategory, selectedCategory, checkFavoriteItens } from '../AppApplicationCustomizer';
 
-export interface IMinaProps {}   
+export interface IMinaProps {}
+
+// Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
+function sleep (time) {      
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 export default class Mina extends React.Component<IMinaProps> {  
   constructor(props: IMinaProps) {  
     super(props);
+
+    setCategory(selectedCategory);
+
+      sleep(500).then(() => {      
+        checkFavoriteItens();
+      });
   }
 
   public render() {    

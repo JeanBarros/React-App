@@ -70,12 +70,12 @@ export function logOut(){
   //location.reload();
 }
 
-function getDashboard(pageTitle){
+export function getDashboard(pageTitle, categoryName){
   var content = document.getElementById('customContent');
   if (content != null)
-    content.style.display='none';
+      content.style.display='none';
 
-  window.location.replace(`${relativeSiteUrl}/SitePages/${pageTitle}.aspx`);
+  window.location.replace(`${relativeSiteUrl}/SitePages/${pageTitle}.aspx?category=${categoryName}`);
 }
 
 // Aguarda para garantir que os dados da lista sejam retornados antes de utilizá-los nos componentes
@@ -225,7 +225,7 @@ export class SharePointWebTitle extends React.Component{
 }
 
 export function showCategory(category:string) {
-  selectedCategory = category;
+  selectedCategory = category.trim();
 
   var element = document.getElementById("sideNav"); 
     element.classList.toggle("sideNav");
@@ -374,7 +374,7 @@ public render(){
                         <span>Detalhes</span>
                       </Link>                      
                     </HashRouter>
-                    <button className="btnDashboard" onClick={() => getDashboard(item.reportPage)}>
+                    <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
                       <div className="btnDashboard-Icon">&nbsp;</div>
                       <span>Dashboard</span>
                     </button>
@@ -420,7 +420,7 @@ public render(){
                           <span>Details</span>
                         </Link>                      
                       </HashRouter>
-                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage)}>
+                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
                       </button>
@@ -445,7 +445,7 @@ export class CategoryListItens extends React.Component{
   public render(){  
     const categories = categoryListItens.map((item) =>
       <section key={item.Id}>
-        {selectedCategory == item.Title ?          
+        {selectedCategory == item.Title.trim() ?          
           <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
             <div id="categoryName">
                 <h1>{item.Title}</h1>
@@ -453,7 +453,7 @@ export class CategoryListItens extends React.Component{
               </div>            
           </div>
         : 
-        selectedCategory == item.titleEN ?          
+        selectedCategory == item.titleEN.trim() ?          
           <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
             <div id="categoryName">
               <h1>{item.titleEN}</h1>
@@ -514,7 +514,7 @@ export class ReportDetails extends React.Component{
                     </div>
                     <div className="reportDetailsToolBar">              
                       {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
-                      <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage)}>
+                      <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
                       </button>
@@ -566,7 +566,7 @@ export class ReportDetails extends React.Component{
                     </div>
                     <div className="reportDetailsToolBar">              
                       {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
-                      <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage)}>
+                      <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
                       </button>
@@ -633,7 +633,7 @@ export class FavoriteListItens extends React.Component{
                         <span>Detalhes</span>
                       </Link>                      
                     </HashRouter>
-                    <button className="btnDashboard" onClick={() => getDashboard(item.reportPage)}>
+                    <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
                       <div className="btnDashboard-Icon">&nbsp;</div>
                       <span>Dashboard</span>
                     </button>
@@ -677,7 +677,7 @@ export class FavoriteListItens extends React.Component{
                           <span>Details</span>
                         </Link>                      
                       </HashRouter>
-                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage)}>
+                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
                       </button>
@@ -703,7 +703,7 @@ export class FavoriteCategoryListItens extends React.Component{
     const categories = categoryListItens.map((item) =>
       <section key={item.Id}>
         {language == "pt" ?
-          selectedCategory == item.Title ?          
+          selectedCategory == item.Title.trim() ?          
             <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
               <div id="categoryName">
                   <h1>{item.Title}</h1>
@@ -713,7 +713,7 @@ export class FavoriteCategoryListItens extends React.Component{
           : 
           null
         :
-          selectedCategory == item.titleEN ?          
+          selectedCategory == item.titleEN.trim() ?          
           <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
             <div id="categoryName">
               <h1>{item.titleEN}</h1>

@@ -52,13 +52,33 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     position: absolute;
     right: 10%;
     bottom: 10%;
+    z-index: 1;
 }
 
 .floatListMenu ul{
     list-style-type: none;
+    text-align: right;
+    padding: 0;   
+}
+
+.floatListMenu a{
+    background-color: #EAEAEA;
+    border-radius: 6px;
+    color: #27292D;
+    text-decoration: none;
     font-size: 1.3rem;
-    padding: 0;
-    border: solid 1px red;   
+    line-height: 3;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 3px 3px 5px #8a8a8ac4;
+}
+
+.floatMenuLinks-hidden{
+    display: none;
+}
+
+.floatMenuLinks-visible{
+    display: inline-flexbox;
 }
 
 .floatButton{
