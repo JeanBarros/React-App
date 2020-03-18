@@ -1,11 +1,14 @@
 import * as React from 'react';
-import { CategoryListItens, checkFavoriteItens, FavoriteListItens, FavoriteCategoryListItens, language, setCategory, selectedCategory } from '../AppApplicationCustomizer';
+import { checkFavoriteItens, FavoriteListItens, FavoriteCategoryListItens, language, setCategory, selectedCategory } from '../AppApplicationCustomizer';
+import * as ReactDOM from 'react-dom';
 
 export interface IFavoritosProps {}
 
+let favoriteItensMessage;
+
 function showOnlyFavorites(){
   let reportTileBox = document.getElementsByClassName('tileBox');
-
+  
   for(let i = 0; i < reportTileBox.length; i++){
     if(reportTileBox[i].getAttribute('data-favorite-checked') == "false"){
       reportTileBox[i].parentElement.classList.add('hiddenReportTileBox');
@@ -24,9 +27,23 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
 
     setCategory(selectedCategory);
 
-    sleep(100).then(() => {
+    sleep(200).then(() => {
+
+      // Cria os elementos
+      const favoriteReports = <FavoriteListItens />;
+      const favoriteReportsDescription = <FavoriteCategoryListItens />;
+      
+      //Renderiza os elementos criados dentro das tags
+      ReactDOM.render(favoriteReports, document.getElementById('ReportListItens'));
+      ReactDOM.render(favoriteReportsDescription, document.getElementById('CategoryListItens'));
+
       checkFavoriteItens();
       showOnlyFavorites();
+
+      if(localStorage.getItem('favoriteItems') != null){
+        favoriteItensMessage = document.getElementById('favoriteItensMessage');
+        favoriteItensMessage.style.display="none";  
+      }    
     });
   }
 
@@ -34,9 +51,9 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
     return (
       <div id="customContent" className="ms-Grid-row w3-container content">
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <div id="CategoryListItens"><FavoriteCategoryListItens/></div> 
+          <div id="CategoryListItens"></div> 
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <div id="ReportListItens"><FavoriteListItens/></div>          
+          <div id="ReportListItens"></div>          
       </div>
     );
   } 

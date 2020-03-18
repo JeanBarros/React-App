@@ -1,5 +1,6 @@
 import * as React from 'react';
-import * as ReactDOM from "react-dom";  
+import * as ReactDOM from "react-dom"; 
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
@@ -15,7 +16,7 @@ import Rh from './Rh';
 import Subsidiarias from './Subsidiarias';
 import Detalhes from './Detalhes';
 import DetalhesDocumento from './DetalhesDocumento';
-import {SharePointWebTitle, language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl} from '../AppApplicationCustomizer';
+import {SharePointWebTitle, language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, absoluteWebUrl} from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
 import FloatNav from './FloatNav';
 
@@ -34,10 +35,13 @@ export default class Main extends React.Component<IMainProps> {
 
     setLoggedIn(true);
 
-    // Obtém os dados da lista de Categorias pelo interal name
-    this.getCategoryListItems('Categorias e Menu');
+    // Use for production enviroment - Obtém os dados da lista de Categorias pelo internal list name
+    this.getCategoryListItems('reportCategories');
+    
+    // Use for development enviroment - Obtém os dados da lista de Categorias pelo display list name
+    // this.getCategoryListItems('Categorias e Menu');
 
-    sleep(500).then(() => {
+    sleep(1000).then(() => {
 
       var header = document.createElement("DIV");
       header.innerHTML = "<div class='header'><div class='logoHeader'></div><div id='webTitle'></div></div>"; 
@@ -75,6 +79,7 @@ export default class Main extends React.Component<IMainProps> {
       }
 
       ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));
+      
     });
   }
 
@@ -116,7 +121,7 @@ export default class Main extends React.Component<IMainProps> {
     return (
       <div>
         <div id="root"></div>
-          {location.href.match('.aspx') ?
+          {location.href.match('category') ?
             <FloatNav/>
           :
             null

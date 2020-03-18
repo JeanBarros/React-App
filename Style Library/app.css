@@ -48,6 +48,15 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     font-size: 16px;
 }
 
+.initialContentOverlay{
+    height: 100%;
+    width: 100%;
+    background-color: #383a40;
+    position: fixed;
+    z-index: 5;
+    top: 0;
+}
+
 .floatMenuContainer{
     position: absolute;
     right: 10%;
@@ -85,7 +94,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     width: 85px;
     height: 90px;
     float: right;
-    background: url("/sites/Lab02/SiteAssets/images/icons/btnFlutuante.png") no-repeat center center;
+    background: url("/sites/bienterprise/SiteAssets/images/icons/btnFlutuante.png") no-repeat center center;
     outline: none;
     border: none;
     cursor: pointer;
@@ -107,7 +116,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     left: 0;
     right: 0;
     bottom: 0;
-    background: url("/sites/lab02/SiteAssets/images/capa.jpg") no-repeat;
+    background: url("/sites/bienterprise/SiteAssets/images/capa.jpg") no-repeat;
     background-size: cover;
     z-index: 5;
 }
@@ -128,7 +137,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 .logoLandingPage{
     width: 273px;
     height: 51px;
-    background: url("/sites/lab02/SiteAssets/images/LogoLandingPage.png") no-repeat;
+    background: url("/sites/bienterprise/SiteAssets/images/LogoLandingPage.png") no-repeat;
     margin-bottom: 30px;
     display: inline-block;
 }
@@ -144,7 +153,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 .logoHeader{
     width: 136px;
     height: 22px;
-    background: url("/sites/lab02/SiteAssets/images/Logo_CBMM-03.png") no-repeat;    
+    background: url("/sites/bienterprise/SiteAssets/images/Logo_CBMM-03.png") no-repeat;    
     display: inline-block;
 }
 
@@ -238,7 +247,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     overflow: hidden;
 }
 
-.hiddenReportTileBox{
+.hiddenReportTileBox, .hiddenFavoriteItensMessage{
     display: none;
 }
 
@@ -304,7 +313,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     width: 100%;
     height: 100%;
     text-align: center;
-    background: url(/sites/lab02/SiteAssets/images/icons/downloadCheck.png) no-repeat center 50px;
+    background: url(/sites/bienterprise/SiteAssets/images/icons/downloadCheck.png) no-repeat center 50px;
     margin: 10px;
     padding: 5px;
 }
@@ -330,11 +339,11 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 }
 
 .iconType{
-    background: url(/sites/lab02/SiteAssets/images/icons/dashboard.png) left center no-repeat;
+    background: url(/sites/bienterprise/SiteAssets/images/icons/dashboard.png) left center no-repeat;
 }
 
 .downloadIconType{
-    background: url(/sites/lab02/SiteAssets/images/icons/file.png) left center no-repeat;
+    background: url(/sites/bienterprise/SiteAssets/images/icons/file.png) left center no-repeat;
 }
 
 .iconType span, .downloadIconType span{
@@ -352,11 +361,11 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 }
 
 .btnFavorite-icon-outline{
-    background: url(/sites/lab02/SiteAssets/images/icons/favStarOutline.png) left center no-repeat;
+    background: url(/sites/bienterprise/SiteAssets/images/icons/favStarOutline.png) left center no-repeat;
 }
 
 .btnFavorite-icon-filled{
-    background: url(/sites/lab02/SiteAssets/images/icons/favStarFill.png) left center no-repeat;
+    background: url(/sites/bienterprise/SiteAssets/images/icons/favStarFill.png) left center no-repeat;
 }
 
 .reportCategoryType span, .downloadType{
@@ -400,22 +409,22 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 
 .btnLogin-Icon, .btnDetalhes-Icon, .btnDashboard-Icon, .btnDownload-Icon{
     width: 21px;
-    background: url('/sites/lab02/SiteAssets/images/icons/info.png') no-repeat center;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/info.png') no-repeat center;
     display: inherit;
 }
 
 .btnDashboard-Icon{
-    background: url('/sites/lab02/SiteAssets/images/icons/rightArrow.png') no-repeat center;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/rightArrow.png') no-repeat center;
 }
 
 .btnDownload-Icon{
     width: 24px;
-    background: url('/sites/lab02/SiteAssets/images/icons/download.png') no-repeat center;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/download.png') no-repeat center;
 }
 
 .btnLogin-Icon{
     height: 24px;
-    background: url('/sites/lab02/SiteAssets/images/icons/login.png') no-repeat center;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/login.png') no-repeat center;
 }
 
 .btnVoltar{
@@ -485,7 +494,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     height: 180px;
     font-size: 1.2rem;
     text-align: center;
-    background: #2E2E2E url(/sites/lab02/SiteAssets/images/bgTitle.png) no-repeat;
+    background: #2E2E2E url(/sites/bienterprise/SiteAssets/images/bgTitle.png) no-repeat;
     background-size: cover;
     border-radius: 6px;
     overflow: hidden;
@@ -533,7 +542,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     width: 42px;
     height: 42px;
     margin-top: 36px;
-    background: url(/sites/lab02/SiteAssets/images/BR-flag-round.png) center center no-repeat;
+    background: url(/sites/bienterprise/SiteAssets/images/BR-flag-round.png) center center no-repeat;
     background-size: 100% !important;
     border: none;
     outline: none;
@@ -541,7 +550,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 }
 
 .btnTranslateEN, .btnTranslateEN-small{    
-    background: url(/sites/lab02/SiteAssets/images/USA-flag-round.png) center center no-repeat;
+    background: url(/sites/bienterprise/SiteAssets/images/USA-flag-round.png) center center no-repeat;
     margin-left: 16px;
 }
 

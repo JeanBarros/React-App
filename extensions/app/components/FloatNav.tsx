@@ -50,7 +50,7 @@ export default class FloatNav extends React.Component{
             //Renderiza o dentro da tag SideNav
             ReactDOM.render(floatNavElements, document.getElementById('floatListMenu'));
 
-            getCurrentCategoryItens();
+            getCurrentCategoryItens();            
         });
     }
     
@@ -88,6 +88,11 @@ export default class FloatNav extends React.Component{
     }
 
     public render(){
+        
+        let sharepointTopMenu = document.querySelector("[role='banner']");
+        
+        setTimeout(() => sharepointTopMenu.classList.add("hiddenCommandBar"), 1000);
+
         return(
             <div className="floatMenuContainer">
             <div id="floatListMenu" className="floatListMenu" style = {{"display" : "none"}}>              

@@ -31,7 +31,10 @@ export interface ISPLists {
 export interface ISPList {}
 
 let webTitle;
-export var relativeSiteUrl;
+export let clienteContext;
+export let absoluteWebUrl;
+export let relativeSiteUrl;
+export let userID;
 export let reportListItens;
 export let categoryListItens;
 export let selectedCategory;
@@ -41,6 +44,7 @@ export let myFavorites;
 let favoriteReportButton;
 let reportTitle;
 let reportTileBox;
+let sharepointTopNav;
 
 export function setCategory(category){
   selectedCategory = category;
@@ -103,12 +107,12 @@ export default class AppApplicationCustomizer
       var appStyle = document.createElement('link'); 
       appStyle.rel = 'stylesheet'; 
       appStyle.type = 'text/css'; 
-      appStyle.href = '/sites/Lab02/Style%20Library/app.css';  
+      appStyle.href = '/sites/bienterprise/Style%20Library/app.css';  
 
       var sideNavStyle = document.createElement('link'); 
       sideNavStyle.rel = 'stylesheet'; 
       sideNavStyle.type = 'text/css'; 
-      sideNavStyle.href = '/sites/Lab02/Style%20Library/sideNav.css';
+      sideNavStyle.href = '/sites/bienterprise/Style%20Library/sideNav.css';
       
       var jQuery=document.createElement('script');
       jQuery.setAttribute("type","text/javascript");
@@ -123,14 +127,16 @@ export default class AppApplicationCustomizer
       language == "pt" ?
         selectedCategory = "Favoritos"
       :
-        selectedCategory = "Favorites";
+        selectedCategory = "Favorites";      
     }    
     
     @override  
-    public onInit(): Promise<void> {  
+    public onInit(): Promise<void> { 
       
-      this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);  
+      sharepointTopNav = document.getElementById('spPageCanvasContent');
+      sharepointTopNav.className = "initialContentOverlay";
       
+      this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);
       return Promise.resolve<void>();  
     }
 
@@ -180,33 +186,49 @@ export default class AppApplicationCustomizer
           }  
           if (this._topPlaceholder.domElement) { 
 
-            this._renderReportList('reports'); // List interal name
-            this._renderCategoryList('Categorias e Menu'); // List interal name
+            // Use for production enviroment
+            this._renderReportList('reports'); // interal list name
+            this._renderCategoryList('reportCategories'); // interal list name
 
-            console.log('Inicializou o componente principal');
+            // Use for development enviroment
+            // this._renderReportList('reports'); // display list name
+            // this._renderCategoryList('Categorias e Menu'); // display list name
 
-            sleep(500).then(() => {      
+            console.log('Inicializou o componente principal');            
+
+            sleep(500).then(() => {  
               if(isLogged == "false"){
                 const elem: React.ReactElement<ILandingPageProps> = React.createElement(LandingPage,{});  
                 ReactDOM.render(elem, this._topPlaceholder.domElement);
               }
               else{
                 const elem: React.ReactElement<IMainProps> = React.createElement(Main,{});  
-                ReactDOM.render(elem, this._topPlaceholder.domElement);
+                ReactDOM.render(elem, this._topPlaceholder.domElement);                
               }
-            });            
-
+            });             
+            
             // Obtém o título do site
             webTitle = this.context.pageContext.web.title;
 
+            // Obtém a URL relativa do site
             relativeSiteUrl = this.context.pageContext.web.serverRelativeUrl;
             console.log('Relative path: ' + relativeSiteUrl);
+
+            // Obtém a URL abosluta do site
+            absoluteWebUrl = this.context.pageContext.legacyPageContext.webAbsoluteUrl;
+            console.log('Absolute URL: ' + absoluteWebUrl);
+
+            clienteContext = this.context;
+
+            // Obtém informações sobre o usuário logado
+            userID = this.context.pageContext.legacyPageContext.userId; 
+            console.log('User ID: ' + userID);
 
             // Cria um elemento com seu valor definido para o título do site
             const webTitleElement = <input type="hidden" id="siteName" name="custId" value={webTitle}></input>;            
 
             // Renderiza o elemento (neste caso não será visível porque o elemento é um input hidden)
-            ReactDOM.render(webTitleElement, document.getElementById('root'));
+            ReactDOM.render(webTitleElement, document.getElementById('root')); 
           }       
        }  
       }      
@@ -220,6 +242,7 @@ export default class AppApplicationCustomizer
 
 export class SharePointWebTitle extends React.Component{
   public render(){
+    sharepointTopNav.classList.remove("initialContentOverlay");
     return(webTitle);
   }
 }
@@ -233,7 +256,11 @@ export function showCategory(category:string) {
 
 function addFavorites(itemTitle, itemId){   
 
-  reportTileBox = document.getElementsByClassName('tileBox')[itemId];
+  reportTileBox = document.getElementsByClassName('tileBox');
+  if(reportTileBox.length > 1)
+    reportTileBox = document.getElementsByClassName('tileBox')[itemId];
+  else
+    reportTileBox = document.getElementsByClassName('tileBox')[0];
 
   // Grava o relatório favoritado no localStorage  
   if(window.localStorage.favoriteItems == undefined){
@@ -706,9 +733,10 @@ export class FavoriteCategoryListItens extends React.Component{
           selectedCategory == item.Title.trim() ?          
             <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
               <div id="categoryName">
-                  <h1>{item.Title}</h1>
-                  <p>{item.description}</p>
-                </div>            
+                <h1>{item.Title}</h1>
+                <p>{item.description}</p>
+                <div id="favoriteItensMessage">Você ainda não possui itens favoritados</div>                
+              </div>            
             </div>
           : 
           null
@@ -718,6 +746,7 @@ export class FavoriteCategoryListItens extends React.Component{
             <div id="categoryName">
               <h1>{item.titleEN}</h1>
               <p>{item.descriptionEN}</p>
+              <div id="favoriteItensMessage">You don't have any favorite items yet</div>
             </div>            
           </div>
         : 
