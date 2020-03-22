@@ -34,7 +34,7 @@ let webTitle;
 export let clienteContext;
 export let absoluteWebUrl;
 export let relativeSiteUrl;
-export let userID;
+export let currentUserInfo;
 export let reportListItens;
 export let categoryListItens;
 export let selectedCategory;
@@ -70,7 +70,7 @@ export const setLoggedIn = (value) => {
 
 export function logOut(){
   setLoggedIn(false);
-  window.location.replace("https://cbmmbr.sharepoint.com/sites/bienterprise");
+  window.location.replace("https://cbmmbr.sharepoint.com/sites/lab02");
   //location.reload();
 }
 
@@ -107,12 +107,12 @@ export default class AppApplicationCustomizer
       var appStyle = document.createElement('link'); 
       appStyle.rel = 'stylesheet'; 
       appStyle.type = 'text/css'; 
-      appStyle.href = '/sites/bienterprise/Style%20Library/app.css';  
+      appStyle.href = '/sites/lab02/Style%20Library/app.css';  
 
       var sideNavStyle = document.createElement('link'); 
       sideNavStyle.rel = 'stylesheet'; 
       sideNavStyle.type = 'text/css'; 
-      sideNavStyle.href = '/sites/bienterprise/Style%20Library/sideNav.css';
+      sideNavStyle.href = '/sites/lab02/Style%20Library/sideNav.css';
       
       var jQuery=document.createElement('script');
       jQuery.setAttribute("type","text/javascript");
@@ -153,7 +153,7 @@ export default class AppApplicationCustomizer
       this._getListData(listName)  
         .then((response) => {
           reportListItens = response.value;
-          console.log(reportListItens);
+          //console.log(reportListItens);          
       });        
     }
     
@@ -161,7 +161,7 @@ export default class AppApplicationCustomizer
       this._getListData(listName)  
         .then((response) => {
           categoryListItens = response.value;
-          console.log(categoryListItens);
+          //console.log(categoryListItens);
       });        
     }
 
@@ -187,12 +187,12 @@ export default class AppApplicationCustomizer
           if (this._topPlaceholder.domElement) { 
 
             // Use for production enviroment
-            this._renderReportList('reports'); // interal list name
-            this._renderCategoryList('reportCategories'); // interal list name
+            // this._renderReportList('reports'); // interal list name
+            // this._renderCategoryList('reportCategories'); // interal list name
 
             // Use for development enviroment
-            // this._renderReportList('reports'); // display list name
-            // this._renderCategoryList('Categorias e Menu'); // display list name
+            this._renderReportList('reports'); // display list name
+            this._renderCategoryList('Categorias e Menu'); // display list name
 
             console.log('Inicializou o componente principal');            
 
@@ -221,8 +221,10 @@ export default class AppApplicationCustomizer
             clienteContext = this.context;
 
             // Obtém informações sobre o usuário logado
-            userID = this.context.pageContext.legacyPageContext.userId; 
-            console.log('User ID: ' + userID);
+            currentUserInfo = this.context.pageContext.legacyPageContext; 
+            console.log("Propriedades do usuário atual:");
+            console.log(currentUserInfo);
+            console.log('User Name: ' + currentUserInfo.userDisplayName + ', Login Name: ' + currentUserInfo.userLoginName +   ', User ID: ' + currentUserInfo.userId);
 
             // Cria um elemento com seu valor definido para o título do site
             const webTitleElement = <input type="hidden" id="siteName" name="custId" value={webTitle}></input>;            
@@ -360,10 +362,10 @@ export function checkFavoriteItens(){
 }
 
 export class ReportListItens extends React.Component{
-public render(){
+public render(){  
   var count = 0;
   const reports = reportListItens.map((item) =>    
-    <section key={item.Id}>        
+    <section key={item.Id}> 
       {language == "pt" ?
         selectedCategory == item.categoryLookupValue ?
           <div className="ms-Grid-col ms-sm12 ms-md4 block">

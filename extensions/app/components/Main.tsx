@@ -16,13 +16,22 @@ import Rh from './Rh';
 import Subsidiarias from './Subsidiarias';
 import Detalhes from './Detalhes';
 import DetalhesDocumento from './DetalhesDocumento';
-import {SharePointWebTitle, language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, absoluteWebUrl} from '../AppApplicationCustomizer';
+import {SharePointWebTitle, language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, absoluteWebUrl, currentUserInfo} from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
 import FloatNav from './FloatNav';
 
 export interface IMainProps {}
 
 let categoryCollection;
+let reportCollection;
+let usersCollection;
+let userAccess: boolean;
+
+export function checkPermissions(){
+  // Use for development enviroment
+  // this.getReportListItems('reports') // display list name;
+  console.log(reportCollection);
+}
 
 // Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
 function sleep (time) {      
@@ -36,10 +45,12 @@ export default class Main extends React.Component<IMainProps> {
     setLoggedIn(true);
 
     // Use for production enviroment - Obtém os dados da lista de Categorias pelo internal list name
-    this.getCategoryListItems('reportCategories');
+    // this.getCategoryListItems('reportCategories');
     
     // Use for development enviroment - Obtém os dados da lista de Categorias pelo display list name
-    // this.getCategoryListItems('Categorias e Menu');
+     this.getCategoryListItems('Categorias e Menu');
+
+     this.getReportListItems('reports') // display list name;
 
     sleep(1000).then(() => {
 
@@ -57,7 +68,7 @@ export default class Main extends React.Component<IMainProps> {
       const sideNavElements = <div><div className="sideNavLogo"></div><SideNav /></div>;
       
       //Renderiza o dentro da tag SideNav
-      ReactDOM.render(sideNavElements, document.getElementById('sideNav'));      
+      ReactDOM.render(sideNavElements, document.getElementById('sideNav')); 
       
       // Barra de ferramenta padrão de edição das páginas
       let pageCommandBar = document.getElementsByClassName("commandBarWrapper")[0];
@@ -78,7 +89,7 @@ export default class Main extends React.Component<IMainProps> {
           //   topPlaceHolder.className = "hiddenTopPlaceHolder";
       }
 
-      ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));
+      ReactDOM.render(<SharePointWebTitle />, document.getElementById('webTitle'));       
       
     });
   }
@@ -107,7 +118,31 @@ export default class Main extends React.Component<IMainProps> {
     spRequest.send();    
   }
 
-  public OpenCloseSideNav(){
+  private getReportListItems(listName){ 
+    var reactHandler = this;    
+
+    var spRequest = new XMLHttpRequest();    
+    spRequest.open('GET', `${relativeSiteUrl}/_api/web/lists/getbytitle('${listName}')/items`,true);    
+    spRequest.setRequestHeader("Accept","application/json");  
+                        
+    spRequest.onreadystatechange = () =>{
+        if (spRequest.readyState === 4 && spRequest.status === 200){    
+          var result = JSON.parse(spRequest.responseText);    
+              
+          reactHandler.setState({    
+              items: result.value  
+          }); 
+          
+          reportCollection = result.value;
+        }    
+        else if (spRequest.readyState === 4 && spRequest.status !== 200){    
+            console.log('Error Occured !');    
+        }    
+    };    
+    spRequest.send();    
+  }
+
+  private OpenCloseSideNav(){
     var element = document.getElementById("sideNav"); 
     element.classList.toggle("sideNav");
 
@@ -130,8 +165,9 @@ export default class Main extends React.Component<IMainProps> {
             <nav className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="sideNav"> 
             </nav>  
             <div> 
-              <Switch>   
-                  <Route exact path='/landingPage' component={LandingPage} /> 
+              {/* Define o componente padrão a ser exibido ao carregar a página */}
+              <Switch>  
+                  <Route path='/landingPage' component={LandingPage} />                   
                   <Route path='/favoritos' component={Favoritos} />
                   <Route path='/downloads' component={Downloads} />
                   <Route path='/comercial' component={Comercial} />
@@ -154,10 +190,39 @@ export default class Main extends React.Component<IMainProps> {
   }
 }
 
+function checkUsersPermission(itemTitle) {
+  let reportCategory 
+  
+  // Itera pela lista Reports
+  for (let i=0; i < reportCollection.length; i++){
+
+    // Verifica o idioma atualmente selecionado
+    if(language == "pt")
+      reportCategory = reportCollection[i].categoryLookupValue.trim();
+    else
+      reportCategory = reportCollection[i].categoryENLookupValue.trim();
+
+    // Verifica se há algum relatório na lista, relacionado à categoria informada no parâmetro da função
+    if(reportCategory == itemTitle){
+      if(reportCollection[i].usersList != null){
+        usersCollection = reportCollection[i].usersList.split(';');
+
+        for (let j=0; j < usersCollection.length; j++){
+          if(currentUserInfo.userEmail == usersCollection[j].trim()){
+            console.log('Usuário autorizado no item: ' + itemTitle);
+            return true;           
+          }
+        }
+      }
+    }
+  }
+}
+
 class SideNav extends React.Component{    
-  public render(){   
+  public render(){
+
     const headings = categoryCollection.map((item) =>
-      <li key={item.Id}> 
+      <li key={item.Id}>
         <HashRouter>  
           {/* A coluna linkPath armazena os parâmetros a serem utilzados para referenciar o componente de cada categoria */}
           {/* a função normalize() combinada com a regex converte acentos e cedilha para caracteres não acentuados e "c". */}
@@ -190,25 +255,34 @@ class SideNav extends React.Component{
         </HashRouter>          
       </li>);
       const subLinks = categoryCollection.map((item) =>
-      <li key={item.Id}>        
+      <li key={item.Id}>    
       <HashRouter>          
         {item.linkType == "Sublink" ?             
           <li>
             {language == 'pt' ?
               <div>
-              <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
-                className="w3-bar-item w3-button" onClick={() => showCategory(item.Title)}>
-                {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                <span>{item.Title}</span>
-              </Link>
-                            
+                {checkUsersPermission(item.Title.trim()) == true ?
+                  <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
+                    className="w3-bar-item w3-button" onClick={() => showCategory(item.Title)}>
+                    {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}                 
+                    <span>{item.Title}</span>              
+                  </Link>
+                : 
+                  null
+                }           
               </div>
             : 
-              <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
-                className="w3-bar-item w3-button" onClick={() => showCategory(item.titleEN)}>
-                {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
-                <span>{item.titleEN}</span>
-              </Link>
+              <div>
+                {checkUsersPermission(item.titleEN.trim()) == true ?
+                  <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
+                    className="w3-bar-item w3-button" onClick={() => showCategory(item.titleEN)}>
+                    {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                    <span>{item.titleEN}</span>
+                  </Link>
+                :
+                  null
+                }
+              </div>
             }
           </li>              
         : null}        
@@ -242,8 +316,8 @@ class SideNav extends React.Component{
             </li>      
           </HashRouter>
         <div className="btnTranslateContainer-small">
-          <button id="btnTranslatePT-small" onClick={() => setLanguage('language', 'pt', 365, '/')} className="btnTranslatePT-small"></button> 
-          <button id="btnTranslateEN-small" onClick={() => setLanguage('language', 'en', 365, '/')} className="btnTranslateEN-small"></button>       
+          <button id="btnTranslatePT-small" onClick={() => setLanguage('language', 'pt', 365, '/')} className="btnTranslatePT-small" title="Português"></button> 
+          <button id="btnTranslateEN-small" onClick={() => setLanguage('language', 'en', 365, '/')} className="btnTranslateEN-small" title="English"></button>       
         </div>  
       </ul>
     );
