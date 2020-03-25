@@ -51,10 +51,15 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 .initialContentOverlay{
     height: 100%;
     width: 100%;
+    font-size: 1.75rem;
     background-color: #383a40;
+    color: #fff;
     position: fixed;
     z-index: 5;
     top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .floatMenuContainer{
@@ -270,7 +275,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     color: #6F848B;
 }
 
-.reportTitle{
+.reportTitle, .documentTitle{
     font-size: 1.43rem;
     padding-top: 15px;
 }

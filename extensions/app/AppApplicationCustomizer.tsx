@@ -30,7 +30,7 @@ export interface ISPLists {
 
 export interface ISPList {}
 
-let webTitle;
+export let webTitle;
 export let clienteContext;
 export let absoluteWebUrl;
 export let relativeSiteUrl;
@@ -70,7 +70,7 @@ export const setLoggedIn = (value) => {
 
 export function logOut(){
   setLoggedIn(false);
-  window.location.replace("https://cbmmbr.sharepoint.com/sites/lab02");
+  window.location.replace(absoluteWebUrl);
   //location.reload();
 }
 
@@ -107,12 +107,12 @@ export default class AppApplicationCustomizer
       var appStyle = document.createElement('link'); 
       appStyle.rel = 'stylesheet'; 
       appStyle.type = 'text/css'; 
-      appStyle.href = '/sites/lab02/Style%20Library/app.css';  
+      appStyle.href = '/sites/bienterprise/Style%20Library/app.css';  
 
       var sideNavStyle = document.createElement('link'); 
       sideNavStyle.rel = 'stylesheet'; 
       sideNavStyle.type = 'text/css'; 
-      sideNavStyle.href = '/sites/lab02/Style%20Library/sideNav.css';
+      sideNavStyle.href = '/sites/bienterprise/Style%20Library/sideNav.css';
       
       var jQuery=document.createElement('script');
       jQuery.setAttribute("type","text/javascript");
@@ -128,13 +128,18 @@ export default class AppApplicationCustomizer
         selectedCategory = "Favoritos"
       :
         selectedCategory = "Favorites";      
-    }    
+    } 
     
     @override  
     public onInit(): Promise<void> { 
+
+      if(isLogged == "true"){
+        sharepointTopNav = document.getElementById('spPageCanvasContent');
+        sharepointTopNav.className = "initialContentOverlay";
       
-      sharepointTopNav = document.getElementById('spPageCanvasContent');
-      sharepointTopNav.className = "initialContentOverlay";
+        // sharepointTopNav = document.getElementById('spPageCanvasContent');
+        // sharepointTopNav.innerText='Por favor, aguarde...';
+      }      
       
       this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);
       return Promise.resolve<void>();  
@@ -187,12 +192,12 @@ export default class AppApplicationCustomizer
           if (this._topPlaceholder.domElement) { 
 
             // Use for production enviroment
-            // this._renderReportList('reports'); // interal list name
-            // this._renderCategoryList('reportCategories'); // interal list name
+            this._renderReportList('reports'); // interal list name
+            this._renderCategoryList('reportCategories'); // interal list name
 
             // Use for development enviroment
-            this._renderReportList('reports'); // display list name
-            this._renderCategoryList('Categorias e Menu'); // display list name
+            // this._renderReportList('reports'); // display list name
+            // this._renderCategoryList('Categorias e Menu'); // display list name
 
             console.log('Inicializou o componente principal');            
 
@@ -225,12 +230,6 @@ export default class AppApplicationCustomizer
             console.log("Propriedades do usuário atual:");
             console.log(currentUserInfo);
             console.log('User Name: ' + currentUserInfo.userDisplayName + ', Login Name: ' + currentUserInfo.userLoginName +   ', User ID: ' + currentUserInfo.userId);
-
-            // Cria um elemento com seu valor definido para o título do site
-            const webTitleElement = <input type="hidden" id="siteName" name="custId" value={webTitle}></input>;            
-
-            // Renderiza o elemento (neste caso não será visível porque o elemento é um input hidden)
-            ReactDOM.render(webTitleElement, document.getElementById('root')); 
           }       
        }  
       }      
@@ -240,13 +239,6 @@ export default class AppApplicationCustomizer
     {  
       console.log('[AppApplicationCustomizer._onDispose] Disposed custom top placeholders.');        
     }
-}
-
-export class SharePointWebTitle extends React.Component{
-  public render(){
-    sharepointTopNav.classList.remove("initialContentOverlay");
-    return(webTitle);
-  }
 }
 
 export function showCategory(category:string) {

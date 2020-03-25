@@ -106,7 +106,6 @@ export default class LandingPage extends React.Component<ILandingPageProps> {
   public render() {
     return (
       <div>
-        <div id="root"></div>
         <LoginControl />                
       </div>
     );  

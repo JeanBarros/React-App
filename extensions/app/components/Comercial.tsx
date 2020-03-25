@@ -1,18 +1,17 @@
 import * as React from 'react';
-import { ReportListItens, CategoryListItens, checkFavoriteItens, setCategory, language, selectedCategory } from '../AppApplicationCustomizer';
+import { ReportListItens, CategoryListItens, checkFavoriteItens, setCategory, selectedCategory, absoluteWebUrl } from '../AppApplicationCustomizer';
 import * as ReactDOM from 'react-dom';
-import { checkPermissions } from './Main';
+import { sleep } from './Main';
 
 export interface IComercialProps {} 
-
-// Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
-function sleep (time) {      
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
 
 export default class Comercial extends React.Component<IComercialProps> {  
   constructor(props: IComercialProps) {  
       super(props);
+
+      if(location.href.match('.aspx')){
+        window.location.replace(absoluteWebUrl);
+      }
 
       setCategory(selectedCategory);
 

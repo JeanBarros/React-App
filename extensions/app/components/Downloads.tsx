@@ -144,7 +144,7 @@ class Documentlist extends React.Component{
                           <div className="reportCategoryIcon" style = {{background: `url(${item.ListItemAllFields.icone})`}}>                                            
                           </div>
                         </div>  
-                        <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription">
+                        <div className="ms-Grid-col ms-sm8 ms-md8 reportCategoryDescription documentTitle">
                           {language == "pt" ?
                             item.ListItemAllFields.Title
                           :
