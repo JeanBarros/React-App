@@ -27,15 +27,15 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
 
     setCategory(selectedCategory);
 
-    sleep(200).then(() => {
+    sleep(500).then(() => {
 
       // Cria os elementos
-      const favoriteReports = <FavoriteListItens />;
       const favoriteReportsDescription = <FavoriteCategoryListItens />;
+      const favoriteReports = <FavoriteListItens />;      
       
       //Renderiza os elementos criados dentro das tags
-      ReactDOM.render(favoriteReports, document.getElementById('ReportListItens'));
       ReactDOM.render(favoriteReportsDescription, document.getElementById('CategoryListItens'));
+      ReactDOM.render(favoriteReports, document.getElementById('ReportListItens'));      
 
       checkFavoriteItens();
       showOnlyFavorites();
@@ -43,13 +43,13 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
       if(localStorage.getItem('favoriteItems') != null){
         favoriteItensMessage = document.getElementById('favoriteItensMessage');
         favoriteItensMessage.style.display="none";  
-      }    
+      }
     });
   }
 
   public render() {
     return (
-      <div id="customContent" className="ms-Grid-row w3-container content">
+      <div className="ms-Grid-row w3-container content">
         <div className="ms-Grid-col ms-md1 block"></div> 
           <div id="CategoryListItens"></div> 
         <div className="ms-Grid-col ms-md1 block"></div> 

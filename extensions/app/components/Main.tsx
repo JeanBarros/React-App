@@ -1,9 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from "react-dom"; 
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, HashRouter, Redirect } from 'react-router-dom';
 
 import Favoritos from './Favoritos';
 import Downloads from './Downloads';
@@ -157,6 +155,11 @@ export default class Main extends React.Component<IMainProps> {
           </nav>  
           <div> 
             {/* Define o componente padrão a ser exibido ao carregar a página */}
+            {!location.href.match('.aspx') ?
+              <Redirect exact from="/#" to="favoritos" />
+            :
+              null
+            }
             <Switch>  
               <Route path='/landingPage' component={LandingPage} />                   
               <Route path='/favoritos' component={Favoritos} />
