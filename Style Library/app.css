@@ -490,6 +490,11 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     overflow: hidden;
 }
 
+.reportDetailsContent{
+    height: 100%;
+    background-color: #383a40;
+}
+
 .reportDetailRightBox{
     max-width: 256px;
 }
@@ -499,7 +504,6 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     height: 180px;
     font-size: 1.2rem;
     text-align: center;
-    background: #2E2E2E url(/sites/bienterprise/SiteAssets/images/bgTitle.png) no-repeat;
     background-size: cover;
     border-radius: 6px;
     overflow: hidden;

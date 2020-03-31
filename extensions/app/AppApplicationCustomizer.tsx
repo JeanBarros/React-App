@@ -38,6 +38,8 @@ export let currentUserInfo;
 export let reportListItens;
 export let categoryListItens;
 export let selectedCategory;
+export let selectedReport;
+export let tileBoxId;
 export let language;
 export let isLogged;
 export let myFavorites;
@@ -80,6 +82,12 @@ export function getDashboard(pageTitle, categoryName){
       content.style.display='none';
 
   window.location.replace(`${relativeSiteUrl}/SitePages/${pageTitle}.aspx?category=${categoryName}`);
+}
+
+export function getDetails(reportTitle:string, reportTileId) {
+  selectedReport = reportTitle.trim();
+  tileBoxId = reportTileId;
+  alert(tileBoxId);
 }
 
 // Aguarda para garantir que os dados da lista sejam retornados antes de utilizá-los nos componentes
@@ -390,7 +398,7 @@ public render(){
                 </div>
                   <div className="tileBoxToolBar">
                     <HashRouter>
-                      <Link className="btnDetalhes" to={`/detalhes`}>
+                      <Link onClick={() => getDetails(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))} className="btnDetalhes" to={`/detalhes`}>
                         <div className="btnDetalhes-Icon">&nbsp;</div>
                         <span>Detalhes</span>
                       </Link>                      
@@ -436,7 +444,7 @@ public render(){
                   </div>
                     <div className="tileBoxToolBar">
                       <HashRouter>
-                        <Link className="btnDetalhes" to={`/detalhes`}>
+                        <Link onClick={() => getDetails(item.reportTitleEN, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))} className="btnDetalhes" to={`/detalhes`}>
                           <div className="btnDetalhes-Icon">&nbsp;</div>
                           <span>Details</span>
                         </Link>                      
@@ -498,8 +506,9 @@ export class ReportDetails extends React.Component{
     const reportDetails = reportListItens.map((item) =>
       <section key={item.Id}>          
         {language == 'pt' ?
-          selectedCategory == item.categoryLookupValue ?
-            <div className="content">
+          selectedCategory == item.categoryLookupValue || selectedCategory == "Favoritos" ?
+            selectedReport == item.Title ?
+              <div data-tileBox-id={tileBoxId} className="content">
               <div className="ms-Grid-row w3-container">
                 <div className="ms-Grid-col ms-md1 block"></div> 
                 <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
@@ -515,11 +524,11 @@ export class ReportDetails extends React.Component{
                     <p><span>Autor: </span>{item.author0}</p>
                     <p><span>Data de criação: </span>{moment(item.Created).format('DD/MM/YYYY')}</p>
                     <p>{item.reportDetails}</p>
-                  </div>
+                  </div>           
                 </div>                
-                <div className="ms-Grid-col ms-sm12 ms-md3 block">
+                <div className="ms-Grid-col ms-sm12 ms-md3 block">                
                   <div className="reportDetailRightBox">
-                    <div className="reportDetailImage">
+                    <div className="reportDetailImage" style = {{background: `#2E2E2E url(${item.reportBackground}) no-repeat center center`}}>
                       <div className="tileBoxOverlay">
                         <div className="ms-Grid-row">
                           <div className="ms-Grid-col ms-sm4 ms-md4">
@@ -534,24 +543,30 @@ export class ReportDetails extends React.Component{
                       </div>
                     </div>
                     <div className="reportDetailsToolBar">              
-                      {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
                       <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
                       </button>
                       <p>
-                        <a href="#" className="btnAddFavorites">Adicionar aos Favoritos</a>
+                        {/* É necessário informar o id do tile que foi clicado;
+                        Retardar a criação do botão para garantir que antes a página de detalhes seja
+                        criada com o data-tileBox-id */}
+                        {/* <a onClick={() => addFavorites(item.Title, 0)} href="#" className="btnAddFavorites">Adicionar aos Favoritos</a> */}
+                        <a onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))} href="#" className="btnAddFavorites">Adicionar aos Favoritos</a>
                       </p>
                     </div>                    
                   </div>
                 </div>
               </div>
             </div>      
+            :
+              null
           :
             null
         :
           selectedCategory == item.categoryENLookupValue ?
-            <div className="content">
+            selectedReport == item.reportTitleEN ?
+              <div className="content">
               <div className="ms-Grid-row w3-container">
                 <div className="ms-Grid-col ms-md1 block"></div> 
                 <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">              
@@ -571,7 +586,7 @@ export class ReportDetails extends React.Component{
                 </div>                
                 <div className="ms-Grid-col ms-sm12 ms-md3 block">
                   <div className="reportDetailRightBox">
-                    <div className="reportDetailImage">
+                    <div className="reportDetailImage" style = {{background: `#2E2E2E url(${item.reportBackground}) no-repeat center center`}}>
                       <div className="tileBoxOverlay">
                         <div className="ms-Grid-row">
                           <div className="ms-Grid-col ms-sm4 ms-md4">
@@ -586,7 +601,6 @@ export class ReportDetails extends React.Component{
                       </div>
                     </div>
                     <div className="reportDetailsToolBar">              
-                      {/* <a href={`${relativeSiteUrl}/SitePages/Report.aspx`} className="btnDashboard-Large">Dashboard</a> */}
                       <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
@@ -599,6 +613,8 @@ export class ReportDetails extends React.Component{
                 </div>
               </div>
             </div>      
+            :
+              null
           :
             null
         }        
@@ -649,7 +665,7 @@ export class FavoriteListItens extends React.Component{
                 </div>
                   <div className="tileBoxToolBar">
                     <HashRouter>
-                      <Link className="btnDetalhes" to={`/detalhes`}>
+                      <Link onClick={() => getDetails(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))} className="btnDetalhes" to={`/detalhes`}>
                         <div className="btnDetalhes-Icon">&nbsp;</div>
                         <span>Detalhes</span>
                       </Link>                      
@@ -724,7 +740,7 @@ export class FavoriteCategoryListItens extends React.Component{
     const categories = categoryListItens.map((item) =>
       <section key={item.Id}>
         {language == "pt" ?
-          selectedCategory == item.Title.trim() ?          
+          selectedCategory == item.Title.trim() ?
             <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
               <div id="categoryName">
                 <h1>{item.Title}</h1>

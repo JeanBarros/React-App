@@ -21,7 +21,7 @@ export default class Detalhes extends React.Component<any> {
 
   public render() {
     return ( 
-      <div>     
+      <div className="reportDetailsContent">     
         <div id="reportDetails"></div>
         <div className="ms-Grid-row w3-container">
           <div className="ms-Grid-col ms-sm12 ms-md12 block detalhes">
