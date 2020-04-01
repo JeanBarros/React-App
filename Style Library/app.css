@@ -29,6 +29,17 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     display: none;
 }
 
+/* Página dos relatórios */
+.CanvasZone {
+    max-width: 100% !important;
+}
+
+/* .CanvasSection-col{
+    padding: 0 !important;
+} */
+
+/* Final página dos relatórios */
+
 .hiddenTopPlaceHolder{
     display: none !important;
 }
@@ -578,6 +589,11 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 
 /* On screens that are 992px or less */
 @media screen and (max-width: 992px) {
+
+    .topPlaceHolder-h100{
+        height: auto !important;
+    }
+    
     .w3-container, .w3-panel {
         padding: .01em 16px !important;
     }

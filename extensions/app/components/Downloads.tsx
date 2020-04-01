@@ -135,7 +135,7 @@ class Documentlist extends React.Component{
     const documents = documentCollection.map((item) =>
       <section key={item.Id}>
         <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div className="tileBox" style = {{background: `url(${item.ListItemAllFields.documentBackground}) no-repeat center center`}}>
+              <div className="tileBox" style = {{background: `url(${item.ListItemAllFields.documentBackground}) no-repeat center center`, backgroundSize: "cover"}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">

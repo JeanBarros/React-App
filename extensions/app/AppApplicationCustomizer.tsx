@@ -9,8 +9,8 @@ import {
 } from '@microsoft/sp-application-base';
 
 import Main, { IMainProps } from './Components/Main';
-import { SPHttpClient, ISPHttpClientOptions, SPHttpClientResponse } from '@microsoft/sp-http';
-import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
+import { BrowserRouter as Router, Link} from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
 import LandingPage, { ILandingPageProps } from './Components/LandingPage';
 
@@ -84,10 +84,9 @@ export function getDashboard(pageTitle, categoryName){
   window.location.replace(`${relativeSiteUrl}/SitePages/${pageTitle}.aspx?category=${categoryName}`);
 }
 
-export function getDetails(reportTitle:string, reportTileId) {
-  selectedReport = reportTitle.trim();
+export function getDetails(reportTitleDetails:string, reportTileId) {
+  selectedReport = reportTitleDetails.trim();
   tileBoxId = reportTileId;
-  alert(tileBoxId);
 }
 
 // Aguarda para garantir que os dados da lista sejam retornados antes de utilizá-los nos componentes
@@ -369,7 +368,7 @@ public render(){
       {language == "pt" ?
         selectedCategory == item.categoryLookupValue ?
           <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+            <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
               <div className="tileBoxOverlay">
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -415,7 +414,7 @@ public render(){
         :
           selectedCategory == item.categoryENLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -636,7 +635,7 @@ export class FavoriteListItens extends React.Component{
     <section key={item.Id}>        
       {language == "pt" ?        
         <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+            <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
               <div className="tileBoxOverlay">
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -680,7 +679,7 @@ export class FavoriteListItens extends React.Component{
           </div>
       :
         <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`}}>
+              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">

@@ -67,15 +67,18 @@ export default class Main extends React.Component<IMainProps> {
             
       // Menu superior nativo do SharePoint
       let sharepointTopMenu = document.querySelector("[role='banner']");
+      let pageHeader = document.querySelector("[data-automation-id='pageHeader']");
       
       if(!location.href.match('.aspx')){
         pageCommandBar.classList.add("hiddenCommandBar");
         sharepointTopMenu.classList.add("hiddenCommandBar");
-        topPlaceHolder.className = "topPlaceHolder-h100";
+        topPlaceHolder.className = "topPlaceHolder-h100";        
       }
       else{
         pageCommandBar.classList.remove("hiddenCommandBar");
         sharepointTopMenu.classList.remove("hiddenCommandBar");
+
+        pageHeader.classList.add("hiddenCommandBar");
           // if(!location.href.match('edit'))
           //   topPlaceHolder.className = "hiddenTopPlaceHolder";
       }
