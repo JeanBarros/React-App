@@ -5,16 +5,10 @@ import { BrowserRouter as Router, Switch, Route, Link, HashRouter, Redirect } fr
 
 import Favoritos from './Favoritos';
 import Downloads from './Downloads';
-import Comercial from './Comercial';
-import Controladoria from './Controladoria';
-import Manutencao from './Manutencao';
-import Mina from './Mina';
-import Pcp from './Pcp';
-import Rh from './Rh';
-import Subsidiarias from './Subsidiarias';
+import Categoria from './Categoria';
 import Detalhes from './Detalhes';
 import DetalhesDocumento from './DetalhesDocumento';
-import {language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, currentUserInfo, webTitle} from '../AppApplicationCustomizer';
+import {language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, currentUserInfo, webTitle, showDownloads} from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
 import FloatNav from './FloatNav';
 
@@ -36,10 +30,10 @@ export default class Main extends React.Component<IMainProps> {
     setLoggedIn(true);
 
     // Use for production enviroment - Obtém os dados da lista de Categorias pelo internal list name
-    this.getCategoryListItems('reportCategories');
+    //this.getCategoryListItems('reportCategories');
     
     // Use for development enviroment - Obtém os dados da lista de Categorias pelo display list name
-    // this.getCategoryListItems('Categorias e Menu');
+    this.getCategoryListItems('Categorias e Menu');
 
      this.getReportListItems('reports'); // display list name;
 
@@ -167,13 +161,7 @@ export default class Main extends React.Component<IMainProps> {
               <Route path='/landingPage' component={LandingPage} />                   
               <Route path='/favoritos' component={Favoritos} />
               <Route path='/downloads' component={Downloads} />
-              <Route path='/comercial' component={Comercial} />
-              <Route path='/controladoria' component={Controladoria} />
-              <Route path='/manutencao' component={Manutencao} />
-              <Route path='/mina' component={Mina} />
-              <Route path='/pcp' component={Pcp} />
-              <Route path='/rh' component={Rh} />
-              <Route path='/subsidiarias' component={Subsidiarias} /> 
+              <Route path='/categoria' component={Categoria} />
               <Route path='/detalhes' component={Detalhes} />
               <Route path='/detalhesDocumento' component={DetalhesDocumento} />                     
             </Switch> 
@@ -192,10 +180,14 @@ function checkUsersPermission(itemTitle) {
   for (let i=0; i < reportCollection.length; i++){
 
     // Verifica o idioma atualmente selecionado
-    if(language == "pt")
-      reportCategory = reportCollection[i].categoryLookupValue.trim();
-    else
-      reportCategory = reportCollection[i].categoryENLookupValue.trim();
+    if(language == "pt"){
+      if(reportCollection[i].categoryLookupValue != null)
+        reportCategory = reportCollection[i].categoryLookupValue.trim();
+    }
+    else{
+      if(reportCollection[i].categoryENLookupValue != null)
+        reportCategory = reportCollection[i].categoryENLookupValue.trim();
+    }
 
     // Verifica se há algum relatório na lista, relacionado à categoria informada no parâmetro da função
     if(reportCategory == itemTitle){
@@ -223,14 +215,12 @@ class SideNav extends React.Component{
           {/* a função normalize() combinada com a regex converte acentos e cedilha para caracteres não acentuados e "c". */}
           {item.linkType == "Top link" ? 
             language == "pt" ?
-              <div>
               <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
-                className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>
+                className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.Title)}>                
                 {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
                 <div className="sideNavIcons" style = {{background: `url(${item.icon}) no-repeat center center`}}></div>
                 <span>{item.Title}</span>
-              </Link>              
-              </div>
+              </Link>
             :
               <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} 
                 className="w3-bar-item w3-button sideNavHeading" onClick={() => showCategory(item.titleEN)}>
@@ -257,7 +247,7 @@ class SideNav extends React.Component{
             {language == 'pt' ?
               <div>
                 {checkUsersPermission(item.Title.trim()) == true ?
-                  <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
+                  <Link to={`/categoria`}                 
                     className="w3-bar-item w3-button" onClick={() => showCategory(item.Title)}>
                     {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}                 
                     <span>{item.Title}</span>              
@@ -269,9 +259,9 @@ class SideNav extends React.Component{
             : 
               <div>
                 {checkUsersPermission(item.titleEN.trim()) == true ?
-                  <Link to={`/${item.linkPath.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}                 
+                  <Link to={`/categoria`}                 
                     className="w3-bar-item w3-button" onClick={() => showCategory(item.titleEN)}>
-                    {/* A coluna linkTitle0 armazena o título do link a ser exibido no menu */}
+                    {/* A coluna titleEN armazena o título do link a ser exibido no menu */}
                     <span>{item.titleEN}</span>
                   </Link>
                 :

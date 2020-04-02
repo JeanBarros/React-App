@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import { Link } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
 import * as moment from 'moment';
-import { language } from '../AppApplicationCustomizer';
+import { language, relativeSiteUrl } from '../AppApplicationCustomizer';
 
 export interface IDownloadsProps {}
 
@@ -23,8 +23,11 @@ export default class Downloads extends React.Component<IDownloadsProps> {
     // Obtém os dados da lista de Parâmetros de Downloads pelo internal name
     this.getDownloadsParameters('downloadsParameters');     
 
-    // Obtém os dados da lista de Categorias pelo internal name
-    this.getDocuments('Documentos%20Partilhados');
+    // Use for production enviroment - Obtém os dados da lista de Categorias pelo internal list name
+    //this.getDocuments('Documentos%20Partilhados');
+
+    // Use for development enviroment - Obtém os dados da lista de Categorias pelo internal list name
+    this.getDocuments('Documentos%20Compartilhados');
 
     sleep(500).then(() => {
 
@@ -33,8 +36,8 @@ export default class Downloads extends React.Component<IDownloadsProps> {
       const parametros = <DocumentsDownloadParamters />;  
       
       //Renderiza os elementos dentro das tags
-      ReactDOM.render(documentElements, document.getElementById('documentList'));
-      ReactDOM.render(parametros, document.getElementById('downlodDescription'));      
+      ReactDOM.render(documentElements, document.getElementById('ReportListItens'));
+      ReactDOM.render(parametros, document.getElementById('CategoryListItens'));      
     });
   }
 
@@ -42,7 +45,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
     var reactHandler = this;    
 
     var spRequest = new XMLHttpRequest();    
-    spRequest.open('GET', `/sites/bienterprise/_api/web/GetFolderByServerRelativeUrl('${listName}')/Files?$expand=ListItemAllFields`,true);    
+    spRequest.open('GET', `${relativeSiteUrl}/_api/web/GetFolderByServerRelativeUrl('${listName}')/Files?$expand=ListItemAllFields`,true);    
     spRequest.setRequestHeader("Accept","application/json");  
 
     spRequest.onreadystatechange = () =>{
@@ -68,7 +71,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
     var reactHandler = this;    
 
     var spRequest = new XMLHttpRequest();    
-    spRequest.open('GET', `/sites/bienterprise/_api/web/lists/getbytitle('${listName}')/items`,true);
+    spRequest.open('GET', `${relativeSiteUrl}/_api/web/lists/getbytitle('${listName}')/items`,true);
     spRequest.setRequestHeader("Accept","application/json");  
 
     spRequest.onreadystatechange = () =>{
@@ -92,14 +95,9 @@ export default class Downloads extends React.Component<IDownloadsProps> {
     return (
       <div id="customContent" className="ms-Grid-row w3-container content">
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <div id="CategoryListItens"><div>
-            <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
-              <div id="downlodDescription"></div>
-            </div>
-          </div>
-        </div>
+        <div id="CategoryListItens"></div> 
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <div id="documentList"></div>          
+        <div id="ReportListItens"></div>
       </div>
     );
   } 
@@ -111,14 +109,18 @@ class DocumentsDownloadParamters extends React.Component{
     console.log(downloadParametersCollection);
     const downLoadsparameters = downloadParametersCollection.map((item) =>
       <section key={item.Id}>
-        <h1>{item.Title}</h1>
-        <p>
-          {language == "pt" ?
-            item.description
-          :
-            item.descriptionEN
-          }
-        </p>
+        <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
+          <div id="categoryName">
+            <h1>{item.Title}</h1>
+          </div>          
+          <p>
+            {language == "pt" ?
+              item.description
+            :
+              item.descriptionEN
+            }
+          </p>
+        </div>
       </section>);
 
     return(

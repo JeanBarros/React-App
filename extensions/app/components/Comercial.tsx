@@ -18,15 +18,15 @@ export default class Comercial extends React.Component<IComercialProps> {
 
       sleep(200).then(() => { 
         
-      // Cria os elementos
-      const categoryListElements = <CategoryListItens />;
-      const reportListElements = <ReportListItens />;
+      // // Cria os elementos
+      // const categoryListElements = <CategoryListItens />;
+      // const reportListElements = <ReportListItens />;
       
-      //Renderiza os elementos criados dentro das tags
-      ReactDOM.render(categoryListElements, document.getElementById('CategoryListItens'));
-      ReactDOM.render(reportListElements, document.getElementById('ReportListItens'));
+      // //Renderiza os elementos criados dentro das tags
+      // ReactDOM.render(categoryListElements, document.getElementById('CategoryListItens'));
+      // ReactDOM.render(reportListElements, document.getElementById('ReportListItens'));
 
-      checkFavoriteItens();        
+      // checkFavoriteItens();        
       });
     }
 

@@ -49,11 +49,11 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
 
   public render() {
     return (
-      <div className="ms-Grid-row w3-container content">
+      <div id="customContent" className="ms-Grid-row w3-container content">
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <div id="CategoryListItens"></div> 
+        <div id="CategoryListItens"></div> 
         <div className="ms-Grid-col ms-md1 block"></div> 
-          <div id="ReportListItens"></div>          
+        <div id="ReportListItens"></div>
       </div>
     );
   } 
