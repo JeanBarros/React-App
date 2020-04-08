@@ -1,5 +1,6 @@
 import * as React from 'react';
-import * as ReactDOM from "react-dom"; 
+import * as ReactDOM from "react-dom";
+import * as $ from "jquery";
 
 import { BrowserRouter as Router, Switch, Route, Link, HashRouter, Redirect } from 'react-router-dom';
 
@@ -8,7 +9,7 @@ import Downloads from './Downloads';
 import Categoria from './Categoria';
 import Detalhes from './Detalhes';
 import DetalhesDocumento from './DetalhesDocumento';
-import {language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, currentUserInfo, webTitle, showDownloads} from '../AppApplicationCustomizer';
+import {language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, currentUserInfo, webTitle, showDownloads, absoluteWebUrl, FavoriteListItens} from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
 import FloatNav from './FloatNav';
 
@@ -17,6 +18,9 @@ export interface IMainProps {}
 let categoryCollection;
 let reportCollection;
 let usersCollection;
+let reportTileBox;
+let btnUpdateFavorite;
+let btnAddFavorite;
 
 // Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
 export function sleep (time) {      
@@ -30,12 +34,12 @@ export default class Main extends React.Component<IMainProps> {
     setLoggedIn(true);
 
     // Use for production enviroment - Obtém os dados da lista de Categorias pelo internal list name
-    //this.getCategoryListItems('reportCategories');
+    this.getCategoryListItems('reportCategories');
     
     // Use for development enviroment - Obtém os dados da lista de Categorias pelo display list name
-    this.getCategoryListItems('Categorias e Menu');
+    // this.getCategoryListItems('Categorias e Menu');
 
-     this.getReportListItems('reports'); // display list name;
+     this.getReportListItems('reports'); // display list name;     
 
     sleep(1000).then(() => {
 
@@ -167,9 +171,311 @@ export default class Main extends React.Component<IMainProps> {
             </Switch> 
           </div> 
         </HashRouter>
-        <div><button onClick={this.OpenCloseSideNav} className="w3-xlarge btnOpenNav">☰<span>Menu</span></button></div>
+        <div><button onClick={this.OpenCloseSideNav} className="w3-xlarge btnOpenNav">☰<span>Menu</span></button></div>        
       </div>
     );
+  }
+}
+
+export function addFavoriteItem(reportTitle, userlogin, tileBoxId) {
+
+  var listName = "favorites";
+  var url = absoluteWebUrl;
+
+  // Obtém o tile (box dos relatórios) da página de acordo com o ID fornecido
+  reportTileBox = document.getElementById(tileBoxId);
+
+  btnAddFavorite = document.getElementById('btnAddFavorite' + tileBoxId);
+  btnUpdateFavorite = document.getElementById('btnUpdateFavorite' + tileBoxId);
+
+    // Obtém os items da lista
+  getListItems(listName, url, (data) => {
+    
+    let favoriteListItems = data.d.results;
+
+    if(favoriteListItems.length > 0){
+      favoriteListItems.forEach(checkItem);
+    }
+    else{
+      createListItem(reportTitle, userlogin);
+      reportTileBox.setAttribute('data-favorite-checked', 'true');
+    }
+
+    function checkItem(item) {
+      if(reportTitle == item.Title && item.userName != userlogin){
+        createListItem(reportTitle, userlogin);
+        if(reportTileBox != null)
+          reportTileBox.setAttribute('data-favorite-checked', 'true');        
+      }
+      else if(reportTitle == item.Title && item.userName == userlogin) {
+        return;
+      }
+      else if(reportTitle != item.Title && item.userName != userlogin) {
+        createListItem(reportTitle, userlogin);
+        if(reportTileBox != null)
+          reportTileBox.setAttribute('data-favorite-checked', 'true');
+      }
+      else if(reportTitle != item.Title && item.userName == userlogin) {
+        createListItem(reportTitle, userlogin);
+        if(reportTileBox != null)
+          reportTileBox.setAttribute('data-favorite-checked', 'true');
+      }         
+    }
+
+    if(btnAddFavorite != null && btnUpdateFavorite != null){
+      // Oculta botão para adicionar
+      btnAddFavorite.classList.add('hiddenButton');
+      btnAddFavorite.classList.remove('visibleButton');
+
+      // Exibe botão para atualizar
+      btnUpdateFavorite.classList.add('visibleButton');
+      btnUpdateFavorite.classList.remove('hiddenButton');
+    }    
+  }, (data) => {
+      alert("Ocorreu um erro!");
+  });    
+}
+
+// Cria o item na lista de favoritos
+function createListItem(reportTitle, userlogin){
+  return getFormDigest(absoluteWebUrl).then((data) => {
+    $.ajax ({
+      url: absoluteWebUrl + "/_api/web/lists/GetByTitle('favorites')/items",  
+        type: "POST",  
+        data: JSON.stringify({ __metadata: { type: "SP.Data.FavoritesListItem" }, Title: reportTitle, userName: userlogin}),
+
+        headers:  
+        {  
+            "Accept": "application/json;odata=verbose",  
+            "Content-Type": "application/json;odata=verbose",  
+            "X-RequestDigest": data.d.GetContextWebInformation.FormDigestValue,  
+            "X-HTTP-Method": "POST"  
+        },
+        
+        // success: (data, status, xhr) =>{
+        //   console.log("O item foi adicionado aos favoritos");
+        // },
+
+        success: (status, xhr) =>{
+          console.log("O item foi adicionado aos favoritos");
+        },
+
+        error: (xhr, status, error) => {
+          console.log(JSON.stringify(error));
+        }
+    });              
+  });
+}
+
+// Obtém a lista dos itens favoritados
+export function getFavoriteItems() {
+  var listName = "favorites";
+  var url = absoluteWebUrl;
+
+  getListItems(listName, url, (data) => {
+
+      let favoriteItemsCollection = data.d.results;
+
+      // Obtém os relatórios visíveis na tela
+      reportTileBox = document.getElementsByClassName('tileBox');
+
+      let favoriteItensMessage = document.getElementById('favoriteItensMessage');
+
+      favoriteItemsCollection.forEach(checkFavoriteItems);
+
+      function checkFavoriteItems(element) {
+        for(let i = 0; i < reportTileBox.length; i++){      
+          if(element.Title == document.getElementsByClassName('reportTitle')[i].innerHTML){
+            if(element.userName == currentUserInfo.userLoginName){
+              reportTileBox[i].setAttribute('data-favorite-checked', 'true');              
+              favoriteItensMessage.style.display="none";
+            }              
+          }          
+        }
+      }
+      
+      showOnlyFavorites();
+      
+  }, (data) => {
+      alert("Ocorreu um erro!");
+  });
+}
+
+// Obtém a lista dos itens favoritados
+export function getFavoriteItemsByCategory() {
+  var listName = "favorites";
+  var url = absoluteWebUrl;
+
+  getListItems(listName, url, (data) => {
+      let favoriteItems = data.d.results;
+
+      // Obtém os relatórios visíveis na tela
+      reportTileBox = document.getElementsByClassName('tileBox');
+
+      favoriteItems.forEach(checkFavoriteItems);
+
+      function checkFavoriteItems(element) {
+        for(let i = 0; i < reportTileBox.length; i++){      
+          if(element.Title == document.getElementsByClassName('reportTitle')[i].innerHTML){
+            if(element.userName == currentUserInfo.userLoginName)
+              reportTileBox[i].setAttribute('data-favorite-checked', 'true');            
+          }          
+        }
+      }
+      
+      for(let i = 0; i < favoriteItems.length; i++){
+
+        btnUpdateFavorite = document.getElementsByClassName('btnUpdateFavorite')[i];
+        btnAddFavorite = document.getElementsByClassName('btnFavorite')[i];
+
+        if(reportTileBox[i] != null){
+          if(reportTileBox[i].getAttribute('data-favorite-checked') == "true"){
+            if(btnUpdateFavorite != null || btnAddFavorite != null){
+              // Oculta botão para adicionar
+              btnAddFavorite.classList.add('hiddenButton');
+
+              // Exibe botão para atualizar
+              btnUpdateFavorite.classList.add('visibleButton');
+            }          
+          }
+        }
+      }
+      
+  }, (data) => {
+      alert("Ocorreu um erro!");
+  });
+}
+
+// Atualiza o item na lista de favoritos
+export function uptadeFavoriteItem(reportTitle, userlogin, tileBoxId) {
+
+  var listName = "favorites";
+  var url = absoluteWebUrl;
+
+  // Obtém o conjunto de todos os box na tela
+  let reportTileBoxCollection = document.getElementsByClassName('tileBox');
+
+  // Exibe mensagem para o usuário
+  let favoriteItensMessage = document.getElementById('favoriteItensMessage');
+  
+  // Obtém o tile (box dos relatórios) da página de acordo com o ID fornecido
+  reportTileBox = document.getElementById(tileBoxId);
+
+  btnAddFavorite = document.getElementById('btnAddFavorite' + tileBoxId);
+  btnUpdateFavorite = document.getElementById('btnUpdateFavorite' + tileBoxId);
+
+  // Obtém os items da lista
+  getListItems(listName, url, (data) => {
+    
+    let favoriteListItems = data.d.results;
+
+    if(favoriteListItems.length > 0){
+      favoriteListItems.forEach(checkItem);
+    }
+    else{
+      createListItem(reportTitle, userlogin);
+      reportTileBox.setAttribute('data-favorite-checked', 'true');
+    }
+
+    function checkItem(item) {
+      
+      if(reportTitle == item.Title){
+        if(item.userName == userlogin){
+
+          deleteListItemById(item.Id);
+          
+          if(location.href.match('favoritos')){
+            reportTileBox.parentElement.remove();
+
+            if(reportTileBoxCollection.length == 0){
+              favoriteItensMessage.style.display="block";
+            }
+          }
+          else{
+            reportTileBox.setAttribute('data-favorite-checked', 'false');
+
+            // Exibe botão para adicionar
+            btnAddFavorite.classList.add('visibleButton');
+            btnAddFavorite.classList.remove('hiddenButton');
+
+            // Oculta botão para atualizar
+            btnUpdateFavorite.classList.remove('visibleButton');
+            btnUpdateFavorite.classList.add('hiddenButton');
+          }
+        }        
+      }     
+    }    
+  }, (data) => {
+      alert("Ocorreu um erro!");
+  });  
+}
+
+// Remove o item na lista de favoritos
+function deleteListItemById(itemId) {
+
+  return getFormDigest(absoluteWebUrl).then((data) => {
+    $.ajax ({
+        url: absoluteWebUrl + "/_api/web/lists/GetByTitle('favorites')/items(" + itemId + ")",    
+        type: "POST",  
+        headers:  
+        {  
+            "X-RequestDigest": data.d.GetContextWebInformation.FormDigestValue,  
+            "IF-MATCH": "*",  
+            "X-HTTP-Method": "DELETE"  
+        },
+
+        // success: (data, status, xhr) => {
+        //   console.log("O item foi removido dos favoritos");
+        // },
+        
+        success: (status, xhr) => {
+          console.log("O item foi removido dos favoritos");
+        },
+
+        error: (xhr, status, error) => {
+          console.log("Ocorreu um erro");
+        }
+    });
+  });
+}
+
+function getFormDigest(webUrl) {
+  return $.ajax({
+      url: webUrl + "/_api/contextinfo",
+      method: "POST",
+      headers: { "Accept": "application/json; odata=verbose" }
+  });
+}
+
+function getListItems(listName, siteurl, success, failure) {
+  $.ajax({
+      url: siteurl + "/_api/web/lists/GetByTitle('" + listName + "')/items?$select=Title, Id, userName",
+      method: "GET",
+      headers: { "Accept": "application/json; odata=verbose" },
+      success: (data) => {
+          success(data);
+      },
+      error: (data) => {
+          failure(data);
+      }      
+  });
+}
+
+export function showOnlyFavorites(){
+  reportTileBox = document.getElementsByClassName('tileBox');
+  
+  for(let i = 0; i <= reportTileBox.length; i++){
+    if(reportTileBox.length == 1){
+      if(reportTileBox[0].getAttribute('data-favorite-checked') == "false"){
+        //reportTileBox[i].parentElement.classList.add('hiddenReportTileBox');
+        reportTileBox[0].parentElement.remove();
+      }
+    }
+    else{
+      if(reportTileBox[i].getAttribute('data-favorite-checked') == "false"){
+        reportTileBox[i].parentElement.remove();
+      }
+    }    
   }
 }
 
@@ -195,7 +501,7 @@ function checkUsersPermission(itemTitle) {
         usersCollection = reportCollection[i].usersList.split(';');
 
         for (let j=0; j < usersCollection.length; j++){
-          if(currentUserInfo.userEmail == usersCollection[j].trim() || currentUserInfo.userLoginName == usersCollection[j].trim()){
+          if(currentUserInfo.userLoginName == usersCollection[j].trim() || currentUserInfo.userLoginName == usersCollection[j].trim()){
             console.log('Usuário autorizado no item: ' + itemTitle);
             return true;           
           }

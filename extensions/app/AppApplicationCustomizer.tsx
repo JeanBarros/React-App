@@ -8,7 +8,7 @@ import {
   PlaceholderName
 } from '@microsoft/sp-application-base';
 
-import Main, { IMainProps } from './Components/Main';
+import Main, { IMainProps, addFavoriteItem, uptadeFavoriteItem, getFavoriteItemsByCategory } from './Components/Main';
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 import { BrowserRouter as Router, Link, HashRouter } from 'react-router-dom';
 import LandingPage, { ILandingPageProps } from './Components/LandingPage';
@@ -83,7 +83,7 @@ export function getDashboard(pageTitle, categoryName){
   window.location.replace(`${relativeSiteUrl}/SitePages/${pageTitle}.aspx?category=${categoryName}`);
 }
 
-export function getDetails(reportTitleDetails:string, reportTileId) {
+export function getDetails(reportTitleDetails, reportTileId) {
   selectedReport = reportTitleDetails.trim();
   tileBoxId = reportTileId;
 }
@@ -113,12 +113,12 @@ export default class AppApplicationCustomizer
       var appStyle = document.createElement('link'); 
       appStyle.rel = 'stylesheet'; 
       appStyle.type = 'text/css'; 
-      appStyle.href = '/sites/Lab02/Style%20Library/app.css';  
+      appStyle.href = '/sites/bienterprise/Style%20Library/app.css';  
 
       var sideNavStyle = document.createElement('link'); 
       sideNavStyle.rel = 'stylesheet'; 
       sideNavStyle.type = 'text/css'; 
-      sideNavStyle.href = '/sites/Lab02/Style%20Library/sideNav.css';
+      sideNavStyle.href = '/sites/bienterprise/Style%20Library/sideNav.css';
       
       var jQuery=document.createElement('script');
       jQuery.setAttribute("type","text/javascript");
@@ -198,12 +198,12 @@ export default class AppApplicationCustomizer
           if (this._topPlaceholder.domElement) { 
 
             // Use for production enviroment
-            // this._renderReportList('reports'); // interbal list name
-            // this._renderCategoryList('reportCategories'); // internal list name
+            this._renderReportList('reports'); // internal list name
+            this._renderCategoryList('reportCategories'); // internal list name
 
             // Use for development enviroment
-            this._renderReportList('reports'); // display list name
-            this._renderCategoryList('Categorias e Menu'); // display list name
+            // this._renderReportList('reports'); // display list name
+            // this._renderCategoryList('Categorias e Menu'); // display list name
 
             console.log('Inicializou o componente principal');            
 
@@ -250,8 +250,8 @@ export default class AppApplicationCustomizer
 export function showDownloads(category:string) {
   selectedCategory = category.trim();
 
-  var element = document.getElementById("sideNav"); 
-  element.classList.toggle("sideNav");
+  let sideNavPane = document.getElementById("sideNav"); 
+  sideNavPane.classList.toggle("sideNav");
 }
 
 export function showCategory(category:string) {
@@ -273,78 +273,13 @@ export function showCategory(category:string) {
       ReactDOM.render(categoryListElements, document.getElementById('CategoryListItens'));
       ReactDOM.render(reportListElements, document.getElementById('ReportListItens'));
 
-      checkFavoriteItens();
+      getFavoriteItemsByCategory();
   }  
 
-  var element = document.getElementById("sideNav"); 
-  element.classList.toggle("sideNav");
-}
-
-function addFavorites(itemTitle, itemId){   
-
-  reportTileBox = document.getElementsByClassName('tileBox');
-  if(reportTileBox.length > 1)
-    reportTileBox = document.getElementsByClassName('tileBox')[itemId];
-  else
-    reportTileBox = document.getElementsByClassName('tileBox')[0];
-
-  // Grava o relatório favoritado no localStorage  
-  if(window.localStorage.favoriteItems == undefined){
-    localStorage.setItem('favoriteItems', itemTitle);
-
-    favoriteReportButton = document.getElementsByClassName('btnFavorite');
-    reportTitle = document.getElementsByClassName('reportTitle');
-
-    // Adiciona uma nova classe para alterar o ícone
-    favoriteReportButton[itemId].classList.remove('btnFavorite-icon-outline');        
-    favoriteReportButton[itemId].classList.add('btnFavorite-icon-filled');
-
-    reportTileBox.setAttribute('data-favorite-checked', 'true');
-  }
-  else{
-    // Obtém a lista de strings do itens salvos
-    myFavorites = localStorage.getItem('favoriteItems');    
-
-    // Obtém o array de favoritos salvos no localStorage
-    let favorites = myFavorites.split(',');
-
-    favorites.forEach(logArrayElements);
-
-    // Se existirem dados, converte os dados existentes para um array
-    // Caso contrário, cria um array    
-    myFavorites = myFavorites ? myFavorites.split(',') : [];
-
-    if(reportTileBox.getAttribute('data-favorite-checked') == "true"){
-
-      // Sempre limpa o LocalStorage antes de iniciar a gravação
-      var storage = window.localStorage;
-      storage.clear();      
-
-      for(let i = 0; i < favorites.length; i++){
-        if(favorites[i] == itemTitle){
-          favorites.splice([i], 1);
-          if(favorites.length > 0)
-            storage.setItem("favoriteItems", favorites.toString());
-        }
-      }
-
-      // Alterna entre as classes para trocar o ícone
-      favoriteReportButton[itemId].classList.remove('btnFavorite-icon-filled');
-      favoriteReportButton[itemId].classList.add('btnFavorite-icon-outline');
-      reportTileBox.setAttribute('data-favorite-checked', 'false');
-    }
-    else{
-      // Adiciona um novo item ao localStorage array
-      myFavorites.push(itemTitle);
-
-      // Salva no localStorage
-      localStorage.setItem('favoriteItems', myFavorites.toString());        
-      
-      // Adiciona uma nova classe para alterar o ícone
-      favoriteReportButton[itemId].classList.add('btnFavorite-icon-filled');
-      reportTileBox.setAttribute('data-favorite-checked', 'true');
-    }
-  }
+  let sideNavPane = document.getElementById("sideNav"); 
+  
+  if(sideNavPane != undefined)
+    sideNavPane.classList.toggle("sideNav");
 }
 
 function logArrayElements(element, index, favoriteItem) {  
@@ -387,14 +322,14 @@ export function checkFavoriteItens(){
 
 export class ReportListItens extends React.Component{
 public render(){  
-  var count = 0;
+  let tileBoxElementId: string;
   const reports = reportListItens.map((item) =>    
     <section key={item.Id}> 
       {language == "pt" ?
         item.categoryLookupValue != null ?
           selectedCategory == item.categoryLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
+              <div id={item.Id} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -410,7 +345,9 @@ public render(){
                     </div>           
                     <div className="ms-Grid-col ms-sm4 ms-md4">
                       <div className="reportCategoryInfo">
-                        <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
+                        <button id={"btnAddFavorite" + item.Id} title="Adicionar aos favoritos" className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavoriteItem(item.Title, currentUserInfo.userLoginName, item.Id)}>
+                        </button>
+                        <button id={"btnUpdateFavorite" + item.Id} title="Remover dos favoritos" className="btnUpdateFavorite btnFavorite-icon-filled hiddenButton" onClick={() => uptadeFavoriteItem(item.Title, currentUserInfo.userLoginName, item.Id)}>
                         </button>
                         <div className="reportCategoryType">
                           <span>Tipo:</span>                      
@@ -423,7 +360,7 @@ public render(){
                   </div>
                     <div className="tileBoxToolBar">
                       <HashRouter>
-                        <Link onClick={() => getDetails(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))} className="btnDetalhes" to={`/detalhes`}>
+                        <Link onClick={() => getDetails(item.Title, item.Id)} className="btnDetalhes" to={`/detalhes`}>
                           <div className="btnDetalhes-Icon">&nbsp;</div>
                           <span>Detalhes</span>
                         </Link>                      
@@ -444,7 +381,7 @@ public render(){
         item.categoryENLookupValue != null ?
           selectedCategory == item.categoryENLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
+              <div id={item.Id} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -460,7 +397,9 @@ public render(){
                     </div>           
                     <div className="ms-Grid-col ms-sm4 ms-md4">
                       <div className="reportCategoryInfo">                      
-                        <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.reportTitleEN, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
+                        <button id={"btnAddFavorite" + item.Id} title="Add to favorites" className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavoriteItem(item.reportTitleEN, currentUserInfo.userLoginName, item.Id)}>
+                        </button>
+                        <button id={"btnUpdateFavorite" + item.Id} title="Remove from favorites" className="btnUpdateFavorite btnFavorite-icon-filled hiddenButton" onClick={() => uptadeFavoriteItem(item.reportTitleEN, currentUserInfo.userLoginName, item.Id)}>
                         </button>                 
                         <div className="reportCategoryType">
                           <span>Type:</span>                      
@@ -473,7 +412,7 @@ public render(){
                   </div>
                     <div className="tileBoxToolBar">
                       <HashRouter>
-                        <Link onClick={() => getDetails(item.reportTitleEN, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))} className="btnDetalhes" to={`/detalhes`}>
+                        <Link onClick={() => getDetails(item.reportTitleEN, item.Id)} className="btnDetalhes" to={`/detalhes`}>
                           <div className="btnDetalhes-Icon">&nbsp;</div>
                           <span>Details</span>
                         </Link>                      
@@ -489,9 +428,7 @@ public render(){
           : null
         :
           null
-        }
-        
-        <span style={{display:'none'}}>{count += 1}</span>            
+        }            
     </section>                 
     );
 
@@ -581,11 +518,9 @@ export class ReportDetails extends React.Component{
                         <span>Dashboard</span>
                       </button>
                       <p>
-                        {/* É necessário informar o id do tile que foi clicado;
-                        Retardar a criação do botão para garantir que antes a página de detalhes seja
-                        criada com o data-tileBox-id */}
-                        {/* <a onClick={() => addFavorites(item.Title, 0)} href="#" className="btnAddFavorites">Adicionar aos Favoritos</a> */}
-                        <a onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))} href="#" className="btnAddFavorites">Adicionar aos Favoritos</a>
+                        <button className="btnAddFavorites" onClick={() => addFavoriteItem(item.Title, currentUserInfo.userLoginName, tileBoxId)}>
+                          Adicionar aos Favoritos
+                        </button>
                       </p>
                     </div>                    
                   </div>
@@ -597,7 +532,7 @@ export class ReportDetails extends React.Component{
           :
             null
         :
-          selectedCategory == item.categoryENLookupValue ?
+          selectedCategory == item.categoryENLookupValue || selectedCategory == "Favorites" ?
             selectedReport == item.reportTitleEN ?
               <div className="content">
               <div className="ms-Grid-row w3-container">
@@ -639,8 +574,10 @@ export class ReportDetails extends React.Component{
                         <span>Dashboard</span>
                       </button>
                       <p>
-                        <a href="#" className="btnAddFavorites">Add to Favorites</a>
-                      </p>
+                        <button className="btnAddFavorites" onClick={() => addFavoriteItem(item.reportTitleEN, currentUserInfo.userLoginName, tileBoxId)}>
+                          Add to Favorites
+                        </button>
+                      </p>                                            
                     </div>                    
                   </div>
                 </div>
@@ -664,12 +601,11 @@ export class ReportDetails extends React.Component{
 
 export class FavoriteListItens extends React.Component{
   public render(){
-  var count = 0;
   const reports = reportListItens.map((item) =>    
     <section key={item.Id}>        
       {language == "pt" ?        
         <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
+            <div id={item.Id} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
               <div className="tileBoxOverlay">
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -684,8 +620,8 @@ export class FavoriteListItens extends React.Component{
                     </div>                    
                   </div>           
                   <div className="ms-Grid-col ms-sm4 ms-md4">
-                    <div className="reportCategoryInfo">
-                      <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
+                    <div className="reportCategoryInfo">  
+                      <button id={"btnUpdateFavorite" + item.Id} title="Remover dos favoritos" className="btnUpdateFavorite btnFavorite-icon-filled" onClick={() => uptadeFavoriteItem(item.Title, currentUserInfo.userLoginName, item.Id)}>
                       </button>
                       <div className="reportCategoryType">
                         <span>Tipo:</span>                      
@@ -713,50 +649,50 @@ export class FavoriteListItens extends React.Component{
           </div>
       :
         <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div id={item.Id.toString()} data-tileBox-id={count} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
-                <div className="tileBoxOverlay">
+          <div id={item.Id} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
+            <div className="tileBoxOverlay">
+              <div className="ms-Grid-row">
+                <div className="ms-Grid-col ms-sm8 ms-md8">
                   <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm8 ms-md8">
-                      <div className="ms-Grid-row">
-                        <div className="ms-Grid-col ms-sm4 ms-md4">
-                          <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}>                                            
-                          </div>
-                        </div>  
-                        <div className="ms-Grid-col ms-sm8 ms-md8 reportTitle">
-                          {item.reportTitleEN}
-                        </div>
-                      </div>                    
-                    </div>           
                     <div className="ms-Grid-col ms-sm4 ms-md4">
-                      <div className="reportCategoryInfo">                      
-                        <button className="btnFavorite btnFavorite-icon-outline" onClick={() => addFavorites(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))}>
-                        </button>                 
-                        <div className="reportCategoryType">
-                          <span>Type:</span>                      
-                          <div className="iconType">
-                            <span>Dashboard</span>
-                          </div>
-                        </div>
+                      <div className="reportCategoryIcon" style = {{background: `url(${item.reportIcon}) no-repeat center center`}}>                                            
+                      </div>
+                    </div>  
+                    <div className="ms-Grid-col ms-sm8 ms-md8 reportTitle">
+                      {item.reportTitleEN}
+                    </div>
+                  </div>                    
+                </div>           
+                <div className="ms-Grid-col ms-sm4 ms-md4">
+                  <div className="reportCategoryInfo">                      
+                    <button id={"btnUpdateFavorite" + item.Id} title="Remove from favorites" className="btnUpdateFavorite btnFavorite-icon-filled" onClick={() => uptadeFavoriteItem(item.reportTitleEN, currentUserInfo.userLoginName, item.Id)}>
+                    </button>                 
+                    <div className="reportCategoryType">
+                      <span>Type:</span>                      
+                      <div className="iconType">
+                        <span>Dashboard</span>
                       </div>
                     </div>
                   </div>
-                    <div className="tileBoxToolBar">
-                      <HashRouter>
-                        <Link className="btnDetalhes" to={`/detalhes`}>
-                          <div className="btnDetalhes-Icon">&nbsp;</div>
-                          <span>Details</span>
-                        </Link>                      
-                      </HashRouter>
-                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
-                        <div className="btnDashboard-Icon">&nbsp;</div>
-                        <span>Dashboard</span>
-                      </button>
-                  </div>
                 </div>
               </div>
+                <div className="tileBoxToolBar">
+                  <HashRouter>
+                    <Link onClick={() => getDetails(item.reportTitleEN, item.Id)} className="btnDetalhes" to={`/detalhes`}>
+                      <div className="btnDetalhes-Icon">&nbsp;</div>
+                      <span>Details</span>
+                    </Link>                      
+                  </HashRouter>
+                  <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
+                    <div className="btnDashboard-Icon">&nbsp;</div>
+                    <span>Dashboard</span>
+                  </button>
+              </div>
             </div>
+          </div>
+        </div>
       }
-      <span style={{display:'none'}}>{count += 1}</span>            
+                  
     </section>                 
     );
 

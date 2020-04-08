@@ -267,6 +267,18 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     display: none;
 }
 
+.visibleReportTileBox{
+    display: block;
+}
+
+.hiddenButton{
+    display: none !important;
+}
+
+.visibleButton{
+    display: inline-flex !important;
+}
+
 .tileBoxOverlay{
     width: 100%;
     height: 100%;
@@ -366,7 +378,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     margin-left: 34px !important;
 }
 
-.btnFavorite{
+.btnFavorite, .btnUpdateFavorite{
     width: 27px;
     height: 26px;
     margin-bottom: 8px;

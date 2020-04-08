@@ -1,20 +1,19 @@
 import * as React from 'react';
 import { checkFavoriteItens, FavoriteListItens, FavoriteCategoryListItens, language, setCategory, selectedCategory } from '../AppApplicationCustomizer';
 import * as ReactDOM from 'react-dom';
+import { getFavoriteItems, showOnlyFavorites } from './Main';
 
 export interface IFavoritosProps {}
 
-let favoriteItensMessage;
-
-function showOnlyFavorites(){
-  let reportTileBox = document.getElementsByClassName('tileBox');
+// function showOnlyFavorites(){
+//   let reportTileBox = document.getElementsByClassName('tileBox');
   
-  for(let i = 0; i < reportTileBox.length; i++){
-    if(reportTileBox[i].getAttribute('data-favorite-checked') == "false"){
-      reportTileBox[i].parentElement.classList.add('hiddenReportTileBox');
-    }
-  }
-}
+//   for(let i = 0; i < reportTileBox.length; i++){
+//     if(reportTileBox[i].getAttribute('data-favorite-checked') == "false"){
+//       reportTileBox[i].parentElement.classList.add('hiddenReportTileBox');
+//     }
+//   }
+// }
 
 // Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
 function sleep (time) {      
@@ -37,13 +36,8 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
       ReactDOM.render(favoriteReportsDescription, document.getElementById('CategoryListItens'));
       ReactDOM.render(favoriteReports, document.getElementById('ReportListItens'));      
 
-      checkFavoriteItens();
-      showOnlyFavorites();
-
-      if(localStorage.getItem('favoriteItems') != null){
-        favoriteItensMessage = document.getElementById('favoriteItensMessage');
-        favoriteItensMessage.style.display="none";  
-      }
+      getFavoriteItems();      
+      
     });
   }
 

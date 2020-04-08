@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { ReportListItens, CategoryListItens, checkFavoriteItens, setCategory, selectedCategory, absoluteWebUrl, showCategory } from '../AppApplicationCustomizer';
-import * as ReactDOM from 'react-dom';
+import { selectedCategory, absoluteWebUrl, showCategory } from '../AppApplicationCustomizer';
 import { sleep } from './Main';
 
 export interface ICategoriaProps {}
@@ -17,6 +16,9 @@ export default class Categoria extends React.Component<ICategoriaProps> {
       sleep(200).then(() => { 
         
        showCategory(selectedCategory);
+       
+       let sideNavPane = document.getElementById("sideNav"); 
+       sideNavPane.classList.toggle("sideNav");
             
       });
     }

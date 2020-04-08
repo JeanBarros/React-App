@@ -24,10 +24,10 @@ export default class Downloads extends React.Component<IDownloadsProps> {
     this.getDownloadsParameters('downloadsParameters');     
 
     // Use for production enviroment - Obtém os dados da lista de Categorias pelo internal list name
-    //this.getDocuments('Documentos%20Partilhados');
+    this.getDocuments('Documentos%20Partilhados');
 
     // Use for development enviroment - Obtém os dados da lista de Categorias pelo internal list name
-    this.getDocuments('Documentos%20Compartilhados');
+    // this.getDocuments('Documentos%20Compartilhados');
 
     sleep(500).then(() => {
 

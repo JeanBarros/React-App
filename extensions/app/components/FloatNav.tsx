@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
-import { relativeSiteUrl, getDashboard } from '../AppApplicationCustomizer';
+import { relativeSiteUrl, getDashboard, language } from '../AppApplicationCustomizer';
 
 let categoryCollection;
 
@@ -106,10 +106,14 @@ export default class FloatNav extends React.Component{
 class FloatNavListItens extends React.Component{    
     public render(){   
     const links = categoryCollection.map((item) =>
-    <li key={item.Id}> 
+    <li key={item.Id}>
         <HashRouter>
-            <Link className="floatMenuLinks-hidden" to="" data-category-name={item.categoryLookupValue} onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>{item.Title}</Link>
-        </HashRouter>          
+        {language == "pt" ?            
+            <Link className="floatMenuLinks-hidden" to="" data-category-name={item.categoryLookupValue} onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>{item.Title}</Link>                    
+        :            
+            <Link className="floatMenuLinks-hidden" to="" data-category-name={item.categoryENLookupValue} onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>{item.reportTitleEN}</Link>           
+        }
+        </HashRouter>                  
     </li>);
     return( 
         <ul>
