@@ -9,7 +9,7 @@ import Downloads from './Downloads';
 import Categoria from './Categoria';
 import Detalhes from './Detalhes';
 import DetalhesDocumento from './DetalhesDocumento';
-import {language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, currentUserInfo, webTitle, showDownloads, absoluteWebUrl, FavoriteListItens} from '../AppApplicationCustomizer';
+import {language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, currentUserInfo, webTitle, absoluteWebUrl, setCategory, selectedCategory } from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
 import FloatNav from './FloatNav';
 
@@ -156,11 +156,42 @@ export default class Main extends React.Component<IMainProps> {
           </nav>  
           <div> 
             {/* Define o componente padrão a ser exibido ao carregar a página */}
+            {/* A estrutura de endereço URL e roteamento dos componentes não adiciona nenhuma extensão em nome de arquivos, 
+            portanto, se não há uma extensão, define-se a rota para o componente inicial desejado */}
             {!location.href.match('.aspx') ?
               <Redirect exact from="/#" to="favoritos" />
             :
               null
             }
+
+            {/* Se o usuário está voltando de outro link visitado no contexto do portal, neste caso, a página de relatórios */}
+            {document.referrer.match('.aspx') ?
+              // Se o usuário alternar entre os links do menu flutuante, substitui a url sem direcionar para outro componente 
+              location.href.match('category') ?
+                null
+              :              
+                <div>
+                  {/* obtém a categria que foi clicada no menu lateral e armazenada localmente e então envia o resultado obtido
+                  como argumento do método SetCategory para a variável selectedCategory */}
+                  {setCategory(localStorage.getItem("selectedCategory"))}
+
+                  {/* Após a variável ser atualizada, redireciona para o componente adequado */}
+                  {selectedCategory == "Downloads" ?
+                    <Redirect exact from="/#" to="downloads" />
+                  :
+                    selectedCategory == "Favoritos" ?
+                      <Redirect exact from="/#" to="favoritos" />
+                    :                  
+                      selectedCategory == "Favorites" ?
+                        <Redirect exact from="/#" to="favoritos" />
+                    :
+                      <Redirect exact from="/#" to="categoria" />
+                  }
+                </div>
+            :
+              null              
+            }
+            
             <Switch>  
               <Route path='/landingPage' component={LandingPage} />                   
               <Route path='/favoritos' component={Favoritos} />
@@ -483,27 +514,28 @@ function checkUsersPermission(itemTitle) {
   let reportCategory; 
   
   // Itera pela lista Reports
-  for (let i=0; i < reportCollection.length; i++){
-
-    // Verifica o idioma atualmente selecionado
-    if(language == "pt"){
-      if(reportCollection[i].categoryLookupValue != null)
-        reportCategory = reportCollection[i].categoryLookupValue.trim();
-    }
-    else{
-      if(reportCollection[i].categoryENLookupValue != null)
-        reportCategory = reportCollection[i].categoryENLookupValue.trim();
-    }
-
-    // Verifica se há algum relatório na lista, relacionado à categoria informada no parâmetro da função
-    if(reportCategory == itemTitle){
-      if(reportCollection[i].usersList != null){
-        usersCollection = reportCollection[i].usersList.split(';');
-
-        for (let j=0; j < usersCollection.length; j++){
-          if(currentUserInfo.userLoginName == usersCollection[j].trim() || currentUserInfo.userLoginName == usersCollection[j].trim()){
-            console.log('Usuário autorizado no item: ' + itemTitle);
-            return true;           
+  if(reportCollection != undefined){
+    for (let i=0; i < reportCollection.length; i++){
+      // Verifica o idioma atualmente selecionado
+      if(language == "pt"){
+        if(reportCollection[i].categoryLookupValue != null)
+          reportCategory = reportCollection[i].categoryLookupValue.trim();
+      }
+      else{
+        if(reportCollection[i].categoryENLookupValue != null)
+          reportCategory = reportCollection[i].categoryENLookupValue.trim();
+      }
+  
+      // Verifica se há algum relatório na lista, relacionado à categoria informada no parâmetro da função
+      if(reportCategory == itemTitle){
+        if(reportCollection[i].usersList != null){
+          usersCollection = reportCollection[i].usersList.split(';');
+  
+          for (let j=0; j < usersCollection.length; j++){
+            if(currentUserInfo.userLoginName == usersCollection[j].trim() || currentUserInfo.userLoginName == usersCollection[j].trim()){
+              console.log('Usuário autorizado no item: ' + itemTitle);
+              return true;           
+            }
           }
         }
       }

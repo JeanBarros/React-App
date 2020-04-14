@@ -9,9 +9,9 @@ export default class Categoria extends React.Component<ICategoriaProps> {
   constructor(props: ICategoriaProps) {  
       super(props);
       
-      if(location.href.match('.aspx')){
-        window.location.replace(absoluteWebUrl);
-      }      
+      // if(location.href.match('.aspx')){
+      //   window.location.replace(absoluteWebUrl);
+      // }      
 
       sleep(200).then(() => { 
         

@@ -42,6 +42,8 @@ export let tileBoxId;
 export let language;
 export let isLogged;
 export let myFavorites;
+export let reportPageTitle;
+export let reportCategoryName;
 let favoriteReportButton;
 let reportTitle;
 let reportTileBox;
@@ -72,14 +74,13 @@ export const setLoggedIn = (value) => {
 export function logOut(){
   setLoggedIn(false);
   window.location.replace(absoluteWebUrl);
-  //location.reload();
 }
 
 export function getDashboard(pageTitle, categoryName){
   var content = document.getElementById('customContent');
   if (content != null)
       content.style.display='none';
-
+  
   window.location.replace(`${relativeSiteUrl}/SitePages/${pageTitle}.aspx?category=${categoryName}`);
 }
 
@@ -129,12 +130,20 @@ export default class AppApplicationCustomizer
       head.appendChild(sideNavStyle);
       head.appendChild(jQuery);
 
-      // Define qual será o primeiro componente a ser exibido, de acordo com o idioma
-      language == "pt" ?
-        selectedCategory = "Favoritos"
+      // Define a variável selectedCategory com o nome do componente que será exibido inicialmente.
+      // Posteriormente, na seção <HashRouter> do componente Main.tsx, a função Redirect carrega o componente adequado
+      // A função referrer obtém o valor do último link visitado. Caso seja retornada uma string vazia, 
+      // indica uma navegação recém iniciada.
+      document.referrer.match("") ?
+        language == "pt" ?
+          selectedCategory = "Favoritos"
+        :
+          selectedCategory = "Favorites"
       :
-        selectedCategory = "Favorites";      
-    } 
+      //  Se o usuário está voltando de outro link visitado no contexto do portal, neste caso, a página de relatórios  
+      //  obtém a categria que foi clicada no menu lateral e armazenada localmente.
+        selectedCategory = localStorage.getItem("selectedCategory");           
+      } 
     
     @override  
     public onInit(): Promise<void> { 
@@ -257,6 +266,13 @@ export function showDownloads(category:string) {
 export function showCategory(category:string) {
   selectedCategory = category.trim();
 
+  // Define o armazenamento local com o valor da categria que foi clicada no menu lateral
+  localStorage.setItem("selectedCategory", selectedCategory);
+
+  if(location.href.match('category')){
+    window.location.replace(`${relativeSiteUrl}/#/categoria`);
+  }
+
   switch(selectedCategory) {
     case "Downloads":
       break;
@@ -265,6 +281,7 @@ export function showCategory(category:string) {
     case "Favorites":
       break;
     default:
+
       // Cria os elementos
       const categoryListElements = <CategoryListItens />;
       const reportListElements = <ReportListItens />;
@@ -280,15 +297,6 @@ export function showCategory(category:string) {
   
   if(sideNavPane != undefined)
     sideNavPane.classList.toggle("sideNav");
-}
-
-function logArrayElements(element, index, favoriteItem) {  
-  if(favoriteItem != null && reportTitle[index] !== undefined){
-    if(element === reportTitle[index].innerHTML){
-      favoriteReportButton[index].classList.remove('btnFavorite-icon-outline');        
-      favoriteReportButton[index].classList.add('btnFavorite-icon-filled');
-    }
-  }
 }
 
 export function checkFavoriteItens(){
