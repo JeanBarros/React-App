@@ -144,9 +144,12 @@ export default class Main extends React.Component<IMainProps> {
   public render() {
 
     setTimeout(() => { 
+      let loadScreen = document.getElementById('loadScreen');
+      loadScreen.remove();
+
       let sharepointTopNav = document.getElementById('spPageCanvasContent');
       sharepointTopNav.classList.remove("initialContentOverlay");
-    }, 1100);
+    }, 1500);
 
     return (
       <div>        

@@ -151,9 +151,12 @@ export default class AppApplicationCustomizer
       if(isLogged == "true"){
         sharepointTopNav = document.getElementById('spPageCanvasContent');
         sharepointTopNav.className = "initialContentOverlay";
+
+        var loadScreen = document.createElement("div");
+        loadScreen.setAttribute('id','loadScreen');
+        loadScreen.innerHTML = "Por favor, aguarde...";
       
-        // sharepointTopNav = document.getElementById('spPageCanvasContent');
-        // sharepointTopNav.innerText='Por favor, aguarde...';
+        document.getElementById("spPageCanvasContent").appendChild(loadScreen);
       }      
       
       this.context.placeholderProvider.changedEvent.add(this, this._renderPlaceHolders);

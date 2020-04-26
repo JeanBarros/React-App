@@ -29,17 +29,6 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     display: none;
 }
 
-/* Página dos relatórios */
-.CanvasZone {
-    max-width: 100% !important;
-}
-
-/* .CanvasSection-col{
-    padding: 0 !important;
-} */
-
-/* Final página dos relatórios */
-
 .hiddenTopPlaceHolder{
     display: none !important;
 }
@@ -496,13 +485,18 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     color: #fff;
 }
 
+/* Página dos relatórios */
+.CanvasZone {
+    max-width: 100% !important;
+}
+
 .reportPage{
     background-color: #EAEAEA;
     text-align: center;
 }
 
-.CanvasZoneContainer.CanvasZoneContainer--read, .mainContent{
-    background-color: #EAEAEA !important;
+.CanvasZoneContainer {
+    background-color: transparent;
 }
 
 .reportContainer{

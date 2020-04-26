@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from "react-dom";  
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { HashRouter } from 'react-router-dom';
 import { relativeSiteUrl, getDashboard, language } from '../AppApplicationCustomizer';
@@ -47,7 +46,7 @@ export default class FloatNav extends React.Component{
             // Cria um elemento
             const floatNavElements = <FloatNavListItens />;
             
-            //Renderiza o dentro da tag SideNav
+            //Renderiza o elemento dentro da tag SideNav
             ReactDOM.render(floatNavElements, document.getElementById('floatListMenu'));
 
             getCurrentCategoryItens();            
@@ -90,8 +89,10 @@ export default class FloatNav extends React.Component{
     public render(){
         
         let sharepointTopMenu = document.querySelector("[role='banner']");
+        let sharepointCanvasZone = document.getElementsByClassName('CanvasZone')[0];
         
         setTimeout(() => sharepointTopMenu.classList.add("hiddenCommandBar"), 1000);
+        setTimeout(() => sharepointCanvasZone.classList.add('reportPage'), 3500);
 
         return(
             <div className="floatMenuContainer">
@@ -104,7 +105,8 @@ export default class FloatNav extends React.Component{
 }
 
 class FloatNavListItens extends React.Component{    
-    public render(){   
+    public render(){
+    
     const links = categoryCollection.map((item) =>
     <li key={item.Id}>
         <HashRouter>
