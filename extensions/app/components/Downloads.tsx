@@ -29,7 +29,7 @@ export default class Downloads extends React.Component<IDownloadsProps> {
     // Use for development enviroment - Obtém os dados da lista de Categorias pelo internal list name
     // this.getDocuments('Documentos%20Compartilhados');
 
-    sleep(500).then(() => {
+    sleep(1000).then(() => {
 
       // Cria os elementos
       const documentElements = <Documentlist />;  
@@ -93,11 +93,14 @@ export default class Downloads extends React.Component<IDownloadsProps> {
 
   public render() {
     return (
-      <div id="customContent" className="ms-Grid-row w3-container content">
-        <div className="ms-Grid-col ms-md1 block"></div> 
-        <div id="CategoryListItens"></div> 
-        <div className="ms-Grid-col ms-md1 block"></div> 
-        <div id="ReportListItens"></div>
+      <div>
+        <div id="modalBox"></div>
+        <div id="customContent" className="ms-Grid-row w3-container content">        
+          <div className="ms-Grid-col ms-md1 block"></div> 
+          <div id="CategoryListItens"></div> 
+          <div className="ms-Grid-col ms-md1 block"></div> 
+          <div id="ReportListItens"></div>
+        </div>
       </div>
     );
   } 
@@ -212,20 +215,36 @@ function getDocumentTitle(title){
   documentTitle = title;
 }
 
-function showModal(url){  
+function showModal(filePath){
 
-  window.location.replace(url);
-  document.body.innerHTML += `<div id='modalBox' class='downloadModal'></div>`;
+  document.getElementById('modalBox').style.display="flex";
+
+  downloadFile(filePath);
 
   // Cria um elemento
   const modalBoxElements = <DownloadModal />;
       
   //Renderiza o dentro da tag SideNav
   ReactDOM.render(modalBoxElements, document.getElementById('modalBox'));
+
+  document.getElementById('modalBox').classList.add('downloadModal');
 }
 
 function hideModal(){
-  location.reload();
+  document.getElementById('modalBox').classList.remove('downloadModal');
+  document.getElementById('modalBox').style.display="none";
+}
+
+function downloadFile(filePath){
+  var element = document.createElement('a');
+  element.setAttribute('href', filePath);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
 }
 
 class DownloadModal extends React.Component{

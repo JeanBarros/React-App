@@ -26,7 +26,7 @@ export default class Favoritos extends React.Component<IFavoritosProps> {
 
     setCategory(selectedCategory);
 
-    sleep(500).then(() => {
+    sleep(1000).then(() => {
 
       // Cria os elementos
       const favoriteReportsDescription = <FavoriteCategoryListItens />;

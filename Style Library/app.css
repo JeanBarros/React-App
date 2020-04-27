@@ -312,7 +312,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     justify-content: center;
     align-items: center;
     bottom: 0;
-    z-index: 6;
+    z-index: 99999;
 }
 
 .downloadCenterBox{
