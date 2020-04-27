@@ -224,61 +224,30 @@ export function addFavoriteItem(reportTitle, userlogin, tileBoxId) {
   btnAddFavorite = document.getElementById('btnAddFavorite' + tileBoxId);
   btnUpdateFavorite = document.getElementById('btnUpdateFavorite' + tileBoxId);
 
-    // Obtém os items da lista
-  getListItems(listName, url, (data) => {
-    
-    let favoriteListItems = data.d.results;
+  createListItem(reportTitle, userlogin, tileBoxId);
+  reportTileBox.setAttribute('data-favorite-checked', 'true');
 
-    if(favoriteListItems.length > 0){
-      favoriteListItems.forEach(checkItem);
-    }
-    else{
-      createListItem(reportTitle, userlogin);
-      reportTileBox.setAttribute('data-favorite-checked', 'true');
-    }
+  if(btnAddFavorite != null && btnUpdateFavorite != null){
+    // Oculta botão para adicionar
+    btnAddFavorite.classList.add('hiddenButton');
+    btnAddFavorite.classList.remove('visibleButton');
 
-    function checkItem(item) {
-      if(reportTitle == item.Title && item.userName != userlogin){
-        createListItem(reportTitle, userlogin);
-        if(reportTileBox != null)
-          reportTileBox.setAttribute('data-favorite-checked', 'true');        
-      }
-      else if(reportTitle == item.Title && item.userName == userlogin) {
-        return;
-      }
-      else if(reportTitle != item.Title && item.userName != userlogin) {
-        createListItem(reportTitle, userlogin);
-        if(reportTileBox != null)
-          reportTileBox.setAttribute('data-favorite-checked', 'true');
-      }
-      else if(reportTitle != item.Title && item.userName == userlogin) {
-        createListItem(reportTitle, userlogin);
-        if(reportTileBox != null)
-          reportTileBox.setAttribute('data-favorite-checked', 'true');
-      }         
-    }
-
-    if(btnAddFavorite != null && btnUpdateFavorite != null){
-      // Oculta botão para adicionar
-      btnAddFavorite.classList.add('hiddenButton');
-      btnAddFavorite.classList.remove('visibleButton');
-
-      // Exibe botão para atualizar
-      btnUpdateFavorite.classList.add('visibleButton');
-      btnUpdateFavorite.classList.remove('hiddenButton');
-    }    
-  }, (data) => {
-      alert("Ocorreu um erro!");
-  });    
+    // Exibe botão para atualizar
+    btnUpdateFavorite.classList.add('visibleButton');
+    btnUpdateFavorite.classList.remove('hiddenButton');
+  }   
 }
 
 // Cria o item na lista de favoritos
-function createListItem(reportTitle, userlogin){
+function createListItem(reportTitle, userlogin, reportItemId){
+
+  let reportId = reportItemId.toString();
+
   return getFormDigest(absoluteWebUrl).then((data) => {
     $.ajax ({
       url: absoluteWebUrl + "/_api/web/lists/GetByTitle('favorites')/items",  
         type: "POST",  
-        data: JSON.stringify({ __metadata: { type: "SP.Data.FavoritesListItem" }, Title: reportTitle, userName: userlogin}),
+        data: JSON.stringify({ __metadata: { type: "SP.Data.FavoritesListItem" }, Title: reportTitle, userName: userlogin, reportId: reportId}),
 
         headers:  
         {  
@@ -293,11 +262,11 @@ function createListItem(reportTitle, userlogin){
         // },
 
         success: (status, xhr) =>{
-          console.log("O item foi adicionado aos favoritos");
+          console.log("O item foi adicionado aos favoritos.");
         },
 
         error: (xhr, status, error) => {
-          console.log(JSON.stringify(error));
+          console.log("Ocorreu um erro.");
         }
     });              
   });
@@ -320,8 +289,10 @@ export function getFavoriteItems() {
       favoriteItemsCollection.forEach(checkFavoriteItems);
 
       function checkFavoriteItems(element) {
-        for(let i = 0; i < reportTileBox.length; i++){      
-          if(element.Title == document.getElementsByClassName('reportTitle')[i].innerHTML){
+        
+        for(let i = 0; i < reportTileBox.length; i++){ 
+
+          if(element.reportId == document.getElementsByClassName('tileBox')[i].getAttribute('id')){
             if(element.userName == currentUserInfo.userLoginName){
               reportTileBox[i].setAttribute('data-favorite-checked', 'true');              
               favoriteItensMessage.style.display="none";
@@ -352,7 +323,7 @@ export function getFavoriteItemsByCategory() {
 
       function checkFavoriteItems(element) {
         for(let i = 0; i < reportTileBox.length; i++){      
-          if(element.Title == document.getElementsByClassName('reportTitle')[i].innerHTML){
+          if(element.reportId == document.getElementsByClassName('tileBox')[i].getAttribute('id')){
             if(element.userName == currentUserInfo.userLoginName)
               reportTileBox[i].setAttribute('data-favorite-checked', 'true');            
           }          
@@ -409,15 +380,14 @@ export function uptadeFavoriteItem(reportTitle, userlogin, tileBoxId) {
       favoriteListItems.forEach(checkItem);
     }
     else{
-      createListItem(reportTitle, userlogin);
+      createListItem(reportTitle, userlogin, tileBoxId);
       reportTileBox.setAttribute('data-favorite-checked', 'true');
     }
 
     function checkItem(item) {
       
-      if(reportTitle == item.Title){
+      if(item.reportId == tileBoxId){
         if(item.userName == userlogin){
-
           deleteListItemById(item.Id);
           
           if(location.href.match('favoritos')){
@@ -485,7 +455,7 @@ function getFormDigest(webUrl) {
 
 function getListItems(listName, siteurl, success, failure) {
   $.ajax({
-      url: siteurl + "/_api/web/lists/GetByTitle('" + listName + "')/items?$select=Title, Id, userName",
+      url: siteurl + "/_api/web/lists/GetByTitle('" + listName + "')/items?$select=Title, Id, userName, reportId",
       method: "GET",
       headers: { "Accept": "application/json; odata=verbose" },
       success: (data) => {

@@ -333,7 +333,6 @@ export function checkFavoriteItens(){
 
 export class ReportListItens extends React.Component{
 public render(){  
-  let tileBoxElementId: string;
   const reports = reportListItens.map((item) =>    
     <section key={item.Id}> 
       {language == "pt" ?
