@@ -44,6 +44,7 @@ export let isLogged;
 export let myFavorites;
 export let reportPageTitle;
 export let reportCategoryName;
+export let reportPageUrl;
 let favoriteReportButton;
 let reportTitle;
 let reportTileBox;
@@ -87,6 +88,10 @@ export function getDashboard(pageTitle, categoryName){
 export function getDetails(reportTitleDetails, reportTileId) {
   selectedReport = reportTitleDetails.trim();
   tileBoxId = reportTileId;
+}
+
+export function showDashboard(pageTitle, categoryName) {
+  reportPageUrl = `${relativeSiteUrl}/SitePages/${pageTitle}.aspx?category=${categoryName}`;
 }
 
 // Aguarda para garantir que os dados da lista sejam retornados antes de utilizá-los nos componentes
@@ -146,7 +151,7 @@ export default class AppApplicationCustomizer
       } 
     
     @override  
-    public onInit(): Promise<void> { 
+    public onInit(): Promise<void> {
 
       if(isLogged == "true"){
         sharepointTopNav = document.getElementById('spPageCanvasContent');
@@ -188,7 +193,8 @@ export default class AppApplicationCustomizer
       });        
     }
 
-    private _renderPlaceHolders(): void {  
+    private _renderPlaceHolders(): void {
+      
       // Handling the top placeholder  
       if (!this._topPlaceholder)   
       {  
@@ -217,8 +223,8 @@ export default class AppApplicationCustomizer
             // this._renderReportList('reports'); // display list name
             // this._renderCategoryList('Categorias e Menu'); // display list name
 
-            console.log('Inicializou o componente principal');            
-
+            console.log('Inicializou o componente principal');  
+            
             sleep(500).then(() => {  
               if(isLogged == "false"){
                 const elem: React.ReactElement<ILandingPageProps> = React.createElement(LandingPage,{});  
@@ -273,6 +279,10 @@ export function showCategory(category:string) {
   localStorage.setItem("selectedCategory", selectedCategory);
 
   if(location.href.match('category')){
+    window.location.replace(`${relativeSiteUrl}/#/categoria`);
+  }
+
+  if(location.href.match('report')){
     window.location.replace(`${relativeSiteUrl}/#/categoria`);
   }
 
@@ -375,10 +385,16 @@ public render(){
                           <span>Detalhes</span>
                         </Link>                      
                       </HashRouter>
-                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
+                      {/* <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
-                      </button>
+                      </button> */}
+                      <HashRouter>
+                        <Link onClick={() => showDashboard(item.reportPage, item.categoryLookupValue)} className="btnDetalhes" to={`/report`}>
+                          <div className="btnDetalhes-Icon">&nbsp;</div>
+                          <span>Go To Report</span>
+                        </Link>                      
+                      </HashRouter>
                   </div>
                 </div>
               </div>

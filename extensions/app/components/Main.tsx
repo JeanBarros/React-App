@@ -8,6 +8,7 @@ import Favoritos from './Favoritos';
 import Downloads from './Downloads';
 import Categoria from './Categoria';
 import Detalhes from './Detalhes';
+import Report from './Report';
 import DetalhesDocumento from './DetalhesDocumento';
 import {language, setLoggedIn, logOut, setLanguage, showCategory, relativeSiteUrl, currentUserInfo, webTitle, absoluteWebUrl, setCategory, selectedCategory } from '../AppApplicationCustomizer';
 import LandingPage from './LandingPage';
@@ -39,13 +40,20 @@ export default class Main extends React.Component<IMainProps> {
     // Use for development enviroment - Obtém os dados da lista de Categorias pelo display list name
     // this.getCategoryListItems('Categorias e Menu');
 
-     this.getReportListItems('reports'); // display list name;     
-
-    sleep(1000).then(() => {
-
+     this.getReportListItems('reports'); // display list name; 
+     
+     
+    sleep(5000).then(() => {
+      var topHeader = document.getElementById('O365_SearchBoxContainer_container');
       var header = document.createElement("DIV");
       header.innerHTML = `<div class='header'><div class='logoHeader'></div><div id='webTitle'>${webTitle}</div></div>`; 
-      document.getElementsByClassName('_71hjFgizWk0Cd55RzerwA')[0].appendChild(header);
+      
+      if(topHeader != null)
+        topHeader.firstElementChild.appendChild(header);      
+    });
+     
+
+    sleep(1000).then(() => {
 
       // Remove o menu padrão do Office 365 no canto superior esquerdo
       // A classe _2kc0c9nP-qti6fefMCFonk no arquivo app.css atualmente oculta este item;
@@ -53,32 +61,45 @@ export default class Main extends React.Component<IMainProps> {
       // var O365NavMenu = document.getElementById('O365_NavHeader');
       // O365NavMenu.children[0].remove();
       
+      // Menu superior nativo do SharePoint
+      if(!location.href.match('.aspx')){
+        var defaultMainHeader = document.getElementsByClassName('ms-Fabric')[0];
+        defaultMainHeader.children[1].classList.add("hideControl");
+      }
+
+      if(!location.href.match('Mode=Edit')){
+        // Área superior das páginas modernas - Título
+        let pageHeader = document.querySelector("[data-automation-id='pageHeader']");
+        if(pageHeader != null)
+          pageHeader.classList.add("hideControl");
+      }
+      
       // Cria um elemento
       const sideNavElements = <div><div className="sideNavLogo"></div><SideNav /></div>;
       
-      //Renderiza o dentro da tag SideNav
+      //Renderiza o elemento criado dentro da tag SideNav
       ReactDOM.render(sideNavElements, document.getElementById('sideNav')); 
       
       // Barra de ferramenta padrão de edição das páginas
       let pageCommandBar = document.getElementsByClassName("commandBarWrapper")[0];
       let topPlaceHolder = document.querySelector("[data-sp-placeholder='Top']");
             
-      // Menu superior nativo do SharePoint
-      let sharepointTopMenu = document.querySelector("[role='banner']");
-      let pageHeader = document.querySelector("[data-automation-id='pageHeader']");
-      
       if(!location.href.match('.aspx')){
-        pageCommandBar.classList.add("hiddenCommandBar");
-        sharepointTopMenu.classList.add("hiddenCommandBar");
-        topPlaceHolder.className = "topPlaceHolder-h100";        
+
+        // O menu personalizado fica invisível por padrão para que não seja exibido em páginas nativas
+        // sendo exibido apenas nos componentes customizados
+        let sideNav = document.getElementsByClassName('btnOpenNav')[0];
+        sideNav.classList.add('btnOpenNav-visble');
+
+        if(pageCommandBar != null)
+          pageCommandBar.classList.add("hideControl");
+        
+        if(topPlaceHolder != null)
+          topPlaceHolder.classList.add("topPlaceHolder-h100");        
       }
       else{
-        pageCommandBar.classList.remove("hiddenCommandBar");
-        sharepointTopMenu.classList.remove("hiddenCommandBar");
-
-        pageHeader.classList.add("hiddenCommandBar");
-          // if(!location.href.match('edit'))
-          //   topPlaceHolder.className = "hiddenTopPlaceHolder";
+        if(pageCommandBar != null)
+          pageCommandBar.classList.remove("hideControl");
       }
     });
   }
@@ -151,6 +172,7 @@ export default class Main extends React.Component<IMainProps> {
 
       let sharepointTopNav = document.getElementById('spPageCanvasContent');
       sharepointTopNav.classList.remove("initialContentOverlay");
+
     }, 1500);
 
     return (
@@ -203,6 +225,7 @@ export default class Main extends React.Component<IMainProps> {
               <Route path='/downloads' component={Downloads} />
               <Route path='/categoria' component={Categoria} />
               <Route path='/detalhes' component={Detalhes} />
+              <Route path='/report' component={Report} />
               <Route path='/detalhesDocumento' component={DetalhesDocumento} />                     
             </Switch> 
           </div> 

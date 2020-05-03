@@ -4,13 +4,17 @@ body, html {
     line-height: 1.5;
 }
 
-#O365_SearchBoxContainer{
-    display: none !important;
-}
-
 #O365_NavHeader, .o365sx-button{
     background-color: #27292D !important;
     color: #FFFFFF !important;
+}
+
+#O365_MainLink_TenantLogo, #O365_MainLink_NavMenu, #sbcId{
+    display: none !important;
+}
+
+.o365sx-appName{
+    display: none !important;
 }
 
 /* Oculta o menu padrão do Office 365 no canto superior esquerdo */
@@ -22,6 +26,11 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 
 /* Barra de comentários em páginas modernas (Social Media Tools) */
 [data-sp-feature-tag='Comments']{
+    display: none;
+}
+
+/* Área superior das páginas modernas - Título */
+[data-automation-id='pageHeader']{
     display: none;
 }
 
@@ -38,8 +47,12 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     background-color: #383a40;
 }
 
-.hiddenCommandBar{
+.hideControl{
     display: none !important;
+}
+
+.visibleControl{
+    display: block !important;
 }
 
 ._71hjFgizWk0Cd55RzerwA{
@@ -152,7 +165,8 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 /* Main */
 
 .header{
-    margin-left: 130px;
+    line-height: 23px;
+    padding-top: 12px;
 }
 
 .logoHeader{
@@ -486,6 +500,14 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 }
 
 /* Página dos relatórios */
+
+.reportDisplay{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    border: none;
+}
+
 .CanvasZone {
     max-width: 100% !important;
 }

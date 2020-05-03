@@ -39,7 +39,7 @@ export default class FloatNav extends React.Component{
         // Obtém os dados da lista de Categorias pelo interal name
         this.getCategoryListItems('Reports');
 
-        sleep(500).then(() => {
+        sleep(1000).then(() => {
             console.log("Lista dos itens do menu flutuante");
             console.log(categoryCollection);
 
@@ -91,8 +91,11 @@ export default class FloatNav extends React.Component{
         let sharepointTopMenu = document.querySelector("[role='banner']");
         let sharepointCanvasZone = document.getElementsByClassName('CanvasZone')[0];
         
-        setTimeout(() => sharepointTopMenu.classList.add("hiddenCommandBar"), 1000);
-        setTimeout(() => sharepointCanvasZone.classList.add('reportPage'), 3500);
+        if(sharepointTopMenu != null)
+            setTimeout(() => sharepointTopMenu.classList.add("hiddenCommandBar"), 1000);
+
+        if(sharepointCanvasZone != null)
+            setTimeout(() => sharepointCanvasZone.classList.add('reportPage'), 3500);
 
         return(
             <div className="floatMenuContainer">
