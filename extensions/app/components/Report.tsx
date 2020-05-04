@@ -15,7 +15,7 @@ export default class Report extends React.Component<IReportProps> {
 
     return (
       <div>        
-        <iframe id="reports" className="reportDisplay" src="https://cbmmbr.sharepoint.com/sites/bienterprise/SitePages/Vendas%20FeNB%20(T).aspx?category=Teste%201"></iframe>
+        <iframe id="reports" className="reportDisplay" src={reportPageUrl}></iframe>
       </div>      
     );
   } 

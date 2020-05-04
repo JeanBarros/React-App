@@ -8,7 +8,7 @@ import {
   PlaceholderName
 } from '@microsoft/sp-application-base';
 
-import Main, { IMainProps, addFavoriteItem, uptadeFavoriteItem, getFavoriteItemsByCategory } from './Components/Main';
+import Main, { IMainProps, addFavoriteItem, uptadeFavoriteItem, getFavoriteItemsByCategory, checkUsersPermission } from './Components/Main';
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 import { BrowserRouter as Router, Link, HashRouter } from 'react-router-dom';
 import LandingPage, { ILandingPageProps } from './Components/LandingPage';
@@ -159,7 +159,11 @@ export default class AppApplicationCustomizer
 
         var loadScreen = document.createElement("div");
         loadScreen.setAttribute('id','loadScreen');
-        loadScreen.innerHTML = "Por favor, aguarde...";
+
+        if(language == "pt")
+          loadScreen.innerHTML = "Por favor, aguarde...";
+        else
+          loadScreen.innerHTML = "Please, wait...";
       
         document.getElementById("spPageCanvasContent").appendChild(loadScreen);
       }      
@@ -349,7 +353,7 @@ public render(){
         item.categoryLookupValue != null ?
           selectedCategory == item.categoryLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div id={item.Id} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
+              <div id={item.Id} data-favorite-checked="false" data-report-category={item.categoryLookupValue} className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -383,18 +387,16 @@ public render(){
                         <Link onClick={() => getDetails(item.Title, item.Id)} className="btnDetalhes" to={`/detalhes`}>
                           <div className="btnDetalhes-Icon">&nbsp;</div>
                           <span>Detalhes</span>
-                        </Link>                      
+                        </Link>
+                        <Link onClick={() => showDashboard(item.reportPage, item.categoryLookupValue)} className="btnDashboard" to={`/report`}>
+                          <div className="btnDashboard-Icon">&nbsp;</div>
+                          <span>Dashboard</span>
+                        </Link>                     
                       </HashRouter>
                       {/* <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
                       </button> */}
-                      <HashRouter>
-                        <Link onClick={() => showDashboard(item.reportPage, item.categoryLookupValue)} className="btnDetalhes" to={`/report`}>
-                          <div className="btnDetalhes-Icon">&nbsp;</div>
-                          <span>Go To Report</span>
-                        </Link>                      
-                      </HashRouter>
                   </div>
                 </div>
               </div>
@@ -407,7 +409,7 @@ public render(){
         item.categoryENLookupValue != null ?
           selectedCategory == item.categoryENLookupValue ?
             <div className="ms-Grid-col ms-sm12 ms-md4 block">
-              <div id={item.Id} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
+              <div id={item.Id} data-favorite-checked="false" data-report-category={item.categoryENLookupValue} className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
                 <div className="tileBoxOverlay">
                   <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -441,12 +443,16 @@ public render(){
                         <Link onClick={() => getDetails(item.reportTitleEN, item.Id)} className="btnDetalhes" to={`/detalhes`}>
                           <div className="btnDetalhes-Icon">&nbsp;</div>
                           <span>Details</span>
+                        </Link>
+                        <Link onClick={() => showDashboard(item.reportPage, item.categoryENLookupValue)} className="btnDashboard" to={`/report`}>
+                          <div className="btnDashboard-Icon">&nbsp;</div>
+                          <span>Dashboard</span>
                         </Link>                      
                       </HashRouter>
-                      <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
+                      {/* <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
-                      </button>
+                      </button> */}
                   </div>
                 </div>
               </div>
@@ -539,10 +545,16 @@ export class ReportDetails extends React.Component{
                       </div>
                     </div>
                     <div className="reportDetailsToolBar">              
-                      <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
+                      {/* <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
-                      </button>
+                      </button> */}
+                      <HashRouter>
+                        <Link onClick={() => showDashboard(item.reportPage, item.categoryLookupValue)} className="btnDashboard-Large" to={`/report`}>
+                          <div className="btnDashboard-Icon">&nbsp;</div>
+                          <span>Dashboard</span>
+                        </Link>                     
+                      </HashRouter>
                       <p>
                         <button className="btnAddFavorites" onClick={() => addFavoriteItem(item.Title, currentUserInfo.userLoginName, tileBoxId)}>
                           Adicionar aos Favoritos
@@ -595,10 +607,16 @@ export class ReportDetails extends React.Component{
                       </div>
                     </div>
                     <div className="reportDetailsToolBar">              
-                      <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
+                      {/* <button className="btnDashboard-Large" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
                         <div className="btnDashboard-Icon">&nbsp;</div>
                         <span>Dashboard</span>
-                      </button>
+                      </button> */}
+                      <HashRouter>
+                        <Link onClick={() => showDashboard(item.reportPage, item.categoryENLookupValue)} className="btnDashboard-Large" to={`/report`}>
+                          <div className="btnDashboard-Icon">&nbsp;</div>
+                          <span>Dashboard</span>
+                        </Link>                     
+                      </HashRouter>
                       <p>
                         <button className="btnAddFavorites" onClick={() => addFavoriteItem(item.reportTitleEN, currentUserInfo.userLoginName, tileBoxId)}>
                           Add to Favorites
@@ -630,8 +648,8 @@ export class FavoriteListItens extends React.Component{
   const reports = reportListItens.map((item) =>    
     <section key={item.Id}>        
       {language == "pt" ?        
-        <div className="ms-Grid-col ms-sm12 ms-md4 block">
-            <div id={item.Id} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
+        <div className="ms-Grid-col ms-sm12 ms-md4 block">            
+              <div id={item.Id} data-favorite-checked="false" data-report-category={item.categoryLookupValue} className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
               <div className="tileBoxOverlay">
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -663,19 +681,23 @@ export class FavoriteListItens extends React.Component{
                       <Link onClick={() => getDetails(item.Title, parseInt(document.getElementById(item.Id).getAttribute('data-tileBox-id')))} className="btnDetalhes" to={`/detalhes`}>
                         <div className="btnDetalhes-Icon">&nbsp;</div>
                         <span>Detalhes</span>
-                      </Link>                      
+                      </Link>
+                      <Link onClick={() => showDashboard(item.reportPage, item.categoryLookupValue)} className="btnDashboard" to={`/report`}>
+                        <div className="btnDashboard-Icon">&nbsp;</div>
+                        <span>Dashboard</span>
+                      </Link>                     
                     </HashRouter>
-                    <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
+                    {/* <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryLookupValue)}>
                       <div className="btnDashboard-Icon">&nbsp;</div>
                       <span>Dashboard</span>
-                    </button>
+                    </button> */}
                 </div>
               </div>
-            </div>
+            </div>            
           </div>
       :
-        <div className="ms-Grid-col ms-sm12 ms-md4 block">
-          <div id={item.Id} data-favorite-checked="false" className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
+        <div className="ms-Grid-col ms-sm12 ms-md4 block">          
+            <div id={item.Id} data-favorite-checked="false" data-report-category={item.categoryENLookupValue} className="tileBox" style = {{background: `url(${item.reportBackground}) no-repeat center center`, backgroundSize: "cover"}}>
             <div className="tileBoxOverlay">
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm8 ms-md8">
@@ -707,15 +729,19 @@ export class FavoriteListItens extends React.Component{
                     <Link onClick={() => getDetails(item.reportTitleEN, item.Id)} className="btnDetalhes" to={`/detalhes`}>
                       <div className="btnDetalhes-Icon">&nbsp;</div>
                       <span>Details</span>
+                    </Link>
+                    <Link onClick={() => showDashboard(item.reportPage, item.categoryENLookupValue)} className="btnDashboard" to={`/report`}>
+                      <div className="btnDashboard-Icon">&nbsp;</div>
+                      <span>Dashboard</span>
                     </Link>                      
                   </HashRouter>
-                  <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
+                  {/* <button className="btnDashboard" onClick={() => getDashboard(item.reportPage, item.categoryENLookupValue)}>
                     <div className="btnDashboard-Icon">&nbsp;</div>
                     <span>Dashboard</span>
-                  </button>
+                  </button> */}
               </div>
             </div>
-          </div>
+          </div>          
         </div>
       }
                   
@@ -751,7 +777,7 @@ export class FavoriteCategoryListItens extends React.Component{
             <div id="categoryName">
               <h1>{item.titleEN}</h1>
               <p>{item.descriptionEN}</p>
-              <div id="favoriteItensMessage">You don't have any favorite items yet</div>
+              <div id="favoriteItensMessage">You don't have any favorite items yet</div>              
             </div>            
           </div>
         : 

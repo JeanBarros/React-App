@@ -29,7 +29,7 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
     display: none;
 }
 
-/* Área superior das páginas modernas - Título */
+/* Área superior das páginas modernas - Page Title (Título) */
 [data-automation-id='pageHeader']{
     display: none;
 }
@@ -40,6 +40,11 @@ Utilizar aquele trecho caso o nome dessa classe seja alterado*/
 
 .hiddenTopPlaceHolder{
     display: none !important;
+}
+
+.sp-SiteHub-innerContent, .sp-App-body, [role='gridcell'], [role='rowheader'], [role='banner'], 
+[role='row'], [data-automationid='main-app-content']{
+    background-color: #fff !important;
 }
 
 .topPlaceHolder-h100{

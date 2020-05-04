@@ -5,16 +5,6 @@ import { getFavoriteItems, showOnlyFavorites } from './Main';
 
 export interface IFavoritosProps {}
 
-// function showOnlyFavorites(){
-//   let reportTileBox = document.getElementsByClassName('tileBox');
-  
-//   for(let i = 0; i < reportTileBox.length; i++){
-//     if(reportTileBox[i].getAttribute('data-favorite-checked') == "false"){
-//       reportTileBox[i].parentElement.classList.add('hiddenReportTileBox');
-//     }
-//   }
-// }
-
 // Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
 function sleep (time) {      
   return new Promise((resolve) => setTimeout(resolve, time));

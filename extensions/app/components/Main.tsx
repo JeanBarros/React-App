@@ -22,6 +22,7 @@ let usersCollection;
 let reportTileBox;
 let btnUpdateFavorite;
 let btnAddFavorite;
+let favoriteItensMessage;
 
 // Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
 export function sleep (time) {      
@@ -62,18 +63,12 @@ export default class Main extends React.Component<IMainProps> {
       // O365NavMenu.children[0].remove();
       
       // Menu superior nativo do SharePoint
-      if(!location.href.match('.aspx')){
-        var defaultMainHeader = document.getElementsByClassName('ms-Fabric')[0];
-        defaultMainHeader.children[1].classList.add("hideControl");
-      }
+      var defaultMainHeader = document.getElementsByClassName('ms-Fabric')[0];
 
-      if(!location.href.match('Mode=Edit')){
-        // Área superior das páginas modernas - Título
-        let pageHeader = document.querySelector("[data-automation-id='pageHeader']");
-        if(pageHeader != null)
-          pageHeader.classList.add("hideControl");
-      }
-      
+      if(!location.href.match('.aspx')){
+        defaultMainHeader.children[1].classList.add("hideControl");
+      }      
+
       // Cria um elemento
       const sideNavElements = <div><div className="sideNavLogo"></div><SideNav /></div>;
       
@@ -83,6 +78,14 @@ export default class Main extends React.Component<IMainProps> {
       // Barra de ferramenta padrão de edição das páginas
       let pageCommandBar = document.getElementsByClassName("commandBarWrapper")[0];
       let topPlaceHolder = document.querySelector("[data-sp-placeholder='Top']");
+
+      /* Título na área superior (cabeçalho) das páginas modernas - Page Title */        
+      let pageHeader = document.querySelector("[data-automation-id='pageHeader']");
+
+      if(!location.href.match('category')){
+        if(pageHeader != null)
+          pageHeader.classList.add("visibleControl");
+      }        
             
       if(!location.href.match('.aspx')){
 
@@ -93,13 +96,17 @@ export default class Main extends React.Component<IMainProps> {
 
         if(pageCommandBar != null)
           pageCommandBar.classList.add("hideControl");
-        
+
         if(topPlaceHolder != null)
           topPlaceHolder.classList.add("topPlaceHolder-h100");        
       }
       else{
         if(pageCommandBar != null)
           pageCommandBar.classList.remove("hideControl");
+
+        var customContent = document.getElementById('customContent');
+        if(customContent != null)
+          customContent.style.display="none";        
       }
     });
   }
@@ -200,10 +207,10 @@ export default class Main extends React.Component<IMainProps> {
                 <div>
                   {/* obtém a categria que foi clicada no menu lateral e armazenada localmente e então envia o resultado obtido
                   como argumento do método SetCategory para a variável selectedCategory */}
-                  {setCategory(localStorage.getItem("selectedCategory"))}
+                  {/* {setCategory(localStorage.getItem("selectedCategory"))} */}
 
                   {/* Após a variável ser atualizada, redireciona para o componente adequado */}
-                  {selectedCategory == "Downloads" ?
+                  {/* {selectedCategory == "Downloads" ?
                     <Redirect exact from="/#" to="downloads" />
                   :
                     selectedCategory == "Favoritos" ?
@@ -213,7 +220,7 @@ export default class Main extends React.Component<IMainProps> {
                         <Redirect exact from="/#" to="favoritos" />
                     :
                       <Redirect exact from="/#" to="categoria" />
-                  }
+                  } */}
                 </div>
             :
               null              
@@ -307,7 +314,7 @@ export function getFavoriteItems() {
       // Obtém os relatórios visíveis na tela
       reportTileBox = document.getElementsByClassName('tileBox');
 
-      let favoriteItensMessage = document.getElementById('favoriteItensMessage');
+      favoriteItensMessage = document.getElementById('favoriteItensMessage');
 
       favoriteItemsCollection.forEach(checkFavoriteItems);
 
@@ -386,7 +393,7 @@ export function uptadeFavoriteItem(reportTitle, userlogin, tileBoxId) {
   let reportTileBoxCollection = document.getElementsByClassName('tileBox');
 
   // Exibe mensagem para o usuário
-  let favoriteItensMessage = document.getElementById('favoriteItensMessage');
+  favoriteItensMessage = document.getElementById('favoriteItensMessage');
   
   // Obtém o tile (box dos relatórios) da página de acordo com o ID fornecido
   reportTileBox = document.getElementById(tileBoxId);
@@ -492,23 +499,37 @@ function getListItems(listName, siteurl, success, failure) {
 
 export function showOnlyFavorites(){
   reportTileBox = document.getElementsByClassName('tileBox');
-  
+
+  let reportCategoryName;
+
   for(let i = 0; i <= reportTileBox.length; i++){
+
     if(reportTileBox.length == 1){
-      if(reportTileBox[0].getAttribute('data-favorite-checked') == "false"){
-        //reportTileBox[i].parentElement.classList.add('hiddenReportTileBox');
-        reportTileBox[0].parentElement.remove();
+      reportCategoryName = reportTileBox[0].getAttribute('data-report-category');
+
+      if(checkUsersPermission(reportCategoryName.trim()) == true){
+        if(reportTileBox[0].getAttribute('data-favorite-checked') == "false"){
+          reportTileBox[0].parentElement.remove();
+        }
       }
+      else
+        reportTileBox[0].parentElement.remove();
     }
     else{
-      if(reportTileBox[i].getAttribute('data-favorite-checked') == "false"){
-        reportTileBox[i].parentElement.remove();
+      reportCategoryName = reportTileBox[i].getAttribute('data-report-category');
+
+      if(checkUsersPermission(reportCategoryName.trim()) == true){
+        if(reportTileBox[i].getAttribute('data-favorite-checked') == "false"){
+          reportTileBox[i].parentElement.remove();
+        }
       }
-    }    
-  }
+      else
+        reportTileBox[i].parentElement.remove();
+    }        
+  }   
 }
 
-function checkUsersPermission(itemTitle) {
+export function checkUsersPermission(categoryName) {
   let reportCategory; 
   
   // Itera pela lista Reports
@@ -525,13 +546,13 @@ function checkUsersPermission(itemTitle) {
       }
   
       // Verifica se há algum relatório na lista, relacionado à categoria informada no parâmetro da função
-      if(reportCategory == itemTitle){
+      if(reportCategory == categoryName){
         if(reportCollection[i].usersList != null){
           usersCollection = reportCollection[i].usersList.split(';');
   
           for (let j=0; j < usersCollection.length; j++){
             if(currentUserInfo.userLoginName == usersCollection[j].trim() || currentUserInfo.userLoginName == usersCollection[j].trim()){
-              console.log('Usuário autorizado no item: ' + itemTitle);
+              console.log('Usuário autorizado no item: ' + categoryName);
               return true;           
             }
           }
