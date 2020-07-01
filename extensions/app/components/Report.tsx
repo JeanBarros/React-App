@@ -1,28 +1,22 @@
 import * as React from 'react';
-import Report from 'powerbi-report-component';
+import { checkFavoriteItens, FavoriteListItens, FavoriteCategoryListItens, language, setCategory, selectedCategory, reportPageUrl } from '../AppApplicationCustomizer';
+import * as ReactDOM from 'react-dom';
 
-export interface IReportProps {}   
+export interface IReportProps {}
 
-export default class Report extends React.Component<any> {  
-  constructor(props) {
+export default class Report extends React.Component<IReportProps> {
+  constructor(props: IReportProps) {  
     super(props);
 
-    var categoryDescription = document.createElement("DIV");
-    categoryDescription.innerHTML = `<div id='categoryDescription' class='categoryDescription'> 
-    <iframe id="report" src="/sites/Lab02/SitePages/Report.aspx" class="reportContainer"></iframe>     
-    </div>`;
-    
-    document.getElementsByClassName('ms-SPLegacyFabricBlock')[0].appendChild(categoryDescription); 
+    setCategory(selectedCategory);    
   }
-  
-  public render() {     
+
+  public render() {
+
     return (
-      <div className="reportPage">
-        <div className="ms-Grid-row w3-container">            
-          <div className="ms-Grid-col ms-sm12 ms-md12 block"> 
-          </div>
-        </div>
-      </div>
+      <div>        
+        <iframe id="reports" className="reportDisplay" src={reportPageUrl}></iframe>
+      </div>      
     );
   } 
 }

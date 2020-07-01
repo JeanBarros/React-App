@@ -1,66 +1,44 @@
 import * as React from 'react';
-import { ReportListItens } from '../AppApplicationCustomizer';
+import { checkFavoriteItens, FavoriteListItens, FavoriteCategoryListItens, language, setCategory, selectedCategory } from '../AppApplicationCustomizer';
+import * as ReactDOM from 'react-dom';
+import { getFavoriteItems, showOnlyFavorites } from './Main';
 
-export interface IFavoritosProps {}  
+export interface IFavoritosProps {}
+
+// Aguarda para garantir que elementos padrão do SharePoint sejam renderizados primeiro
+function sleep (time) {      
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 export default class Favoritos extends React.Component<IFavoritosProps> {
   constructor(props: IFavoritosProps) {  
     super(props);
+
+    setCategory(selectedCategory);
+
+    sleep(1000).then(() => {
+
+      // Cria os elementos
+      const favoriteReportsDescription = <FavoriteCategoryListItens />;
+      const favoriteReports = <FavoriteListItens />;      
+      
+      //Renderiza os elementos criados dentro das tags
+      ReactDOM.render(favoriteReportsDescription, document.getElementById('CategoryListItens'));
+      ReactDOM.render(favoriteReports, document.getElementById('ReportListItens'));      
+
+      getFavoriteItems();      
+      
+    });
   }
 
   public render() {
-    return (      
-      <div>        
-        <div>
-          <div className="ms-Grid-row w3-container">
-            <div className="ms-Grid-col ms-md1 block"></div> 
-            <div className="ms-Grid-col ms-sm12 ms-md10 block pageDescription">
-              <h1>Favoritos</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices dapibus egestas. 
-                Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
-                Vivamus efficitur urna vel velit porttitor tempus. Aliquam arcu orci, laoreet a tortor in, 
-                sollicitudin blandit ex. Ut dapibus dui vel nulla efficitur, posuere venenatis leo volutpat. 
-                Mauris vel interdum felis. Duis iaculis blandit lacus eget pellentesque.</p>
-            </div> 
-            <div className="ms-Grid-col ms-md1 block"></div>
-          </div>
-          <div className="ms-Grid-row w3-container">
-            <div className="ms-Grid-col ms-sm6 ms-md6 block favoriteFilters">
-              Filtrar por:
-              <select name="Categoria">
-                <option value="Categoria">Categoria</option>
-                <option value="todasCategorias">Todas as categorias</option>
-                <option value="comercial">Comercial</option>
-                <option value="controladoria">Controladoria</option>
-                <option value="manutencao">Manutenção</option>
-                <option value="mina">Mina</option>
-                <option value="pcp">PCP</option>
-                <option value="rh">RH</option>
-                <option value="subsidiarias">Subsidiárias</option>
-              </select>
-              <select name="Tipo">
-                <option value="todosTipos">Todos os tipos</option>
-                <option value="Dashboard">Dashboard</option>
-                <option value="arquivo">Arquivo</option>
-              </select>
-            </div>            
-            <div className="ms-Grid-col ms-sm6 ms-md6 block favoriteFilters">
-              <div className="filterOrder">
-                Ordenar por:
-                <select name="Order">
-                  <option value="maisRecente">Mais recente</option>
-                  <option value="maisAntigo">Mais antigo</option>
-                  <option value="az">Ordem A > Z</option>
-                  <option value="za">Ordem Z > A</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="ms-Grid-row w3-container spaceBotton">
-              <ReportListItens></ReportListItens>
-          </div>
-          </div>        
-        </div>
+    return (
+      <div id="customContent" className="ms-Grid-row w3-container content">
+        <div className="ms-Grid-col ms-md1 block"></div> 
+        <div id="CategoryListItens"></div> 
+        <div className="ms-Grid-col ms-md1 block"></div> 
+        <div id="ReportListItens"></div>
+      </div>
     );
   } 
 }
