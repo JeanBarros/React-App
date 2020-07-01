@@ -4,14 +4,123 @@ body, html {
     line-height: 1.5;
 }
 
+#O365_NavHeader, .o365sx-button{
+    background-color: #27292D !important;
+    color: #FFFFFF !important;
+}
+
+#O365_MainLink_TenantLogo, #O365_MainLink_NavMenu, #sbcId{
+    display: none !important;
+}
+
+.o365sx-appName{
+    display: none !important;
+}
+
+/* Oculta o menu padrão do Office 365 no canto superior esquerdo */
+/* Observar trecho comentado na linha 45 do arquivo Main.tsx
+Utilizar aquele trecho caso o nome dessa classe seja alterado*/
+._2kc0c9nP-qti6fefMCFonk{
+    display: none !important;
+}
+
+/* Barra de comentários em páginas modernas (Social Media Tools) */
+[data-sp-feature-tag='Comments']{
+    display: none;
+}
+
+/* Área superior das páginas modernas - Page Title (Título) */
+[data-automation-id='pageHeader']{
+    display: none;
+}
+
+.ms-searchux-searchbox{
+    display: none;
+}
+
+.hiddenTopPlaceHolder{
+    display: none !important;
+}
+
+/* .sp-SiteHub-innerContent, .sp-App-body, [role='gridcell'], [role='rowheader'], [role='banner'], 
+[role='row'], [data-automationid='main-app-content']{
+    background-color: #fff !important;
+} */
+
+.topPlaceHolder-h100{
+    height: 100%;
+    background-color: #383a40;
+}
+
+.hideControl{
+    display: none !important;
+}
+
+.visibleControl{
+    display: block !important;
+}
+
 ._71hjFgizWk0Cd55RzerwA{
     text-align: center;
     color: #fff;
     font-size: 16px;
 }
 
-.searchCell-176{
+.initialContentOverlay{
+    height: 100%;
+    width: 100%;
+    font-size: 1.75rem;
+    background-color: #383a40;
+    color: #fff;
+    position: fixed;
+    z-index: 5;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.floatMenuContainer{
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    z-index: 1;
+}
+
+.floatListMenu ul{
+    list-style-type: none;
+    text-align: right;
+    padding: 0;   
+}
+
+.floatListMenu a{
+    background-color: #EAEAEA;
+    border-radius: 6px;
+    color: #27292D;
+    text-decoration: none;
+    font-size: 1.3rem;
+    line-height: 3;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 3px 3px 5px #8a8a8ac4;
+}
+
+.floatMenuLinks-hidden{
     display: none;
+}
+
+.floatMenuLinks-visible{
+    display: inline-flexbox;
+}
+
+.floatButton{
+    width: 85px;
+    height: 90px;
+    float: right;
+    background: url("/sites/bienterprise/SiteAssets/images/icons/btnFlutuante.png") no-repeat center center;
+    outline: none;
+    border: none;
+    cursor: pointer;
 }
 
 /* Classes React*/
@@ -30,7 +139,7 @@ body, html {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url("/sites/Lab02/SiteAssets/images/capa.png") no-repeat;
+    background: url("/sites/bienterprise/SiteAssets/images/capa.jpg") no-repeat;
     background-size: cover;
     z-index: 5;
 }
@@ -43,36 +152,15 @@ body, html {
     font-size: 1.65rem;
 }
 
-#overlay .content{
+#overlay .landingPage-content{
     padding: 33.3% 5%;
-}
-
-.btnLogin{
-    width: 181px;
-    height: 38px;
-    font-size: 1rem;
-    margin-top: 30px;
-    border-radius: 6px;
-    background-color: #8AA4AD;    
-    cursor: pointer;
-    position: relative;
-    z-index: 5;
-}
-
-.btnLogin div{
-    display: inline-flex;
-    align-items: center;
-}
-
-.btnLogin i{
-    font-size: 22px;
-    margin-right: 10px;
+    color: #FFFFFF;
 }
 
 .logoLandingPage{
     width: 273px;
     height: 51px;
-    background: url("/sites/Lab02/SiteAssets/images/LogoLandingPage.png") no-repeat;
+    background: url("/sites/bienterprise/SiteAssets/images/LogoLandingPage.png") no-repeat;
     margin-bottom: 30px;
     display: inline-block;
 }
@@ -82,13 +170,14 @@ body, html {
 /* Main */
 
 .header{
-    margin-left: 130px;
+    line-height: 23px;
+    padding-top: 12px;
 }
 
 .logoHeader{
     width: 136px;
     height: 22px;
-    background: url("/sites/Lab02/SiteAssets/images/Logo_CBMM-03.png") no-repeat;    
+    background: url("/sites/bienterprise/SiteAssets/images/Logo_CBMM-03.png") no-repeat;    
     display: inline-block;
 }
 
@@ -97,14 +186,6 @@ body, html {
     padding-left: 15px;
     font-size: 1.5625em;
     border-left: solid 2px white;
-}
-
-.root-139{
-    display: none !important;
-}
-
-.commandBarWrapper .ms-CommandBar {
-    display: none !important;
 }
 
 [data-sp-feature-tag="Site header host"] {
@@ -166,32 +247,15 @@ body, html {
     bottom: -10px;
 }
 
-input {
-    display: none;
-}
-
-input:checked ~ label .hamburguer {
-    transform: rotate(45deg);
-}
-
-input:checked ~ label .hamburguer:before {
-    transform: rotate(90deg);
-    top: 0;
-}
-
-input:checked ~ label .hamburguer:after {
-    transform: rotate(90deg);
-    bottom: 0;
-}
-
 .pageDescription{
     text-align: center;
-    padding-top: 80px;
-    padding-bottom: 30px;
+    padding-top: 100px;
+    padding-bottom: 70px;
     color: #868686;
 }
 
 .pageDescription h1{
+    font-size: 2em;
     color: #d8d8d8;
     font-weight: 400;
 }
@@ -199,18 +263,34 @@ input:checked ~ label .hamburguer:after {
 .tileBox{
     width: 100%;
     height: 182px;
+    color: #fff;
     margin-bottom: 20px;
-    font-size: 1.2rem;
-    background: #2E2E2E url("/sites/Lab02/SiteAssets/images/bgTitle.png") no-repeat;
+    font-size: 0.875rem;
     background-size: cover;
     border-radius: 6px;
     overflow: hidden;
 }
 
+.hiddenReportTileBox, .hiddenFavoriteItensMessage{
+    display: none;
+}
+
+.visibleReportTileBox{
+    display: block;
+}
+
+.hiddenButton{
+    display: none !important;
+}
+
+.visibleButton{
+    display: inline-flex !important;
+}
+
 .tileBoxOverlay{
     width: 100%;
     height: 100%;
-    background-color: #030303c2;
+    /* background-color: #030303c2; */
 }
 
 .tileBoxToolBar{
@@ -226,21 +306,13 @@ input:checked ~ label .hamburguer:after {
     color: #6F848B;
 }
 
-.categoryDescription{
-    border: solid 1px red;
-    width: 100% !important;
-    display: block;
-    position: absolute;
-    text-align: center;
-}
-
-.reportCategoryDescription{
+.reportTitle, .documentTitle{
     font-size: 1.43rem;
     padding-top: 15px;
 }
 
 .reportCategoryIcon{
-    width: 56px;
+    width: 62px;
     height: 56px;
     margin-top: 20px;
     margin-left: 5px;
@@ -248,20 +320,95 @@ input:checked ~ label .hamburguer:after {
     background-position: center center !important;
 }
 
-.reportCategoryInfo{
+.downloadModal{
+    width: 100%;
+    height: 100%;
+    background-color: #ADADAD;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    z-index: 99999;
+}
+
+.downloadCenterBox{
+    width: 519px;
+    height: 371px;
+    margin: 10px;
+    padding: 5px;
+    background: #FCFCFC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.downloadCenterBox-content{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background: url(/sites/bienterprise/SiteAssets/images/icons/downloadCheck.png) no-repeat center 50px;
+    margin: 10px;
+    padding: 5px;
+}
+
+.downloadCenterBox-content h1{
+    font-size: 1.5rem;
+    color: #707070;
+    margin-top: 170px;
+}
+
+.downloadCenterBox-content a{
+    color: #707070;
+}
+
+.reportCategoryInfo, .downloadInfo{
     text-align: right;
     float: right;
+    margin: 16px 10px 0 0;
 }
 
-.reportCategoryInfo .ms-Icon{
-    font-size: 1.5rem;    
+.downloadInfo{
+    margin: 22px 10px 33px 0;
 }
 
-.reportCategoryType span{
+.iconType{
+    background: url(/sites/bienterprise/SiteAssets/images/icons/dashboard.png) left center no-repeat;
+}
+
+.downloadIconType{
+    background: url(/sites/bienterprise/SiteAssets/images/icons/file.png) left center no-repeat;
+}
+
+.iconType span, .downloadIconType span{
+    margin-left: 34px !important;
+}
+
+.btnFavorite, .btnUpdateFavorite{
+    width: 27px;
+    height: 26px;
+    margin-bottom: 8px;
+    display: inline-flex;
+    border: none;
+    cursor: pointer;
+    outline: 0;
+}
+
+.btnFavorite-icon-outline{
+    background: url(/sites/bienterprise/SiteAssets/images/icons/favStarOutline.png) left center no-repeat;
+}
+
+.btnFavorite-icon-filled{
+    background: url(/sites/bienterprise/SiteAssets/images/icons/favStarFill.png) left center no-repeat;
+}
+
+.reportCategoryType span, .downloadType{
     margin-left: 10px;
 }
 
-.btnDetalhes, .btnDashboard{
+.btnDetalhes, .btnDashboard, .btnLogin{
     margin-right: 15px;
     background-color: transparent;
     border: solid 1px #fff;
@@ -270,9 +417,50 @@ input:checked ~ label .hamburguer:after {
     outline: 0;
 }
 
+.btnLogin{
+    width: 181px;
+    height: 38px;
+    font-size: 1rem;
+    color: #E4EAEF;
+    margin-top: 30px;
+    border-radius: 6px;
+    background-color: #8AA4AD;    
+    cursor: pointer;
+    outline: none;
+    border: solid 1px #8aa4ad;
+}
+
 .btnDashboard{
     background-color: #6F848B;
     border: none;
+}
+
+.btnLogin span{
+    margin-left: 15px;
+}
+
+.btnDetalhes span, .btnDashboard span, .btnAddFavorites span, .btnDashboard-Large span{
+    margin-left: 5px;
+}
+
+.btnLogin-Icon, .btnDetalhes-Icon, .btnDashboard-Icon, .btnDownload-Icon{
+    width: 21px;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/info.png') no-repeat center;
+    display: inherit;
+}
+
+.btnDashboard-Icon{
+    background: url('/sites/bienterprise/SiteAssets/images/icons/rightArrow.png') no-repeat center;
+}
+
+.btnDownload-Icon{
+    width: 24px;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/download.png') no-repeat center;
+}
+
+.btnLogin-Icon{
+    height: 24px;
+    background: url('/sites/bienterprise/SiteAssets/images/icons/login.png') no-repeat center;
 }
 
 .btnVoltar{
@@ -283,7 +471,7 @@ input:checked ~ label .hamburguer:after {
     text-decoration: none;
 }
 
-.tileBoxToolBar a{
+.tileBoxToolBar a, .btnDashboard{
     width: 120px;
     height: 32px;
     color: #fff;
@@ -294,20 +482,8 @@ input:checked ~ label .hamburguer:after {
     text-decoration: none;
 }
 
-.favoriteFilters{
-    margin-bottom: 30px;
-}
-
-.favoriteFilters select{
-    width: 144px;
-    height: 30px;
-    border-radius: 3px;
-    margin-left: 15px;
-    outline: 0;
-}
-
-.filterOrder{
-    float: right;
+.detalhes{
+    color: #fff;
 }
 
 .detalhes h1{
@@ -323,8 +499,22 @@ input:checked ~ label .hamburguer:after {
     font-weight: 600;
 }
 
-.spaceBotton, .reportPage{
+.content, .reportPage{
     padding-bottom: 50px !important;
+    color: #fff;
+}
+
+/* Página dos relatórios */
+
+.reportDisplay{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    border: none;
+}
+
+.CanvasZone {
+    max-width: 100% !important;
 }
 
 .reportPage{
@@ -332,16 +522,8 @@ input:checked ~ label .hamburguer:after {
     text-align: center;
 }
 
-.CanvasZoneContainer{
-    background-color: yellow !important;
-}
-
-.CanvasZone.CanvasZone--read {
-    padding: 0 !important;
-}
-
-.CanvasZone{
-    background-color: blueviolet !important;
+.CanvasZoneContainer {
+    background-color: transparent;
 }
 
 .reportContainer{
@@ -350,6 +532,11 @@ input:checked ~ label .hamburguer:after {
     position: relative;
     z-index: 1;
     overflow: hidden;
+}
+
+.reportDetailsContent{
+    height: 100%;
+    background-color: #383a40;
 }
 
 .reportDetailRightBox{
@@ -361,7 +548,6 @@ input:checked ~ label .hamburguer:after {
     height: 180px;
     font-size: 1.2rem;
     text-align: center;
-    background: #2E2E2E url(/sites/Lab02/SiteAssets/images/bgTitle.png) no-repeat;
     background-size: cover;
     border-radius: 6px;
     overflow: hidden;
@@ -380,7 +566,7 @@ input:checked ~ label .hamburguer:after {
     padding-top: 15px;
 }
 
-.reportDetailsToolBar a {
+.reportDetailsToolBar a, .btnAddFavorites, .btnDashboard-Large {
     width: 190px;
     height: 32px;
     display: inline-block;
@@ -405,8 +591,42 @@ input:checked ~ label .hamburguer:after {
     border: none;
 }
 
+.btnTranslatePT, .btnTranslateEN, .btnTranslatePT-small, .btnTranslateEN-small{
+    width: 42px;
+    height: 42px;
+    margin-top: 36px;
+    background: url(/sites/bienterprise/SiteAssets/images/BR-flag-round.png) center center no-repeat;
+    background-size: 100% !important;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.btnTranslateEN, .btnTranslateEN-small{    
+    background: url(/sites/bienterprise/SiteAssets/images/USA-flag-round.png) center center no-repeat;
+    margin-left: 16px;
+}
+
+.btnTranslatePT-small, .btnTranslateEN-small{
+    width: 36px;
+    height: 36px;
+    margin-top: 0;
+}
+
+.btnTranslateContainer-small{
+    float: right;
+    position: relative;
+    top: -42px;
+    margin-right: 15px;
+}
+
 /* On screens that are 992px or less */
 @media screen and (max-width: 992px) {
+
+    .topPlaceHolder-h100{
+        height: auto !important;
+    }
+    
     .w3-container, .w3-panel {
         padding: .01em 16px !important;
     }

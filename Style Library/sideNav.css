@@ -82,7 +82,12 @@
     display: block !important;
 }
 
+.sideNav a{
+    color: #ffffff;
+}
+
 .sideNavBottom{
+    color: #ffffff;
     padding-bottom: 60px !important;
 }
 
@@ -90,7 +95,7 @@
     width: 136px;
     height: 22px;
     margin: 60px 0 35px 50px;
-    background: url("/sites/Lab02/SiteAssets/images/Logo_CBMM-03.png") no-repeat;
+    background: url("/sites/bienterprise/SiteAssets/images/Logo_CBMM-03.png") no-repeat;
     background-size: 75%;
 }
 
@@ -101,6 +106,10 @@
     float: left;
 }
 
+.logoutIcon{
+    background: url("/sites/bienterprise/SiteAssets/images/icons/logout.png") no-repeat center;
+}
+
 .sideNav ul{  
     list-style-type: none;  
     font-size: 1.3rem;
@@ -109,12 +118,8 @@
 
 .sideNavHeading{    
     font-weight: bold;
+    color: #ffffff;
     padding-left: 50px;
-}
-
-.favoriteIcon{
-    width: 24px;
-    height: 24px;
 }
 
 .sideNavSubLinks{
@@ -150,7 +155,6 @@
 .w3-xlarge{font-size:24px!important}
 
 .w3-bar-block .w3-bar-item{
-    width:100%;
     display:block;
     text-align:left;
     border:none;
@@ -159,20 +163,19 @@
     outline:0
 }
 
-._2kc0c9nP-qti6fefMCFonk {
-    display: none;
-    font-size: initial;
-    /* border: solid 1px yellow; */
-    float: left;
-}
-
 .btnOpenNav{
     position: fixed;
+    color: #ffffff;
     top: 0;
     left: 0;
     padding-left: 30px;
     outline: none;
-    z-index: 5;    
+    z-index: 5;  
+    visibility: hidden;
+}
+
+.btnOpenNav-visble{
+    visibility: visible !important;
 }
 
 .btnOpenNav:hover{
